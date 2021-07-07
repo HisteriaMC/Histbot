@@ -4,12 +4,7 @@ const mcutil = require('minecraft-server-util');
 module.exports.run = async(client, message, args) => {
     if(!args[0]) return message.reply("Format: "+this.config.format);
     let reason = args.join(" ");
-    if(message.member.isBot){
-        if(message.content.includes('ıllıllı/­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­ıllıllı')){
-            reason = reason.replace("ıllıllı/­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­ıllıllı", "");
-            message.delete().catch(()=>{});
-        } else return;
-    }
+    if(message.member.isBot) return;
 
     if(!message.member.hasPermission("ADMINISTRATOR")) return message.channel.send("Tu n'as pas la permission d'utiliser la commande rcon");
     if (!config.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");

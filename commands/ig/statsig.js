@@ -11,7 +11,6 @@ module.exports.run = async(client, message, args) => {
         if(!results || !results[0]) return message.reply("Aucun membre trouvé avec ce pseudo");
         let result = results[0];
         let timeig = convert(result.total + (result.online !== "offline" ? Date.now()/1000 - result.join : 0));
-        let offline, device;
         let fields = [
                     {
                         name: "Kills",
