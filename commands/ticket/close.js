@@ -127,7 +127,7 @@ module.exports.run = async(client, message) => {
 };
 
 async function createTranscript(message, transcriptname, client) { //Tests
-    const dom = new JSDOM(fs.readFileSync(config.tickets.pathtranscripts+'template.html', 'utf8'));
+    const dom = new JSDOM(fs.readFileSync('template/template.html', 'utf8'));
     const document = dom.window.document;
 
     let messageCollection = new Discord.Collection();

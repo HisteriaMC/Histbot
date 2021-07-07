@@ -1,0 +1,78 @@
+<!doctype HTML>
+<html>
+<head>
+    <title>Ticket</title>
+    <meta charset="utf8"/>
+    <link rel="icon" href="favicon.ico">
+</head>
+<link rel="stylesheet" href="template.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+<div id="app">
+    <header>
+        <img :src="header.serverimg" alt="ServerIMG"/>
+        <div class="title">
+            <p class="servername">{{header.servername}}</p>
+            <div class="subTitle">
+                <p class="channelname">{{header.channelname}}</p>
+                <p class="channeldescription">{{header.channeldescription}}</p>
+            </div>
+        </div>
+    </header>
+    <main>
+        <span v-for="message in messages">
+            <div class="userMessage">
+                <img :src="message.img" alt="userImage">
+                <div class="content">
+                    <div class="user">
+                        <p class="pseudo">{{ message.pseudo }}</p>
+                        <p class="date">{{ message.date }}</p>
+                    </div>
+
+                    <div class="message" v-html="message.text"></div>
+                    <span v-for="image in message.images">
+                        <div class="image">
+                            <img :src="image" alt="attachedImage">
+                        </div>
+                    </span>
+                    <span v-for="file in message.files">
+                        <div class="file">
+                            <img src="https://discord.com/assets/66084381f55f4238d69e5cbe3b8dc42e.svg" alt="docImage">
+                            <div class="fileData">
+                                <a :href="file.link" target="_blank">
+                                    <h3>{{ file.name }}</h3>
+                                </a>
+                                <p>{{ file.size }}</p>
+                            </div>
+                            <a :href="file.link" target="_blank">
+                                <svg class="downloadButton" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M16.293 9.293L17.707 10.707L12 16.414L6.29297 10.707L7.70697 9.293L11 12.586V2H13V12.586L16.293 9.293ZM18 20V18H20V20C20 21.102 19.104 22 18 22H6C4.896 22 4 21.102 4 20V18H6V20H18Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                    </span>
+
+                    <div v-if="message.embed" class="embed">
+                        <h1 v-html="message.embed.title"></h1>
+                        <div v-for="section in message.embed.content">
+                            <h2 v-html="section.title"></h2>
+                            <p v-html="section.text"></p>
+                        </div>
+                    </div>
+                    <p v-if="message.code" class="code">{{ message.code }}</p>
+                </div>
+            </div>
+        </span>
+    </main>
+    <footer>
+        <div id="social">
+        </div>
+        <div id="mention">
+            <h2>Made with ❤ by dadodasyra and Zelytra for Histeria</h2>
+        </div>
+    </footer>
+</div></body>
+</html>
