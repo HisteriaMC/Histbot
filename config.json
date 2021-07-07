@@ -1,0 +1,76 @@
+{
+    "token"  : "",
+    "prefix" : "+",
+    "mcpetoken" : "",
+
+    "serverid" : "699035170338111489",
+    "serveridjava": "853707448850579486",
+    "staffserverid" : "791341272442077204",
+
+    "logsbedrock": "853233575062798346",
+    "logsjava" : "854786976561627174",
+    "logsstaff" : "854792327054098444",
+    "castvote" : "699038495255035945",
+    "voterole" : "699038462841585724",
+
+    "color" : 12914197,
+    "image_url" : "https://cdn.discordapp.com/avatars/537670570158850060/0dd939b1b54f2d26dc3290fa0b3d8b3e.png",
+
+    "owners" : ["498159251383123969", "238570701685129217", "207473467518353409"],
+    "welcome" : "789971039089721384",
+    "welcomejava" : "853707449529532448",
+
+    "idees": {
+        "channelbedrock": "699038502137888848",
+        "channeljava" : "853707449710542866",
+        "emoteyes" : "<a:yes:847551934902829067>",
+        "emoteno" : "<a:no:847551980737790023>",
+        "emotedelete" : "<:trash:847552332937429023>"
+    },
+    "tickets": {
+        "allchannels": ["716242136198152222", "699038481506238536", "793565615222685719", "853707450275987457", "853707450275987458", "854710981753700352"],
+        "bedrock": {
+            "categorywait": "716242136198152222",
+            "categoryopened": "699038481506238536",
+            "categoryclosed": "793565615222685719",
+            "role": "789980290915369000"
+        },
+        "java": {
+            "categorywait": "853707450275987457",
+            "categoryopened": "853707450275987458",
+            "categoryclosed": "854710981753700352",
+            "role": "854772040094974037"
+        },
+        "reasons": {
+            "1️⃣": "Arnaques en échange",
+            "2️⃣": "Changement de comptes",
+            "3️⃣": "Contestation de sanction",
+            "4️⃣": "Trap/Tpkill",
+            "5️⃣": "Questions",
+            "6️⃣": "Autres"
+        },
+        "emoteclose": "<a:yes:847551934902829067>",
+        "pathtranscripts": "/var/www/transcripts/"
+    },
+    "rcon": {
+        "host": "127.0.0.1",
+        "password": "",
+        "passwordjava": "",
+        "servers": ["699035170338111489", "760175330429632582", "791341272442077204", "589373751359963146"],
+        "rolesjava": ["794922510181203980", "796452368748249088"]
+    },
+    "mysql": {
+        "host": "histeria.fr",
+        "user": "dadodasyra",
+        "password": "",
+        "schema": "discord"
+    }
+}
+
+
+
+
+
+
+
+

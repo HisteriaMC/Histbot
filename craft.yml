@@ -1,0 +1,411 @@
+---
+delete:
+ - "133" #block en hist
+ - "283" #epee en or/histerite
+ - "284" # mpelle en or/histerite
+ - "294" #houe en histerite/or
+ - "285" #pioche en histerite/or
+ - "286" #hache en histerite/or
+ - "123" #neon
+ - "296" #blé
+ - "357" #pomme histerite /cookie
+ - "346" #grappin / fishing hook
+ - "352" #histsword / bone
+ - "302" #casque h /chainmail
+ - "303" #plastron h
+ - "304" #jambieres h
+ - "305" # bottes h
+ - "298" #casque farm / leather
+ - "299" #plastron farm
+ - "300" #jambieres farm
+ - "301" #bottes far 2m
+ - "339" #papier/ clé
+ - "25" #cave block /note block
+ - "353" #speed stick / sucre
+ - "336" #jump stick / brick
+ - "45" #bricks (pour pas craft des brick avec des jump stick)
+ - "226" #pink glazed / pratiquement invsibile
+ - "214" #nether wart block
+ - "405" #nether brick
+ - "112" #nether brick block
+ - "351:15" #bone meal pour ascenceur et épée hist
+ - "216" #ascenceur
+ - "468" #turte shell/ Stick en Histerite / scute
+ - "378" #Histerite compressé
+ - "370" #hist core/ ghast tear
+ - "377" #blaze powder... POURQUOI ?
+ - "237:10" #concrete powder purple / stonebrick blanche
+ - "237:12" #concrete powder brown / stonebrick noir / blackstone
+ - "203" #escalier en obsi
+ - "182:1" #dalles en obsi
+ - "288" #paterne de drawer
+ - "170" #drawer
+ - "245" #cobblebreaker
+ - "397" #spike
+ - "247" #basalt/poisObsidienne
+
+add:
+ 1:
+  recipe:
+   - [[388], [388], [388]]
+   - [[388], [260], [388]] #apple
+   - [[388], [388], [388]] #histerite
+  result: ["357", 1] #cookie / Histapple
+  permission: craft.histerite_apple
+ 2:
+  recipe:
+   - [[133], [133], [133]]
+   - [[133], [445], [133]] #hammer
+   - [[133], [133], [133]] #bloc d'hist
+  result: ["346", 1] #grappin
+ 3:
+  recipe:
+   - [[0], [388], [0]]
+   - [[0], [388], [0]] #histerite
+   - [[0], [468], [0]] #histstick
+  result: ["352", 1] #histsword
+  permission: craft.histerite_sword
+ 4:
+  recipe:
+   - [[388], [388], [388]] #histrite
+   - [[388], [0], [388]]
+   - [[0], [0], [0]]
+  result: ["302", 1] #casque histerite
+ 5:
+  recipe:
+   - [[388], [0], [388]]
+   - [[388], [388], [388]]
+   - [[388], [388], [388]]
+  result: ["303", 1] #plastron histerite
+ 6:
+  recipe:
+   - [[388], [388], [388]]
+   - [[388], [0], [388]]
+   - [[388], [0], [388]]
+  result: ["304", 1] #jambieres Histerite
+ 7:
+  recipe:
+   - [[0], [0], [0]]
+   - [[388], [0], [388]]
+   - [[388], [0], [388]]
+  result: ["305", 1] #bottes histerite
+ 8:
+  recipe:
+   - [[388], [388], [388]]
+   - [[388], [388], [388]]
+   - [[388], [388], [388]]
+  result: ["133", 1]  #bloc histerite /emeraude
+ 9:
+  recipe:
+   - [[399], [399], [399]]
+   - [[399], [399], [399]] #133 = Bloc hist
+   - [[0], [468], [0]] #nether star / compress
+  result: ["445", 1] #hammer
+ 10:
+  recipe:
+   - [[20], [20], [20]]
+   - [[20], [399], [20]] #nether star / compress
+   - [[20], [20], [20]] #bloc hist
+  result: ["25", 1] #cave block / note block
+ 11:
+  recipe:
+   - [[399], [399], [399]] #compress
+   - [[399], [0], [399]] #compress
+   - [[0], [0], [0]]
+  result: ["298", 1] #casque farm
+ 12:
+  recipe:
+   - [[399], [0], [399]]
+   - [[399], [399], [399]]
+   - [[399], [399], [399]] #compress
+  result: ["299", 1] #plastron nocturite
+  permission: craft.nocturite_chestplate
+ 13:
+  recipe:
+   - [[399], [399], [399]]
+   - [[399], [0], [399]]
+   - [[399], [0], [399]]
+  result: ["300", 1] #jambieres farm
+  permission: craft.nocturite_leggings
+ 14:
+  recipe:
+   - [[0], [0], [0]]
+   - [[399], [0], [399]] #compress
+   - [[399], [0], [399]]
+  result: ["301", 1] #bottes nocturite
+  permission: craft.nocturite_boots
+ 15:
+  recipe:
+   - [[3], [3], [3]]
+   - [[3], [133], [3]] #bloc hist
+   - [[3], [3], [3]] #dirt
+  result: ["88", 1] #fertilized dirt
+  permission: craft.ferti
+ 16:
+  recipe:
+   - [[0], [468], [0]] #bloc hist
+   - [[468], [370], [468]]
+   - [[0], [468], [0]]
+  result: ["414", 1] #unclaim / patte de lapin
+ 17:
+  recipe:
+   - [[325], [388], [325]] #325 = bucket
+   - [[388], [325], [388]] #388 = hist block
+   - [[325], [388], [325]]
+  result: ["402", 1] #sponger
+ 18:
+  recipe:
+   - [[0], [0], [0]]
+   - [[388], [388], [388]] #histerite
+   - [[0], [388], [0]]
+  result: ["344", 1] #dynamite / egg
+ 19:
+  recipe:
+   - [[388], [388], [388]] #bloc hist
+   - [[0], [468], [0]] #stick
+   - [[0], [468], [0]] #stick
+  result: ["285", 1] #pioche histt
+  permission: craft.piocheHist
+ 20:
+  recipe:
+   - [[4], [4], [4]] #cobble
+   - [[4], [4], [4]]
+   - [[4], [4], [4]]
+  result: ["382", 1] #compress stone / fleche invi
+ 21:
+  recipe:
+   - [[0], [265], [0]] #iron ingot
+   - [[265], [264], [265]] #diamant
+   - [[0], [265], [0]]
+  result: ["332:0", 4] #shuriken / snowball
+ 22:
+  recipe:
+   - [[264], [133], [264]] #diams / block h / diams
+   - [[133], [133], [133]] #block hist
+   - [[265], [265], [265]] #fer
+  result: ["341:0", 1] #hang glider / slime ball
+ 23:
+  recipe:
+   - [[372], [372], [372]]
+   - [[372], [372], [372]]
+   - [[372], [372], [372]] #372 = nether wart
+  result: ["405:0", 1] #405 = ingot de farm/nether brick
+ 24:
+  recipe:
+   - [[405], [405], [405]] #ingot de farm
+   - [[405], [405], [405]]
+   - [[405], [405], [405]]
+  result: ["214:0", 1] #bkoc de farm
+ 25:
+  recipe:
+   - [[214], [214], [214]]
+   - [[214], [214], [214]]
+   - [[214], [214], [214]] #bloc de farm
+  result: ["399:0", 1] #nether star / compres
+  permission: craft.nocturite_compress
+ 26:
+  recipe:
+   - [[49], [49], [49]]
+   - [[49], [388], [49]] #obsi histerite
+   - [[49], [49], [49]] #obsi
+  result: ["246:0", 1] #obsi reinforced
+ 27:
+  recipe:
+   - [[264], [264], [264]] #diamant
+   - [[265], [331], [265]] #fer redstone
+   - [[264], [264], [264]] #diams
+  result: ["216:0", 1] #ascenceur
+ 28:
+  recipe:
+   - [[0], [266], [0]] #or
+   - [[388], [468], [388]] #histerite
+   - [[0], [468], [0]] #stick
+  result: ["424:0", 1] #Stick of God
+ 29:
+  recipe:
+   - [[0], [266], [0]]
+   - [[265], [468], [265]]
+   - [[0], [468], [0]]
+  result: ["353:0", 1] #Speed Stick
+ 30:
+  recipe:
+   - [[0], [0], [0]]
+   - [[0], [388], [0]]
+   - [[0], [388], [0]] #hist stick
+  result: ["468:0", 4]
+ 31:
+  recipe:
+   - [[133], [133], [133]]
+   - [[133], [388], [133]]
+   - [[133], [133], [133]]
+  result: ["378:0", 1] #hist compress
+  permission: craft.histerite_compress
+ 32:
+  recipe:
+   - [[0], [388], [0]]
+   - [[0], [468], [0]]
+   - [[0], [468], [0]] #todo
+  result: ["284", 1] #pelle hist
+  permission: craft.histerite_shovel
+ 33:
+  recipe:
+   - [[0], [388], [388]]
+   - [[0], [468], [0]] #todo
+   - [[0], [468], [0]]
+  result: ["294", 1] #houe hist
+ 34:
+  recipe:
+   - [[388], [468], [388]]
+   - [[468], [378], [468]]
+   - [[388], [468], [388]]
+  result: ["370:0", 1] #core hist
+  permission: craft.Histerite_core
+ 35:
+  recipe:
+   - [[98], [98], [98]]
+   - [[98], ["351:19"], [98]]
+   - [[98], [98], [98]]
+  result: ["236:10", 8] #brick white
+ 36:
+  recipe:
+   - [[98], [98], [98]]
+   - [[98], ["351:16"], [98]]
+   - [[98], [98], [98]]
+  result: ["236:12", 8] #brick black
+ 37:
+  recipe:
+   - [[49], [0], [0]]
+   - [[49], [49], [0]]
+   - [[49], [49], [49]]
+  result: ["203", 6]
+ 38:
+  recipe:
+   - [[0], [0], [0]]
+   - [[49], [49], [49]]
+   - [[0], [0], [0]]
+  result: ["182:1", 6] #dalles en obsi
+ 39:
+  recipe:
+   - [[5], [5], [5]]
+   - [[5], [133], [5]]
+   - [[5], [5], [5]]
+  result: ["288", 1] #upgrade de drawer
+ 40:
+  recipe:
+   - [[5], [5], [5]]
+   - [[5], [54], [5]]
+   - [[5], [5], [5]]
+  result: ["170", 1] #drawer
+ 41:
+  recipe:
+   - [[4], [264], [4]]
+   - [[264], [378], [264]]
+   - [[4], [264], [4]]
+  result: ["245", 1] #CobbleBreaker
+  permission: craft.Cobble_crusher
+ 42:
+  recipe:
+   - [[0], [246], [0]]
+   - [[388], [468], [388]]
+   - [[0], [468], [0]]
+  result: ["369", 4] #Obsi breaker
+ 43:
+  recipe:
+   - [[81], [81], [81]]
+   - [[81], [49], [81]]
+   - [[81], [81], [81]]
+  result: ["247", 1] #poisObsidienne
+ 44:
+  recipe:
+   - [[0], [468], [0]]
+   - [[468], [133], [468]]
+   - [[0], [468], [0]]
+  result: ["328:0", 1] #item pack
+  permission: craft.itempack
+ 45:
+  recipe:
+   - [[0], [388], [388]]
+   - [[0], [468], [388]]
+   - [[0], [468], [0]]
+  result: ["286", 1]
+ 46:
+  recipe:
+   - [[468], [468], [468]]
+   - [[468], [399], [468]]
+   - [[468], [468], [468]]
+  result: ["437", 1]
+ 47:
+  recipe:
+   - [[0], [352], [0]]
+   - [[265], [264], [265]]
+   - [[388], [388], [388]]
+  result: ["397", 4] #spike
+ 48:
+  recipe:
+   - [[265], [265], [265]]
+   - [[264], [50], [264]]
+   - [[265], [265], [265]]
+  result: ["123", 4] #bloc de neon
+ 49:
+  recipe:
+   - [["5:1"], ["5:1"], ["5:1"]]
+   - [["5:1"], [54], ["5:1"]]
+   - [["5:1"], ["5:1"], ["5:1"]]
+  result: ["170", 1] #drawer aussi
+ 50:
+  recipe:
+   - [["5:2"], ["5:2"], ["5:2"]]
+   - [["5:2"], [54], ["5:2"]]
+   - [["5:2"], ["5:2"], ["5:2"]]
+  result: ["170", 1] #drawer aussi
+ 51:
+  recipe:
+   - [[5:3], [5:3], [5:3]]
+   - [[5:3], [54], [5:3]]
+   - [[5:3], [5:3], [5:3]]
+  result: ["170", 1] #drawer aussi
+ 52:
+  recipe:
+   - [["5:4"], ["5:4"], ["5:4"]]
+   - [["5:4"], [54], ["5:4"]]
+   - [["5:4"], ["5:4"], ["5:4"]]
+  result: ["170", 1] #drawer aussi
+ 53:
+  recipe:
+   - [["5:5"], ["5:5"], ["5:5"]]
+   - [["5:5"], [54], ["5:5"]]
+   - [["5:5"], ["5:5"], ["5:5"]]
+  result: ["170", 1] #drawer aussi
+ 54:
+  recipe:
+   - [["5:1"], ["5:1"], ["5:1"]]
+   - [["5:1"], [133], ["5:1"]]
+   - [["5:1"], ["5:1"], ["5:1"]]
+  result: ["288", 1] #upgrade de drawer
+55:
+  recipe:
+   - [["5:2"], ["5:2"], ["5:2"]]
+   - [["5:2"], [133], ["5:2"]]
+   - [["5:2"], ["5:2"], ["5:2"]]
+  result: ["288", 1] #upgrade de drawer
+56:
+  recipe:
+   - [["5:3"], ["5:3"], ["5:3"]]
+   - [["5:3"], [133], ["5:3"]]
+   - [["5:3"], ["5:3"], ["5:3"]]
+  result: ["288", 1] #upgrade de drawer
+57:
+  recipe:
+   - [["5:4"], ["5:4"], ["5:4"]]
+   - [["5:4"], [133], ["5:4"]]
+   - [["5:4"], ["5:4"], ["5:4"]]
+  result: ["288", 1] #upgrade de drawer
+58:
+  recipe:
+   - [["5:5"], ["5:5"], ["5:5"]]
+   - [["5:5"], [133], ["5:5"]]
+   - [["5:5"], ["5:5"], ["5:5"]]
+  result: ["288", 1] #upgrade de drawer
+
+ 
+ 
