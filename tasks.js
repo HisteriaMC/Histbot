@@ -115,7 +115,7 @@ class run {
                 let lastline = content[content.length - 1];
                 let platform = config.idees.channelbedrock === channelid ? "bedrock" : "java";
                 content = content.splice(0, content.length - 1);
-                if(emotedelete.count > 4 && (emotedelete.count * 100 / (emoteyes.count + emotedelete.count - 2)) > 75){ //emotedelete > 3
+                if(emotedelete.count > 3 && (emotedelete.count * 100 / (emoteyes.count + emotedelete.count - 2)) > 50){ //emotedelete > 3
                     this.client.log(message.content.split("\n").splice(2, content.length).join('\n')+' **a été supprimé**', platform);
                     message.delete();
                 } else if(emoteyes.count > 30 && (emoteyes.count - 1) * 100 / (emoteno.count + emoteyes.count - 2) > 90 && !message.pinned){

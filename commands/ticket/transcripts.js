@@ -10,21 +10,21 @@ module.exports.run = async(client, message, args) => {
                 sendResults(message, results, message.author.id, args)
             });
     } else if(target){
-        if(message.member.permissions.has('MANAGE_MESSAGES') && message.guild.id === config.serverid) {
+        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
             client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id],
                 function(err, results) {
                     sendResults(message, results, target.id, args)
                 });
         } else return message.reply("Vous n'avez pas la permission");
     } else if(args[0].match(/^\d+$/g)){
-        if(message.member.permissions.has('MANAGE_MESSAGES') && message.guild.id === config.serverid) {
+        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
             client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [args[0]],
             function(err, results) {
                 sendResults(message, results, args[0], args)
             });
         } else return message.reply("Vous n'avez pas la permission");
     } else if(args[0] === 'name') {
-        if (message.member.permissions.has('MANAGE_MESSAGES') && message.guild.id === config.serverid) {
+        if (message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
 
             if (!args[1]) return message.reply('Il manque le nom de la personne ciblée');
             target = args[1];

@@ -3,6 +3,7 @@ moment.locale("fr");
 const config = require("../../config.json");
 const Discord = require("discord.js");
 const fs = require('fs');
+const path = require("path");
 const {JSDOM} = require("jsdom");
 this.indeleting = {};
 
@@ -127,7 +128,7 @@ module.exports.run = async(client, message) => {
 };
 
 async function createTranscript(message, transcriptname, client) { //Tests
-    const dom = new JSDOM(fs.readFileSync('template/template.html', 'utf8'));
+    const dom = new JSDOM(fs.readFileSync(path.resolve(__dirname, './template/template.html'), 'utf8'));
     const document = dom.window.document;
 
     let messageCollection = new Discord.Collection();
@@ -194,7 +195,7 @@ async function createTranscript(message, transcriptname, client) { //Tests
         "header: " +
         "{servername:'"+message.guild.name+"', " +
         "channelname:'#"+message.channel.name+"', " +
-        "channeldescription:'"+replacementions(descmentions, topic)+"', " +
+        "channeldescription:'"+replaceescape(replacementions(descmentions, topic))+"', " +
         "serverimg: '"+message.guild.iconURL({format: "png"})+"'}, " +
 
         "messages: "+JSON.stringify(finalmsgs)+"}}); ";
@@ -203,7 +204,11 @@ async function createTranscript(message, transcriptname, client) { //Tests
 
     await fs.writeFileSync(config.tickets.pathtranscripts + transcriptname + '.html', document.documentElement.outerHTML); //Enregistrer l'entête du serveur
 }
-
+function replaceescape(content)
+{
+    content = content.replace("'", "\'");
+    return content.replace('"', "\"");
+}
 function replacementions(mentions, content, insertstrong = false)
 {
     let toreplace;

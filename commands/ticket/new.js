@@ -56,19 +56,22 @@ module.exports.run = async(client, message) => {
         const filter = (reaction) => config.tickets.reasons[reaction.emoji.name];
         const collector = newmsg.createReactionCollector(filter, { time: 300000 });
 
-
+        let customcollect = 0;
         collector.on('collect', async react => {
             if(react.me) return;
             msgrequest.delete();
             collector.stop();
+            customcollect++;
             await reason(newmsg, react, message.author, platform);
         });
-        collector.on('end', collected => {
-            if(collected.size === 0){
-                newmsg.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
+        collector.on('end', () => {
+            if(customcollect === 0){
+                newmsg.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes." +
+                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de réagir avec une emote sous le message du bot.");
                 require("../../sleep.js")(5000);
                 newmsg.channel.delete();
-                message.author.send("Nous n'avons pas eu de réponse dans votre ticket depuis 5 minutes que vous n'avez pas finir d'ouvrir, le ticket a été fermé")
+                message.author.send("Nous n'avons pas eu de réponse dans votre ticket depuis 5 minutes que vous n'avez pas finir d'ouvrir, le ticket a été fermé."+
+                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de réagir avec une emote sous le message du bot.")
                     .catch(() => console.log("Impossible de dm le closeur d'un ticket inactif"));
             }
         });
@@ -189,8 +192,14 @@ async function description(message, reason, pseudo, description, author, platfor
         content = "Trop long, envoyé en message";
     }
     categoryid = message.guild.id === config.serveridjava ? config.tickets.java.categoryopened : config.tickets.bedrock.categoryopened;
-    await message.channel.setTopic("Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+") "+platform);
-    if(reason !== "skip") await message.channel.setName(reason)
+    await message.channel.edit({
+        name: reason??"skip",
+        topic: "Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+") "+platform,
+        parentID: categoryid,
+        lockPermissions: false
+    }).catch(err => { message.channel.send("<@498159251383123969>"); message.channel.send(err)}); //Hardcoded debug
+    //await message.channel.setTopic("Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+") "+platform);
+    //if(reason !== "skip") await message.channel.setName(reason)
     message.edit({
         embed: {
             title: `**__Nouveau Ticket__**`,
@@ -216,8 +225,7 @@ async function description(message, reason, pseudo, description, author, platfor
             ],
         }
     });
-    await message.channel.setParent(categoryid, { lockPermissions: false })
-        .catch(err => { message.channel.send("<@498159251383123969>"); message.channel.send(err)});
+
     description.attachments.forEach(attach => {
        message.channel.send(attach.url);
     });
