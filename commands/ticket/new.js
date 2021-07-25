@@ -59,9 +59,9 @@ module.exports.run = async(client, message) => {
         let customcollect = 0;
         collector.on('collect', async react => {
             if(react.me) return;
+            customcollect++;
             msgrequest.delete();
             collector.stop();
-            customcollect++;
             await reason(newmsg, react, message.author, platform);
         });
         collector.on('end', () => {

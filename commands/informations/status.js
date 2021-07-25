@@ -2,17 +2,17 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    let server = message.guild.id === config.serverid ? "java" : "bedrock";
+    let server = message.guild.id !== config.serverid ? "bedrock" : "java";
 
     if(server === "java"){
         mcutil.status('histeria.fr', {port: 25565, enableSRV: true, timeout: 5000})
-            .then((response) => replywithembed(server, 19132, response, message))
+            .then((response) => replywithembed(server, 25565, response, message))
             .catch((error) => {
                 message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
             });
 
     } else {
-        mcutil.statusBedrock('histeria.fr', {port: 19132, enableSRV: true, timeout: 5000})
+        mcutil.statusBedrock('histeria.fr', {port: 19132, enableSRV: false, timeout: 5000})
             .then((response) => replywithembed(server, 19132, response, message))
             .catch((error) => {
                 message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");

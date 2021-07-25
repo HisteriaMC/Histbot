@@ -52,14 +52,14 @@ async function counting(client, message) {
         let num = message.content.split(' ')[0]??"no";
         if(num === 0) num = 1;
         if(num != lastcount + 1){
-            //message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount)
-            //lastcount = 0;
-            message.delete();
-            message.author.send("Petite explication :" +
+            message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount)
+            lastcount = 0;
+            //message.delete();
+            /*message.author.send("Petite explication :" +
                 "\nAlors en gros dans ce salon on compte, ce qui défini en gros rajouter 1 à chaque fois. " +
                 "Par exemple actuellement on est à **"+lastcount+"** donc la théorie voudrait que ce que tu dois dire est **"+ (lastcount + 1) +"**." +
                 "\nJe comprends, c'est compliqué etc.. Si tu as toujours besoin d'aide j'ai une petite vidéo pour toi : <https://www.youtube.com/watch?v=IQY_rk0o29Y>")
-                .catch(() => console.log("Impossible de dm un counter raté"));
+                .catch(() => console.log("Impossible de dm un counter raté"));*/
         } else lastcount = lastcount + 1;
     }
 }
