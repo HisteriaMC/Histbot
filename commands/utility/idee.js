@@ -11,7 +11,7 @@ module.exports.run = async(client, message, args) => {
     if(!channel) message.reply("Salon idée introuvable "+channelid);
     channel.send('Idée par ' + `${message.author}` + '\n\n' + '```' + idee + '```')
         .then(async function (msgidee) {
-            for(const emote of [config.idees.emoteyes, config.idees.emoteno, config.idees.emotedelete]){
+            for(const emote of [config.idees.emoteyes, config.idees.emoteno/*, config.idees.emotedelete*/]){
                 await msgidee.react(emote);
             }
         })

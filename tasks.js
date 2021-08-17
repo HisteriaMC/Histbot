@@ -42,7 +42,7 @@ class run {
                        }
                    ]
                }
-               message.edit("<@&"+config.voterole+">", { embed }).catch(err => console.err("Erreur lors du message de vote pour update"));
+               message.edit("<@&"+config.voterole+">", { embed }).catch(() => console.err("Erreur lors du message de vote pour update"));
                found = true;
            }
         });
@@ -107,15 +107,15 @@ class run {
                 let emoteyes = emotes.get(emoteyesid);
                 let emotenoid = config.idees.emoteno.split(":")[2].replace(">", "");
                 let emoteno = emotes.get(emotenoid);
-                let emotedeleteid = config.idees.emotedelete.split(":")[2].replace(">", "");
-                let emotedelete = emotes.get(emotedeleteid);
+                /*let emotedeleteid = config.idees.emotedelete.split(":")[2].replace(">", "");
+                let emotedelete = emotes.get(emotedeleteid);*/
 
-                if(!emoteyes || !emoteno || !emotedelete) return;
+                if(!emoteyes || !emoteno /*|| !emotedelete*/) return;
                 let content = message.content.split("\n");
                 let lastline = content[content.length - 1];
                 let platform = config.idees.channelbedrock === channelid ? "bedrock" : "java";
                 content = content.splice(0, content.length - 1);
-                if(emotedelete.count > 3 && (emotedelete.count * 100 / (emoteyes.count + emotedelete.count - 2)) > 50){ //emotedelete > 3
+                if(emoteno.count > 3 && (emoteno.count * 100 / (emoteyes.count + emoteno.count - 2)) > 50){ //emotedelete > 3
                     this.client.log(message.content.split("\n").splice(2, content.length).join('\n')+' **a été supprimé**', platform);
                     message.delete();
                 } else if(emoteyes.count > 30 && (emoteyes.count - 1) * 100 / (emoteno.count + emoteyes.count - 2) > 90 && !message.pinned){
