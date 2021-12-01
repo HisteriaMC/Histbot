@@ -1,0 +1,15 @@
+{
+  "token" : "",
+  "mcpeToken": "",
+  "mysql": {
+    "host": "histeria.fr",
+    "user": "dadodasyra",
+    "password": "",
+    "schema": "discord"
+  },
+  "rcon": {
+    "host": "histeria.fr",
+    "password": "",
+    "servers": ["699035170338111489", "760175330429632582", "791341272442077204", "589373751359963146"]
+  }
+}
