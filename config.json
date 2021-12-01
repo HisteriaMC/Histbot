@@ -2,18 +2,19 @@
     "prefix" : "+",
     "port": 19132,
 
-    "serverid" : "589373751359963146",
-    "staffserverid" : "791341272442077204",
+    "serverId": "589373751359963146",
+    "staffServerId": "791341272442077204",
 
-    "commandchannel": "789974382742994944",
+    "commandChannel": "789974382742994944",
+    "checkSpellingChannel": "915632710372966441",
 
     "logs": "853233575062798346",
-    "logsstaff" : "854792327054098444",
-    "castvote" : "699038495255035945",
-    "voterole" : "699038462841585724",
+    "logsStaff": "854792327054098444",
+    "castVote": "699038495255035945",
+    "voteRole": "699038462841585724",
 
     "color" : 12914197,
-    "image_url" : "https://cdn.discordapp.com/avatars/700009968480419912/fc674c381af96f8e5659a83a1927083a.png",
+    "imageURL": "https://cdn.discordapp.com/avatars/700009968480419912/fc674c381af96f8e5659a83a1927083a.png",
 
     "owners" : ["498159251383123969", "238570701685129217", "207473467518353409"],
     "welcome" : "789971039089721384",
@@ -22,14 +23,14 @@
 
     "idees": {
         "channel": "699038502137888848",
-        "emoteyes" : "<a:yes:847551934902829067>",
-        "emoteno" : "<a:no:847551980737790023>"
+        "emoteYes": "<a:yes:847551934902829067>",
+        "emoteNo": "<a:no:847551980737790023>"
     },
     "tickets": {
-        "allchannels": ["716242136198152222", "699038481506238536", "793565615222685719"],
-        "categorywait": "716242136198152222",
-        "categoryopened": "699038481506238536",
-        "categoryclosed": "793565615222685719",
+        "allChannels": ["716242136198152222", "699038481506238536", "793565615222685719"],
+        "categoryWait": "716242136198152222",
+        "categoryOpened": "699038481506238536",
+        "categoryClosed": "793565615222685719",
         "role": "789980290915369000",
 
         "reasons": {
@@ -42,7 +43,7 @@
             "7": "Grades/Boutique",
             "8": "Autres"
         },
-        "emoteclose": "<a:yes:847551934902829067>",
-        "pathtranscripts": "/var/www/transcripts/"
+        "emoteClose": "<a:yes:847551934902829067>",
+        "pathTranscripts": "/var/www/transcripts/"
     }
 }

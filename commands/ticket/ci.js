@@ -3,7 +3,7 @@ moment.locale("fr");
 const config = require("../../config.json");
 
 module.exports.run = async(client, message, args) => {
-    if (!message.channel.parent || !config.tickets.allchannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
+    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
 
     let topic = message.channel.topic;
     if(!topic) topic = "";
@@ -20,7 +20,7 @@ module.exports.run = async(client, message, args) => {
                 color: config.color,
                 timestamp: new Date(),
                 footer: {
-                    icon_url: config.image_url,
+                    icon_url: config.imageURL,
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 fields: [
@@ -38,7 +38,7 @@ module.exports.run = async(client, message, args) => {
                     color: config.color,
                     timestamp: new Date(),
                     footer: {
-                        icon_url: config.image_url,
+                        icon_url: config.imageURL,
                         text: "@Histeria " + new Date().getFullYear()
                     },
                     fields: [
@@ -60,7 +60,7 @@ module.exports.run = async(client, message, args) => {
                 color: config.color,
                 timestamp: new Date(),
                 footer: {
-                    icon_url: config.image_url,
+                    icon_url: config.imageURL,
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 fields: [
@@ -79,7 +79,7 @@ module.exports.run = async(client, message, args) => {
                     color: config.color,
                     timestamp: new Date(),
                     footer: {
-                        icon_url: config.image_url,
+                        icon_url: config.imageURL,
                         text: "@Histeria " + new Date().getFullYear()
                     },
                     fields: [
@@ -94,7 +94,7 @@ module.exports.run = async(client, message, args) => {
         });
     }
     if(args[0] === undefined || (args[0] !== null && ["oui", "yes", "ouai", "oué", "oue", "ui", "true"].includes(args[0]))) {
-        let categoryid = config.tickets.categoryclosed;
+        let categoryid = config.tickets.categoryClosed;
         await message.channel.setParent(categoryid, { lockPermissions: false });
         //await message.channel.setTopic(message.channel.topic+" fermé par "+message.author.displayName);
     }

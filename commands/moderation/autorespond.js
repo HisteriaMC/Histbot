@@ -20,8 +20,8 @@ module.exports.run = async(client, message, args) => {
     } else {
         autorespondname = args[1]?.toLowerCase();
         if (!autorespondname) return message.reply("Il manque un argument. Format: "+config.prefix + config.format);
-        if (![config.serverid, config.staffserverid].includes(message.guild.id)) return message.reply("L'autorespond n'est pas disponible sur ce serveur");
-        if(message.guild.id === config.staffserverid) serverid = config.serverid; //Si serveur de staff = autoresponse serv principal
+        if (![config.serverId, config.staffServerId].includes(message.guild.id)) return message.reply("L'autorespond n'est pas disponible sur ce serveur");
+        if(message.guild.id === config.staffServerId) serverid = config.serverId; //Si serveur de staff = autoresponse serv principal
         if (!args[2]) return message.reply("Il manque le contenu de l'autorespond à créer : "+this.config.format)
         args = args.splice(2);
 

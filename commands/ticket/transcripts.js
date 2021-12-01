@@ -8,7 +8,7 @@ module.exports.run = async(client, message, args) => {
     if(!args[0]){
         client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
     } else {
-        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.staffserverid].includes(message.guild.id)) {
+        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverId, config.staffServerId].includes(message.guild.id)) {
             if(target){
                 client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
             } else if(args[0].match(/^\d+$/g)){
@@ -40,7 +40,7 @@ function sendResults(message, results, who, args, id = true)
             color: config.color,
             timestamp: d,
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria "+d.getFullYear()
             },
             fields: [

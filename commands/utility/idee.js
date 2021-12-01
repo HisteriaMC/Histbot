@@ -1,7 +1,7 @@
 const config = require("../../config.json");
 
 module.exports.run = async(client, message, args) => {
-    if(config.serverid !== message.guild.id) return message.reply("Les idées ne sont pas disponible sur ce serveur");
+    if(config.serverId !== message.guild.id) return message.reply("Les idées ne sont pas disponible sur ce serveur");
 
     let idee = args.join(" ");
     idee = idee.replace(/`/g, '');
@@ -11,7 +11,7 @@ module.exports.run = async(client, message, args) => {
     message.reply("Ton idée a été posté dans <#"+channelid+">.");
     channel.send('Idée par ' + `${message.author}` + '\n\n' + '```' + idee + '```')
         .then(async function (msgidee) {
-            for(const emote of [config.idees.emoteyes, config.idees.emoteno]){
+            for(const emote of [config.idees.emoteYes, config.idees.emoteNo]){
                 await msgidee.react(emote);
             }
         })

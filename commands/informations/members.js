@@ -8,7 +8,7 @@ module.exports.run = async(client, message) => {
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria "+d.getFullYear()
             },
             description: "Membres: " + message.guild.memberCount + "\n" +

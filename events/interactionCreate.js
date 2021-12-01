@@ -13,8 +13,8 @@ module.exports = (client, interaction) => {
     let conf = cmd.config;
     if (conf.permission && !interaction.member.permissions.has(conf.permission)) return interaction.reply("Vous n'avez pas la permission d'utiliser cette commande");
     if (interaction.member.bot && !conf.canBeUseByBot) return;
-    if (interaction.guild.id === config.serverid
-        && interaction.channel.id !== config.commandchannel
+    if (interaction.guild.id === config.serverId
+        && interaction.channel.id !== config.commandChannel
         && !interaction.member.permissions.has("MANAGE_MESSAGES")
         && !conf.bypassChannel) return;
     if (conf.delete) interaction.delete();

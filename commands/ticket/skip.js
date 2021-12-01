@@ -3,7 +3,7 @@ moment.locale("fr");
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    if (!message.channel.parent || !config.tickets.allchannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
+    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
     message.channel.messages.fetch({ limit: 10 }).then(messages => {
         messages.forEach(base => {
             try{
@@ -14,7 +14,7 @@ module.exports.run = async(client, message) => {
                             color: config.color,
                             timestamp: new Date(),
                             footer: {
-                                icon_url: config.image_url,
+                                icon_url: config.imageURL,
                                 text: "@Histeria " + new Date().getFullYear()
                             },
                             fields: [
@@ -35,7 +35,7 @@ module.exports.run = async(client, message) => {
                     });
                 }
                 base.reactions.removeAll();
-                let categoryid = config.tickets.categoryopened;
+                let categoryid = config.tickets.categoryOpened;
 
                 let topic = message.channel.topic;
                 if(!topic) topic = "";

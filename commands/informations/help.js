@@ -24,7 +24,7 @@ module.exports.run = async(client, message) => {
             color: config.color,
             timestamp: d,
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria "+d.getFullYear()
             },
             fields: fields

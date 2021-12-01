@@ -3,7 +3,7 @@ const config = require('./config.json');
 
 class run {
     changestatus() {
-        this.client.guilds.fetch(config.serverid).then(
+        this.client.guilds.fetch(config.serverId).then(
             guild => {
                 this.client.user.setActivity(`${guild.memberCount} membres | +help`, {
                     type: "STREAMING",
@@ -49,9 +49,9 @@ class run {
         if(!messages) return;
         messages.forEach(message => {
             let emotes = message.reactions.cache;
-            let emoteyesid = config.idees.emoteyes.split(":")[2].replace(">", "");
+            let emoteyesid = config.idees.emoteYes.split(":")[2].replace(">", "");
             let emoteyes = emotes.get(emoteyesid);
-            let emotenoid = config.idees.emoteno.split(":")[2].replace(">", "");
+            let emotenoid = config.idees.emoteNo.split(":")[2].replace(">", "");
             let emoteno = emotes.get(emotenoid);
 
             if(!emoteyes || !emoteno) return;
@@ -69,7 +69,7 @@ class run {
                     ).then(messages => {
                     if (message && message.author.id === this.client.user.id) messages.first().delete();})});
             } else if(emoteyes.count > 1 || emoteno.count > 1){
-                let reactspreview = `\n`+Math.round((emoteyes.count - 1) * 100 / (emoteno.count + emoteyes.count - 2))+`% ${config.idees.emoteyes}/${config.idees.emoteno}`;
+                let reactspreview = `\n`+Math.round((emoteyes.count - 1) * 100 / (emoteno.count + emoteyes.count - 2))+`% ${config.idees.emoteYes}/${config.idees.emoteNo}`;
                 if(lastline.includes('%') && lastline.includes('/')){
                     if(reactspreview === "\n"+lastline) return;
 

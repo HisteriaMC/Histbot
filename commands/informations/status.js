@@ -18,7 +18,7 @@ function replywithembed(port, response, message)
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria " + d.getFullYear()
             },
             fields: [

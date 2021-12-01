@@ -9,7 +9,7 @@ const { JSDOM } = jsdom;
 this.indeleting = {};
 
 module.exports.run = async(client, message) => {
-    if (!message.channel.parent || !config.tickets.allchannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
+    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
 
     let d = new Date();//Hardcoded anti spam
     if(this.indeleting[message.channel.id] && this.indeleting[message.channel.id] > Date.now()) return message.reply("Une autre commande de close est en cours d'execution");
@@ -20,13 +20,13 @@ module.exports.run = async(client, message) => {
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria " + new Date().getFullYear()
             },
             description: ":question: Voulez vous vraiment fermer ce ticket, confirmez avec la réaction ci-dessous"
         }]
     });
-    let emotecloseid = config.tickets.emoteclose.split(":")[2].replace(">", "");
+    let emotecloseid = config.tickets.emoteClose.split(":")[2].replace(">", "");
 
     await newmsg.react(emotecloseid);
     const filter = (reaction) => reaction.emoji.id === emotecloseid;
@@ -42,15 +42,15 @@ module.exports.run = async(client, message) => {
                 color: config.color,
                 timestamp: d,
                 footer: {
-                    icon_url: config.image_url,
+                    icon_url: config.imageURL,
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 description: "Suppression du salon dans 5 secondes..."
             }]
         });
         react.remove();
-        await newmsg.react(config.idees.emoteno);
-        const filter = (reaction) => reaction.emoji.id === config.idees.emoteno.split(":")[2].replace(">", "");
+        await newmsg.react(config.idees.emoteNo);
+        const filter = (reaction) => reaction.emoji.id === config.idees.emoteNo.split(":")[2].replace(">", "");
 
         const collector2 = newmsg.createReactionCollector({filter,  time: 7000 });
         collector2.on('collect', async (react, user) => {
@@ -61,7 +61,7 @@ module.exports.run = async(client, message) => {
                     color: config.color,
                     timestamp: d,
                     footer: {
-                        icon_url: config.image_url,
+                        icon_url: config.imageURL,
                         text: "@Histeria " + new Date().getFullYear()
                     },
                     description: "Suppression annulée par "+user.username
@@ -78,7 +78,7 @@ module.exports.run = async(client, message) => {
         await createTranscript(message, transcriptname, client);
         await require("../../sleep")(5000)
         if(newmsg.embeds[0].description.includes("annulée")) {
-            fs.unlinkSync(config.tickets.pathtranscripts + transcriptname + '.html');
+            fs.unlinkSync(config.tickets.pathTranscripts + transcriptname + '.html');
             return;
         }
 
@@ -112,7 +112,7 @@ module.exports.run = async(client, message) => {
                 color: config.color,
                 timestamp: new Date(),
                 footer: {
-                    icon_url: config.image_url,
+                    icon_url: config.imageURL,
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 description: `Votre ticket '${channelname}' a bien été supprimé`+bywho+
@@ -121,7 +121,7 @@ module.exports.run = async(client, message) => {
         }).catch(() => console.log("Impossible de dm le closeur d'un ticket"));
     });
     collector.on('end', collected => {
-        if(config.tickets.categorywait !== message.channel.parent?.id) return;
+        if(config.tickets.categoryWait !== message.channel.parent?.id) return;
         if(collected.size === 0) newmsg.channel.send("Absence de plus de 1 minute, annulation");
     });
 };
@@ -201,7 +201,7 @@ async function createTranscript(message, transcriptname, client) { //Tests
     script.append(vue);
     body.appendChild(script);
 
-    await fs.writeFileSync(config.tickets.pathtranscripts + transcriptname + '.html', document.documentElement.outerHTML); //Enregistrer l'entête du serveur
+    await fs.writeFileSync(config.tickets.pathTranscripts + transcriptname + '.html', document.documentElement.outerHTML); //Enregistrer l'entête du serveur
 }
 function replaceescape(content)
 {

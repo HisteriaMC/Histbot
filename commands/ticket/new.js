@@ -5,7 +5,7 @@ let desac = false;
 module.exports.run = async(client, message, args) => {
     if (config.owners.includes(message.author.id) && args[0] === "desac") return desac = !desac;
     if (desac) return message.channel.send("Les tickets sont temporairement désactivés probablement dû à une surcharge. Veuillez nous en excuser.");
-    if (message.guild.id !== config.serverid) return message.channel.send("Pas de ticket sur ce serveur");
+    if (message.guild.id !== config.serverId) return message.channel.send("Pas de ticket sur ce serveur");
 
     message.guild.channels.create(message.author.username, {
         type: 'text',
@@ -16,7 +16,7 @@ module.exports.run = async(client, message, args) => {
                 allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
             },
             {
-                id: config.serverid,
+                id: config.serverId,
                 deny: ["VIEW_CHANNEL"]
             },
             {
@@ -24,7 +24,7 @@ module.exports.run = async(client, message, args) => {
                 allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
             }
         ],
-        parent: config.tickets.categorywait, reason: 'Ticket de ' + message.author.tag
+        parent: config.tickets.categoryWait, reason: 'Ticket de ' + message.author.tag
     }).then(async c => {
         if (!c || !c instanceof TextChannel) return message.reply("Désolé, il y'a une erreur quelque part");
         let reasons;
@@ -56,7 +56,7 @@ module.exports.run = async(client, message, args) => {
                 color: config.color,
                 timestamp: new Date(),
                 footer: {
-                    icon_url: config.image_url,
+                    icon_url: config.imageURL,
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 fields: [
@@ -97,7 +97,7 @@ async function reason(message, reason, author, platform) {
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria " + new Date().getFullYear()
             },
             fields: [
@@ -117,13 +117,13 @@ async function reason(message, reason, author, platform) {
     let msgpseudo = await message.channel.send('**Veuillez répondre ci-dessous avec votre pseudo en jeu (écrivez . si non-nécessaire)**');
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', m => {
-        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop();
+        if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop();
         msgpseudo.delete();
         pseudo(message, m, reason, author, platform);
         collector.stop();
     });
     collector.on('end', collected => {
-        if(config.tickets.categorywait !== message.channel.parent.id) return;
+        if(config.tickets.categoryWait !== message.channel.parent.id) return;
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
@@ -147,7 +147,7 @@ async function pseudo(message, response, reason, author){
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria " + new Date().getFullYear()
             },
             fields: [
@@ -170,13 +170,13 @@ async function pseudo(message, response, reason, author){
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', desc => {
         if(desc.me) return;
-        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop;
+        if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop;
         msgdescription.delete();
         description(message, reason, content, desc, author);
         collector.stop();
     });
     collector.on('end', collected => {
-        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop();
+        if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop();
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
@@ -195,7 +195,7 @@ async function description(message, reason, pseudo, description, author){
         message.channel.send(content);
         content = "Trop long, envoyé en message";
     }
-    categoryid = config.tickets.categoryopened;
+    categoryid = config.tickets.categoryOpened;
     await message.channel.edit({
         name: reason??"skip",
         topic: "Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+")",
@@ -211,7 +211,7 @@ async function description(message, reason, pseudo, description, author){
             color: config.color,
             timestamp: new Date(),
             footer: {
-                icon_url: config.image_url,
+                icon_url: config.imageURL,
                 text: "@Histeria " + new Date().getFullYear()
             },
             fields: [

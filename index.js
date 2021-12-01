@@ -133,7 +133,7 @@ function loadautorespond()
     client.mysql.query('SELECT * FROM `autorespond`;', function(err, results) {
         if(!results) return;
         results.forEach(row => {
-            if(row["server"] === config.serverid) client.autorespond.set(row["autorespond"], row["content"]);
+            if(row["server"] === config.serverId) client.autorespond.set(row["autorespond"], row["content"]);
         });
     });
 }
@@ -142,8 +142,8 @@ client.log = async function log(message, platform = "all") {
     let channelid;
     switch (platform) {
         case "gen": case "general": channelid = config.logs; break;
-        case "staff": channelid = config.logsstaff; break;
-        default: case "all": channelid = config.logsstaff;break;
+        case "staff": channelid = config.logsStaff; break;
+        default: case "all": channelid = config.logsStaff;break;
     }
 
     let channel = client.channels.cache.get(channelid);
