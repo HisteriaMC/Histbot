@@ -2,23 +2,20 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    let server = message.guild.id === config.serverid ? "Java" : "Bedrock";
-    let port = message.guild.id === config.serverid ? 25565 : 19132;
-    mcutil.queryFull('histeria.fr', {port: port, enableSRV: true, timeout: 5000})
+    mcutil.queryFull('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
             let clean = getCleanPlayers(response.players);
             let d = new Date();
+            const title = `Liste de joueurs connectés sur le serveur (${response.onlinePlayers}/${response.maxPlayers})`;
             switch(clean.type){
                 case "message":
-                    message.channel.send(`Voici la liste de tout les joueurs connectés sur le serveur ${server} (${response.onlinePlayers}/${response.maxPlayers})`);
-                    clean.list.forEach(msg => {
-                        message.channel.send(msg);
-                    })
+                    message.channel.send(title);
+                    clean.list.forEach(msg => {message.channel.send(msg);});
                     break;
                 case "description":
                     message.channel.send({
-                        embed: {
-                            title: `Liste de joueurs connectés sur le serveur ${server} (${response.onlinePlayers}/${response.maxPlayers})`,
+                        embeds: [{
+                            title: title,
                             color: config.color,
                             timestamp: new Date(),
                             footer: {
@@ -26,13 +23,13 @@ module.exports.run = async(client, message) => {
                                 text: "@Histeria " + d.getFullYear()
                             },
                             description: clean.list[0]
-                        }
+                        }]
                     });
                     break;
                 case "fields":
                     message.channel.send({
-                        embed: {
-                            title: `Liste de joueurs connectés sur le serveur ${server} (${response.onlinePlayers}/${response.maxPlayers})`,
+                        embeds: [{
+                            title: title,
                             color: config.color,
                             timestamp: new Date(),
                             footer: {
@@ -45,12 +42,11 @@ module.exports.run = async(client, message) => {
                                     value: clean.list[0]
                                 }
                             ]
-                        }
+                        }]
                     });
                     break;
             }
-        })
-        .catch((error) => {
+        }).catch((error) => {
             message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
         });
 };
@@ -75,11 +71,12 @@ function getCleanPlayers(players)
     cleanlist.push(stringplayers.substr(0, stringplayers.length -2));
     return {type: type, list: cleanlist};
 }
+
 module.exports.config = {
     name: "list",
-    description: "Liste des joueurs en jeu",
-    format: "+list",
-    alias: ["listbedrock", "listplots", "listjava"],
+    description: "Donne la liste des joueurs connectés au serveur",
+    format: "list",
     category: "Informations",
-    canBeUseByBot: true
+    canBeUseByBot: true,
+    delete: true
 };

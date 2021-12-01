@@ -1,7 +1,6 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    if(!args[0]) return message.reply("Il manque la personne a récupéré");
     client.mysqlminicore.query("SELECT * FROM `stats` WHERE player = ?", [args[0]], function (err, results){
         if(err) {
             console.error(err);
@@ -12,32 +11,32 @@ module.exports.run = async(client, message, args) => {
         let result = results[0];
         let timeig = convert(result.total + (result.online !== "offline" ? Date.now()/1000 - result.join : 0));
         let fields = [
-                    {
-                        name: "Kills",
-                        value: result.kill,
-                        inline: true
-                    },
-                    {
-                        name: "Death",
-                        value: result.death,
-                        inline: true
-                    },
-                    {
-                        name: "Ratio",
-                        value: Math.round(((result.kill < 2 ? 1 : result.kill) / (result.death < 2 ? 1 : result.death)) * 100) / 100,
-                        inline: true
-                    },
-                    {
-                        name: "Première connexion",
-                        value: result.firstjoin,
-                        inline: true
-                    },
-                    {
-                        name: "Temps de jeu",
-                        value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
-                        inline: true
-                    },
-                ];
+                {
+                    name: "Kills",
+                    value: String(result.kill),
+                    inline: true
+                },
+                {
+                    name: "Death",
+                    value: String(result.death),
+                    inline: true
+                },
+                {
+                    name: "Ratio",
+                    value: String(Math.round(((result.kill < 2 ? 1 : result.kill) / (result.death < 2 ? 1 : result.death)) * 100) / 100),
+                    inline: true
+                },
+                {
+                    name: "Première connexion",
+                    value: String(result.firstjoin),
+                    inline: true
+                },
+                {
+                    name: "Temps de jeu",
+                    value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
+                    inline: true
+                },
+            ];
         if(result.online === "offline") {
             let lastconnexion = convertwithday(Date.now()/1000 - result.join);
             fields.push(
@@ -46,17 +45,24 @@ module.exports.run = async(client, message, args) => {
                     value: `${lastconnexion.day} jours, ${lastconnexion.hour} heures, ${lastconnexion.minute} minutes et ${lastconnexion.second} secondes`,
                     inline: true
                 });
+        } else {
+            fields.push(
+                {
+                    name: "Serveur",
+                    value: result.online,
+                    inline: true
+                });
         }
  
         if(result.device !== ""){
             fields.push({
                 name: "Appareil",
-                value: result.device,
+                value: String(result.device),
                 inline: true
             });
         }
         message.reply({
-            embed: {
+            embeds: [{
                 title: `Information du joueur **${result.player}**`,
                 color: config.color,
                 timestamp: new Date(),
@@ -65,7 +71,7 @@ module.exports.run = async(client, message, args) => {
                     text: "@Histeria "+new Date().getFullYear()
                 },
                 fields: fields
-            }
+            }]
         })
     })
         
@@ -96,10 +102,13 @@ function convertwithday(time)
     return {day: day??0, hour: hour??0, minute: minute??0, second: second??0};
 }
 module.exports.config = {
-    name: "statsig",
+    name: "stats",
     description: "Voir les informations d'un joueur en jeu",
-    format: "+statsig <pseudo>",
-    alias: ["statsingame", "statsplayer", "statsi"],
+    format: "stats <pseudo>",
+    alias: ["statsingame", "statsplayer", "statsi", "statsig"],
     canBeUseByBot: false,
-    category: "In Game"
+    category: "In Game",
+    iglink: true,
+    needed_args: 1,
+    args: {pseudo: "string"}
 };

@@ -4,7 +4,6 @@ const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
     if (!message.channel.parent || !config.tickets.allchannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
-    await message.delete();
     message.channel.messages.fetch({ limit: 10 }).then(messages => {
         messages.forEach(base => {
             try{
@@ -36,7 +35,7 @@ module.exports.run = async(client, message) => {
                     });
                 }
                 base.reactions.removeAll();
-                let categoryid = message.guild.id === config.serveridjava ? config.tickets.java.categoryopened : config.tickets.bedrock.categoryopened;
+                let categoryid = config.tickets.categoryopened;
 
                 let topic = message.channel.topic;
                 if(!topic) topic = "";
@@ -52,8 +51,10 @@ module.exports.run = async(client, message) => {
 module.exports.config = {
     name: "skip",
     description: "Sauter toutes les étapes de la création d'un ticket",
-    format: "+skip",
+    format: "skip",
     alias: ["skipped"],
     canBeUseByBot: false,
-    category: "Ticket"
+    category: "Ticket",
+    delete: true,
+    bypassChannel: true
 };

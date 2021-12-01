@@ -6,7 +6,7 @@ module.exports.run = async(client, message) => {
     let noalias = [];
     client.commands.forEach(command => {
         let name = command.config.name;
-        let toadd = "**"+command.config.format+"** "+command.config.description;
+        let toadd = "**"+config.prefix+command.config.format+"** "+command.config.description;
         if(noalias.includes(name) || command.config.category === "hidden") return;
         noalias.push(name);
 
@@ -18,8 +18,8 @@ module.exports.run = async(client, message) => {
     }
 
     let d = new Date();
-    await message.channel.send({
-        embed: {
+    message.channel.send({
+        embeds: [{
             title: `__Liste des commandes disponibles__`,
             color: config.color,
             timestamp: d,
@@ -28,14 +28,15 @@ module.exports.run = async(client, message) => {
                 text: "@Histeria "+d.getFullYear()
             },
             fields: fields
-        }
+        }]
     })
 };
 
 module.exports.config = {
     name: "help",
     description: "Voir la liste des commandes disponible",
-    format: "+help",
+    format: "help",
     category: "Informations",
-    canBeUseByBot: true
+    canBeUseByBot: true,
+    delete: true
 }

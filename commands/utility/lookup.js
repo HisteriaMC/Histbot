@@ -8,21 +8,25 @@ module.exports.run = async(client, message, args) => {
     if(!member) member = message.member;
     const activities = member.presence.activities;
     let playing;
-    activities.forEach(activity => {
-        let activitytype = getActivityType(activity.type);
-        let toadd = activitytype ? activitytype:''+" "+activity.name;
-        if(activity.details) toadd = toadd.concat(", "+activity.details);
-        if(activity.state) toadd = toadd.concat(", "+activity.state);
-        toadd = toadd.concat(' (Depuis '+moment.unix(activity.createdAt).calendar().toLowerCase()+')');
 
-        if(!playing) playing = toadd;
-        else playing = playing.concat("\n\n"+toadd);
-    });
+    if(!activities) playing = "Aucune";
+    else {
+        activities.forEach(activity => {
+            let activitytype = getActivityType(activity.type);
+            let toadd = activitytype ? activitytype:''+" "+activity.name;
+            if(activity.details) toadd = toadd.concat(", "+activity.details);
+            if(activity.state) toadd = toadd.concat(", "+activity.state);
+            toadd = toadd.concat(' (Depuis '+moment.unix(activity.createdAt).calendar().toLowerCase()+')');
+
+            if(!playing) playing = toadd;
+            else playing = playing.concat("\n\n"+toadd);
+        });
+    }
 
     let createdat = moment.utc(member.user.createdAt);
     let joinat = moment.utc(member.joinedAt);
     message.channel.send({
-        embed: {
+        embeds: [{
             color: config.color,
             title: `Statistiques de **${member.user.tag}**`,
             thumbnail: {
@@ -49,7 +53,7 @@ module.exports.run = async(client, message, args) => {
             footer: {
                 text: `Informations de l'utilisateur ${member.user.tag}`
             }
-        }
+        }]
     })
 
 };
@@ -59,7 +63,7 @@ function getStatus(type)
         case "dnd": return "Ne pas déranger";
         case "online": return "En ligne";
         case "idle": return "Absent";
-        case "offline": return "Hors ligne"
+        default: case "offline": return "Hors ligne"
     }
 }
 function getActivityType(type)
@@ -75,7 +79,7 @@ function getActivityType(type)
 module.exports.config = {
     name: "lookup",
     description: "Voir les informations d'un utilisateur discord",
-    format: "+lookup <user>",
+    format: "lookup [user]",
     alias: ["whois", "ui"],
     canBeUseByBot: false,
     category: "Utilitaire"

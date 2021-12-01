@@ -2,12 +2,8 @@ const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
     const d = new Date();
-    message.delete().catch(()=>{});
-
-    let port = message.guild.id === config.serverid ? "19132" : "25565";
-
-    await message.channel.send({
-        embed: {
+    message.channel.send({
+        embeds: [{
             title: `**__Info du serveur__**`,
             color: config.color,
             timestamp: new Date(),
@@ -21,18 +17,19 @@ module.exports.run = async(client, message) => {
                     value: "histeria.fr"
                 },
                 {
-                    name: `Port`,
-                    value: port
+                    name: "Port",
+                    value: String(config.port)
                 }
             ],
-        }
+        }]
     });
 };
 
 module.exports.config = {
     name: "ip",
     description: "IP du serveur",
-    format: "+ip",
+    format: "ip",
     canBeUseByBot: true,
-    category: "Informations"
+    category: "Informations",
+    delete: true
 };

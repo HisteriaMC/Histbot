@@ -1,10 +1,7 @@
-const config = require("../../config.json");
+const hidden = require("../../hidden.json");
 
 module.exports.run = async(client, message, args) => {
-    if (!message.member.permissions.has("BAN_MEMBERS")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
-    if (!config.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
-    if (!args[0]) return message.reply("Il manque la personne à qui donner l'argent");
-    if (!args[1]) return message.reply("Il manque le montant à donner");
+    if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
     if (!Number.isInteger(parseInt(args[1]))) return message.reply("Le montant n\'est pas valide");
 
     client.mysqlminicore.query("UPDATE money SET money = money + ? WHERE userName = ?", [args[1], args[0]], function (err) {
@@ -14,14 +11,16 @@ module.exports.run = async(client, message, args) => {
             return;
         }
 
-        message.reply(args[1] + ' ont bien été donné à ' + args[0]);
+        message.reply("**"+args[1] + '$** ont bien été donné à **' + args[0]+"**");
     });
 };
 
 module.exports.config = {
     name: "givemoney",
     description: "Give de la money à un joueur",
-    format: "+givemoney <pseudo> <montant>",
+    format: "givemoney <pseudo> <montant>",
     canBeUseByBot: false,
-    category: "Moderation"
+    category: "Moderation",
+    permission: "BAN_MEMBERS",
+    needed_args: 2
 };

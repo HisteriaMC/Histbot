@@ -1,40 +1,24 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    let target = message.guild.member(message.mentions.users.first());
-    if(!target) target = message.guild.member(args[0]);
+    let target = message.guild.members.cache.get(message.mentions.users.first());
+    if(!target) target = message.guild.members.cache.get(args[0]);
 
+    let callback = function(err, results) {sendResults(message, results, target?.id, args)};
     if(!args[0]){
-        client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id],
-            function(err, results) {
-                sendResults(message, results, message.author.id, args)
-            });
-    } else if(target){
-        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
-            client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id],
-                function(err, results) {
-                    sendResults(message, results, target.id, args)
-                });
+        client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
+    } else {
+        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.staffserverid].includes(message.guild.id)) {
+            if(target){
+                client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
+            } else if(args[0].match(/^\d+$/g)){
+                client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [args[0]], callback);
+            } else if(args[0] === 'name') {
+                    if (!args[1]) return message.reply('Il manque le nom de la personne ciblée');
+                    target = args[1];
+                    client.mysql.execute('SELECT * FROM `transcripts` WHERE username = ?', [target], callback);
+            }
         } else return message.reply("Vous n'avez pas la permission");
-    } else if(args[0].match(/^\d+$/g)){
-        if(message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
-            client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [args[0]],
-            function(err, results) {
-                sendResults(message, results, args[0], args)
-            });
-        } else return message.reply("Vous n'avez pas la permission");
-    } else if(args[0] === 'name') {
-        if (message.member.permissions.has('MANAGE_MESSAGES') && [config.serverid, config.serveridjava, config.staffserverid].includes(message.guild.id)) {
-
-            if (!args[1]) return message.reply('Il manque le nom de la personne ciblée');
-            target = args[1];
-
-            client.mysql.execute('SELECT * FROM `transcripts` WHERE username = ?', [target],
-                function (err, results) {
-                    sendResults(message, results, target, args, false)
-                });
-        } else return message.reply("Vous n'avez pas la permission");
-
     }
 };
 function sendResults(message, results, who, args, id = true)
@@ -51,7 +35,7 @@ function sendResults(message, results, who, args, id = true)
     });
     let d = new Date();
     message.author.send({
-        embed: {
+        embeds: [{
             title: `**__Transcripts__**`,
             color: config.color,
             timestamp: d,
@@ -62,10 +46,10 @@ function sendResults(message, results, who, args, id = true)
             fields: [
                 {
                     name: who,
-                    value: content
+                    value: content.substring(0, 1024)
                 }
             ],
-        }
+        }]
     }).then(() => message.reply('Je vous ai envoyé le résultat en DM'))
         .catch(() => message.reply("Je n'arrive pas à vous envoyer de message, assurez vous d'autoriser les messages privés avec au moins un serveur en commun avec moi"));
 
@@ -74,7 +58,7 @@ function sendResults(message, results, who, args, id = true)
 module.exports.config = {
     name: "transcripts",
     description: "Voir la liste de ses tickets",
-    format: "+transcripts <user/'name'> [pseudo/'force']",
+    format: "transcripts [user/'name'] [pseudo/'force']",
     canBeUseByBot: false,
     category: "Ticket"
 };

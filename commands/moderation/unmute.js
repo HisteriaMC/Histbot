@@ -1,11 +1,11 @@
+const {User} = require("discord.js");
 module.exports.run = async(client, message, args) => {
-    if(!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
-    if(!message.guild.member(client.user).hasPermission("MANAGE_ROLES")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    if(!message.guild.members.cache.get(client.user.id).permissions.has("MANAGE_ROLES")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
-    if(!args[0]) return message.reply("Format de la commande : "+module.exports.config.format);
-
-    let muted = message.guild.member(message.mentions.users.first());
+    let muted = message.mentions.users.first();
+    if(!muted && args[0]) muted = message.guild.members.cache.get(args[0]);
     if(!muted) return message.reply("Utilisateur introuvable.");
+    if(muted instanceof User) muted = message.guild.members.cache.get(muted.id);
 
     let mutedrole = message.guild.roles.cache.find(r => r.name === "Muted");
     if(!mutedrole) return message.reply("Il n'y a pas de role Muted sur ce serveur :sob:");
@@ -16,7 +16,7 @@ module.exports.run = async(client, message, args) => {
         .catch(error => {console.log("Impossible de dm le unmute "+message.guild.name+" erreur : "+error)})
 
     muted.roles.remove(mutedrole).then(member => {
-        message.channel.send(`<a:OUI:702130016850411610> **${member.user.username}** a bien été unmute par **${message.author.username}**`);
+        message.reply(`<a:OUI:702130016850411610> **${member.user.username}** a bien été unmute par **${message.author.username}**`);
     }) .catch(err => {
         message.reply(`Désolé ${message.author} je ne peux pas unmute cette personne parce que : ${err}`);
     })
@@ -25,7 +25,9 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "unmute",
     description: "Unmute quelqu'un du serveur discord.",
-    format: "+unmute <user>",
+    format: "unmute <user>",
     category: "Moderation",
-    canBeUseByBot: false
+    canBeUseByBot: false,
+    permission: "MANAGE_MESSAGES",
+    needed_args: 1
 };

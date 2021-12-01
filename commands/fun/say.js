@@ -1,7 +1,6 @@
 module.exports.run = async(client, message, args) => {
     if(!args[0]) return message.reply("Format de la commande : "+module.exports.config.format);
     message.delete();
-    if(!message.member.hasPermission("MANAGE_MESSAGES")) return;
 
     let msg = args.join(" ");
 
@@ -15,7 +14,10 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "say",
     description: "Faire parler le bot",
-    format: "+say <message>",
+    format: "say <message>",
     category: "Fun",
-    canBeUseByBot: false
+    canBeUseByBot: false,
+    permission: "MANAGE_MESSAGES",
+    needed_args: 1,
+    args: {message: "string"}
 };

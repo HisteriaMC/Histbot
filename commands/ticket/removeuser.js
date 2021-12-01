@@ -8,7 +8,7 @@ module.exports.run = async(client, message, args) => {
         let member = message.mentions.members.first() || await client.users.fetch(args[0]);
         if (!member) return message.reply("L'utilisateur mentionné n'est pas valide");
 
-        await message.channel.updateOverwrite(member.id, {
+        await message.channel.permissionOverwrites.edit(member.id, {
             'VIEW_CHANNEL': false,
             'SEND_MESSAGES': false
         }, "Supressin d'utilisateur dans un ticket");
@@ -22,8 +22,9 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "removeuser",
     description: "Supprimer un utilisateur d'un ticket",
-    format: "+removeuser [user]",
+    format: "removeuser <user>",
     alias: ["remove", "removeusr", "deleteuser", "delete", "deleteusr"],
     canBeUseByBot: false,
-    category: "Ticket"
+    category: "Ticket",
+    bypassChannel: true
 };

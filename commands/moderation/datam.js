@@ -4,7 +4,7 @@ module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
 
     let rcon = client.commands.get("rcon");
-    rcon.config.rconfunc(19133, "tbantext " + args.join(' '), message, "fac1");
+    rcon.config.rconfunc(19133, "datam " + args.join(' '), message, "fac1");
 };
 
 module.exports.config = {

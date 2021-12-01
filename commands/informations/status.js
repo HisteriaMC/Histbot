@@ -2,29 +2,19 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    let server = message.guild.id === config.serverid ? "bedrock" : "java"; //WTF x2
-
-    if(server === "java"){
-        mcutil.status('histeria.fr', {port: 25565, enableSRV: true, timeout: 5000})
-            .then((response) => replywithembed(server, 25565, response, message))
-            .catch((error) => {
-                message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
-            });
-    } else {
-        mcutil.statusBedrock('histeria.fr', {port: 19132, enableSRV: false, timeout: 5000})
-            .then((response) => replywithembed(server, 19132, response, message))
-            .catch((error) => {
-                message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
-            });
-    }
+    mcutil.statusBedrock('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
+        .then((response) => replywithembed(response.port, response, message))
+        .catch((error) => {
+            message.channel.send("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
+        });
 };
 
-function replywithembed(server, port, response, message)
+function replywithembed(port, response, message)
 {
     let d = new Date();
     message.channel.send({
-        embed: {
-            title: `Statut du serveur ${server}`,
+        embeds: [{
+            title: `Statut du serveur`,
             color: config.color,
             timestamp: new Date(),
             footer: {
@@ -52,15 +42,15 @@ function replywithembed(server, port, response, message)
                     value: `${response["version"]}`
                 }
             ]
-        }
+        }]
     });
 }
 
 module.exports.config = {
     name: "status",
-    description: "Statut actuelle du serveur en jeu",
-    format: "+status",
-    alias: ["statusbedrock", "statusplots"],
+    description: "Statut actuel du serveur en jeu",
+    format: "status",
     category: "Informations",
-    canBeUseByBot: true
+    canBeUseByBot: true,
+    delete: true
 };

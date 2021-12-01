@@ -1,16 +1,17 @@
 const config = require('../../config.json')
 
 module.exports.run = async(client, message, args) => {
-    let target = message.guild.member(message.mentions.users.first());
-    if(!target && args[0]) target = message.guild.member(args[0]);
+    let target = message.mentions.users.first();
+    if(!target && args[0]) target = message.guild.members.cache.get(args[0]);
     if(!target) target = message.member;
+
     const d = new Date();
     let full = client.xpapi.getFull(target.id);
     if(!full) return message.reply('Utilisateur non trouvé');
 
     message.reply({
-        embed: {
-            title: `Statistiques de **${target.displayName}**`,
+        embeds: [{
+            title: `Statistiques de **${target.displayName??target.username}**`,
             color: config.color,
             timestamp: d,
             footer: {
@@ -34,14 +35,15 @@ module.exports.run = async(client, message, args) => {
                     inline: true
                 },
             ]
-        }
+        }]
     })
 };
 
 module.exports.config = {
     name: "xp",
     description: "Récupérer votre xp ou celle d'un membre sur le discord",
-    format: "+xp <utilisateur>",
+    format: "xp [user]",
     canBeUseByBot: false,
-    category: "Fun"
+    category: "Fun",
+    args: {user: "user"}
 };

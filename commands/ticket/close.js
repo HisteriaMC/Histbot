@@ -4,7 +4,8 @@ const config = require("../../config.json");
 const Discord = require("discord.js");
 const fs = require('fs');
 const path = require("path");
-const {JSDOM} = require("jsdom");
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 this.indeleting = {};
 
 module.exports.run = async(client, message) => {
@@ -14,7 +15,7 @@ module.exports.run = async(client, message) => {
     if(this.indeleting[message.channel.id] && this.indeleting[message.channel.id] > Date.now()) return message.reply("Une autre commande de close est en cours d'execution");
 
     let newmsg = await message.channel.send({
-        embed: {
+        embeds: [{
             title: `**__Close Ticket__**`,
             color: config.color,
             timestamp: new Date(),
@@ -23,21 +24,20 @@ module.exports.run = async(client, message) => {
                 text: "@Histeria " + new Date().getFullYear()
             },
             description: ":question: Voulez vous vraiment fermer ce ticket, confirmez avec la réaction ci-dessous"
-        }
+        }]
     });
     let emotecloseid = config.tickets.emoteclose.split(":")[2].replace(">", "");
 
     await newmsg.react(emotecloseid);
     const filter = (reaction) => reaction.emoji.id === emotecloseid;
-    const collector = newmsg.createReactionCollector(filter, { time: 60000 });
+    const collector = newmsg.createReactionCollector({ filter, time: 60000 });
 
     collector.on('collect', async react => {
         d = new Date()
-        if(react.me) return;
         collector.stop();
         this.indeleting[message.channel.id] = Date.now() + 10000;
         newmsg.edit({
-            embed: {
+            embeds: [{
                 title: `**__Close Ticket__**`,
                 color: config.color,
                 timestamp: d,
@@ -46,16 +46,15 @@ module.exports.run = async(client, message) => {
                     text: "@Histeria " + new Date().getFullYear()
                 },
                 description: "Suppression du salon dans 5 secondes..."
-            }
+            }]
         });
         react.remove();
         await newmsg.react(config.idees.emoteno);
         const filter = (reaction) => reaction.emoji.id === config.idees.emoteno.split(":")[2].replace(">", "");
 
-        const collector2 = newmsg.createReactionCollector(filter, { time: 7000 });
+        const collector2 = newmsg.createReactionCollector({filter,  time: 7000 });
         collector2.on('collect', async (react, user) => {
             d = new Date()
-            if(react.me) return;
             newmsg.edit({
                 embed: {
                     title: `**__Close Ticket__**`,
@@ -71,9 +70,9 @@ module.exports.run = async(client, message) => {
             react.remove();
             collector2.stop()
         });
-        let transcriptname = await require('crypto').randomBytes(3).toString('hex');
-        while(await fs.existsSync(transcriptname)){
-            transcriptname = await require('crypto').randomBytes(3).toString('hex');
+        let transcriptname = require('crypto').randomBytes(3).toString('hex');
+        while(fs.existsSync(transcriptname)){
+            transcriptname = require('crypto').randomBytes(3).toString('hex');
         }
 
         await createTranscript(message, transcriptname, client);
@@ -103,12 +102,12 @@ module.exports.run = async(client, message) => {
             [transcriptname, name, id, username]);
         message.channel.delete();
         client.log(`Le ticket '${channelname}' de ${user?.tag||"introuvable"} a été fermé par ${message.author.tag} `+
-            `https://transcripts.histeria.fr/${transcriptname}`, message.guild.id === config.serveridjava ? "java" : "bedrock");
+            `https://transcripts.histeria.fr/${transcriptname}`, "gen");
         if(!user) return;
         let bywho = "";
         if(user.id !== message.author.id) bywho = " par "+message.author.tag;
         user.send({
-            embed: {
+            embeds: [{
                 title: `**__Close Ticket__**`,
                 color: config.color,
                 timestamp: new Date(),
@@ -118,11 +117,11 @@ module.exports.run = async(client, message) => {
                 },
                 description: `Votre ticket '${channelname}' a bien été supprimé`+bywho+
                     '\nVous pouvez accéder à un transcript de votre ticket via [ce lien](https://transcripts.histeria.fr/'+transcriptname+')'
-            }
+            }]
         }).catch(() => console.log("Impossible de dm le closeur d'un ticket"));
     });
     collector.on('end', collected => {
-        if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(message.channel.parent.id)) return;
+        if(config.tickets.categorywait !== message.channel.parent?.id) return;
         if(collected.size === 0) newmsg.channel.send("Absence de plus de 1 minute, annulation");
     });
 };
@@ -145,8 +144,7 @@ async function createTranscript(message, transcriptname, client) { //Tests
         if (channelMessages)
             messageCollection = messageCollection.concat(channelMessages);
     }
-    let msgs = messageCollection.array().reverse();
-
+    let msgs = Array.from(messageCollection.values()).reverse();
     let body = document.body;
 
     let finalmsgs = [];
@@ -184,6 +182,7 @@ async function createTranscript(message, transcriptname, client) { //Tests
     let topic = message.channel.topic;
     if(!topic) topic = "";
 
+    topic = topic.replace("'", '');
     let splitted = topic.split('@').pop();
     splitted = splitted.split('>').shift();
 
@@ -313,8 +312,9 @@ function replacemarkdown(content)
 module.exports.config = {
     name: "close",
     description: "Close un ticket",
-    format: "+close",
+    format: "close",
     alias: ["fermer"],
     canBeUseByBot: false,
-    category: "Ticket"
+    category: "Ticket",
+    bypassChannel: true
 };

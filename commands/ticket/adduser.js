@@ -9,7 +9,7 @@ module.exports.run = async(client, message, args) => {
         let member = message.mentions.members.first() || await client.users.fetch(args[0]);
         if (!member) return message.reply("L'utilisateur mentionné n'est pas valide");
 
-        await message.channel.updateOverwrite(member.id, {
+        await message.channel.permissionOverwrites.edit(member.id, {
             'VIEW_CHANNEL': true,
             'SEND_MESSAGES': true
         }, "Ajout d'utilisateur dans un ticket");
@@ -23,8 +23,10 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "adduser",
     description: "Ajouter un utilisateur à un ticket",
-    format: "+adduser [user]",
+    format: "adduser <user>",
     alias: ["add", "addusr"],
     canBeUseByBot: false,
-    category: "Ticket"
+    category: "Ticket",
+    needed_args: 1,
+    bypassChannel: true
 };

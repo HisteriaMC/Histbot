@@ -2,7 +2,6 @@ const config = require('../../config.json');
 const moment = require('moment');
 
 module.exports.run = async(client, message, args) => {
-    if(!args[0]) return message.reply("Il manque la personne a vérifié");
     client.mysqlminicore.query("SELECT * FROM `banPlayers` WHERE player = ?", [args[0]], function (err, results){
         if(err) {
             console.error(err);
@@ -13,7 +12,7 @@ module.exports.run = async(client, message, args) => {
         let result = results[0];
 
         message.reply({
-            embed: {
+            embeds: [{
                 title: `Information du ban de **${result.player}**`,
                 color: config.color,
                 timestamp: new Date(),
@@ -39,7 +38,7 @@ module.exports.run = async(client, message, args) => {
                         value: moment.unix(result.banTime).format("LLL") +` (${moment.unix(result.banTime).fromNow()})`
                     }
                 ]
-            }
+            }]
         })
     })
 };
@@ -47,7 +46,10 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "tcheck",
     description: "Voir les informations d'un joueur banni",
-    format: "+tcheck <pseudo>",
+    format: "tcheck <pseudo>",
     canBeUseByBot: false,
-    category: "In Game"
+    category: "In Game",
+    needed_args: 1,
+    iglink: true,
+    args: {pseudo: "string"}
 };

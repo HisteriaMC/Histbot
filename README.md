@@ -18,7 +18,3 @@ Les librairies suivantes sont nécessaires à l'usage
 - jsdom
 
 Elles sont téléchargeable via cette commmande `npm i discord.js fs mysql2 path minecraft-server-util moment crypto node-fetch jsdom`.
-
-# Fonctionnalités
-
-![image](https://user-images.githubusercontent.com/44753923/131345402-9d86fb9c-975e-40bb-896a-95dce9280847.png)

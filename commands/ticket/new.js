@@ -1,40 +1,57 @@
 const config = require("../../config.json");
+const {TextChannel, MessageActionRow, MessageSelectMenu} = require("discord.js");
+let desac = false;
 
-module.exports.run = async(client, message) => {
-    if (message.guild.id !== config.serverid && message.guild.id !== config.serveridjava) return message.channel.send("Pas de ticket sur ce serveur");
-    let platform = message.guild.id === config.serverid ? "bedrock" : "java";
+module.exports.run = async(client, message, args) => {
+    if (config.owners.includes(message.author.id) && args[0] === "desac") return desac = !desac;
+    if (desac) return message.channel.send("Les tickets sont temporairement désactivés probablement dû à une surcharge. Veuillez nous en excuser.");
+    if (message.guild.id !== config.serverid) return message.channel.send("Pas de ticket sur ce serveur");
 
     message.guild.channels.create(message.author.username, {
         type: 'text',
-        topic: 'Ticket en attente de <@' + message.member.id+'> '+platform,
+        topic: 'Ticket en attente de <@' + message.member.id+'>',
         permissionOverwrites: [
             {
                 id: message.member.id,
-                allow: ["VIEW_CHANNEL", "SEND_MESSAGES"]
+                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
             },
             {
-                id: message.guild.id === config.serverid ? config.serverid : config.serveridjava,
+                id: config.serverid,
                 deny: ["VIEW_CHANNEL"]
             },
             {
-                id: platform === "bedrock" ? config.tickets.bedrock.role : config.tickets.java.role,
-                allow: ["VIEW_CHANNEL"]
+                id: config.tickets.role,
+                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
             }
         ],
-        parent: message.guild.id === config.serverid ? config.tickets.bedrock.categorywait : config.tickets.java.categorywait, reason: 'Ticket de ' + message.author.tag
+        parent: config.tickets.categorywait, reason: 'Ticket de ' + message.author.tag
     }).then(async c => {
-        if (!c) return message.reply("Désolé, il y'a une erreur quelque part");
+        if (!c || !c instanceof TextChannel) return message.reply("Désolé, il y'a une erreur quelque part");
         let reasons;
 
         for (const [key, value] of Object.entries(config.tickets.reasons)) {
             if (!reasons) reasons = "**Veuillez réagir avec un émoji en dessous du message concernant votre demande**\n" + key + " " + value;
             else reasons = reasons.concat("\n" + key + " " + value);
         }
-        client.log(`Le ticket <#${c.id}> a été ouvert par ${message.author.tag}`,
-            message.guild.id === config.serveridjava ? "java" : "bedrock")
-        message.reply(`:white_check_mark: Votre Ticket a été créé, <#${c.id}>`);
+        client.log(`Le ticket <#${c.id}> a été ouvert par ${message.author.tag}`, 'gen');
+        message.reply(`:white_check_mark: Votre Ticket a été créé, <#${c.id}>`); //Send msg in channel of opening
+
+        let options = [];
+        for (const [key, value] of Object.entries(config.tickets.reasons)) { //Generate list of options
+            options.push({
+                label: value,
+                value: key
+            })
+        }
+        const row = new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('select')
+                    .setPlaceholder('Choisissez ici le sujet de votre ticket')
+                    .addOptions(options),
+            );
         let newmsg = await c.send({
-            embed: {
+            embeds: [{
                 title: `**__Nouveau Ticket__**`,
                 color: config.color,
                 timestamp: new Date(),
@@ -45,51 +62,37 @@ module.exports.run = async(client, message) => {
                 fields: [
                     {
                         name: "Sujet du ticket",
-                        value: reasons
+                        value: "Veuillez choisir dans la menu en dessous le sujet du ticket"
                     }
                 ],
-            }
+            }],
+            components: [row]
         });
         await newmsg.pin().then( () => {c.messages.fetch({ limit: 1 }).then(messages => {messages.first().delete();})});
 
-        let msgrequest = await c.send('**Veuillez réagir avec un émoji au dessus de ce message pour préciser votre demande**');
-        const filter = (reaction) => config.tickets.reasons[reaction.emoji.name];
-        const collector = newmsg.createReactionCollector(filter, { time: 300000 });
-
-        let customcollect = 0;
-        collector.on('collect', async react => {
-            if(react.me) return;
-            customcollect++;
-            msgrequest.delete();
+        const collector = newmsg.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 300000 });
+        collector.on('collect', async interaction => {
             collector.stop();
-            await reason(newmsg, react, message.author, platform);
+            await interaction.deferUpdate();
+            await reason(newmsg, config.tickets.reasons[interaction.values[0]], message.author);
         });
         collector.on('end', () => {
-            if(customcollect === 0){
+            if(!newmsg.channel) return;
+            if(collector.collected === 0){
                 newmsg.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes." +
-                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de réagir avec une emote sous le message du bot.");
+                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
                 require("../../sleep.js")(5000);
                 newmsg.channel.delete();
                 message.author.send("Nous n'avons pas eu de réponse dans votre ticket depuis 5 minutes que vous n'avez pas finir d'ouvrir, le ticket a été fermé."+
-                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de réagir avec une emote sous le message du bot.")
-                    .catch(() => console.log("Impossible de dm le closeur d'un ticket inactif"));
+                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
             }
         });
-        for (const key of Object.keys(config.tickets.reasons)) {
-            if(collector.ended) return;
-            if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(c.parent.id)) return;
-            await newmsg.react(key);
-        }
     });
 };
 
-async function reason(message, react, author, platform) {
-    await message.reactions.removeAll();
-    let reason = config.tickets.reasons[react.emoji.toString()];
-
-    //await message.channel.setTopic("1. Ticket ouvert pour " + reason + " par <@" + author.id+">");
+async function reason(message, reason, author, platform) {
     message.edit({
-        embed: {
+        embeds: [{
             title: `**__Nouveau Ticket__**`,
             color: config.color,
             timestamp: new Date(),
@@ -107,19 +110,20 @@ async function reason(message, react, author, platform) {
                     value: "**Veuillez répondre ci-dessous avec votre pseudo en jeu (écrivez . si non-nécessaire)**"
                 }
             ],
-        }
+        }],
+        components: []
     });
 
     let msgpseudo = await message.channel.send('**Veuillez répondre ci-dessous avec votre pseudo en jeu (écrivez . si non-nécessaire)**');
-    const collector = message.channel.createMessageCollector(m => m.content !== "", { time: 300000 });
+    const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', m => {
-        if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(message.channel.parent.id)) return collector.stop();
+        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop();
         msgpseudo.delete();
         pseudo(message, m, reason, author, platform);
         collector.stop();
     });
     collector.on('end', collected => {
-        if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(message.channel.parent.id)) return;
+        if(config.tickets.categorywait !== message.channel.parent.id) return;
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
@@ -130,7 +134,7 @@ async function reason(message, react, author, platform) {
     });
 }
 
-async function pseudo(message, response, reason, author, platform){
+async function pseudo(message, response, reason, author){
     response.delete();
     let content;
     if(response.content === ".") content = "Pas de pseudo indiqué";
@@ -138,7 +142,7 @@ async function pseudo(message, response, reason, author, platform){
     content = content.replace('<@', 'TAG_PROTECT');
     //await message.channel.setTopic("2. Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+content+")");
     message.edit({
-        embed: {
+        embeds: [{
             title: `**__Nouveau Ticket__**`,
             color: config.color,
             timestamp: new Date(),
@@ -160,19 +164,19 @@ async function pseudo(message, response, reason, author, platform){
                     value: "**Veuillez indiquer une description approfondie du problème, n'hésitez pas à rajouter des documents par la suite ou des liens**"
                 }
             ],
-        }
+        }]
     });
-    let msgdescription = await message.channel.send("**Veuillez indiquer une description approfondie du problème, n'hésitez pas à rajouter des documents par la suite ou des liens**");
-    const collector = message.channel.createMessageCollector(m => m.content !== "", { time: 300000 });
+    let msgdescription = await message.channel.send("**Veuillez indiquer une description approfondie du problème n'hésitez pas à inclure des liens**");
+    const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', desc => {
         if(desc.me) return;
-        if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(message.channel.parent.id)) return collector.stop;
+        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop;
         msgdescription.delete();
-        description(message, reason, content, desc, author, platform);
+        description(message, reason, content, desc, author);
         collector.stop();
     });
     collector.on('end', collected => {
-        if(![config.tickets.bedrock.categorywait, config.tickets.java.categorywait].includes(message.channel.parent.id)) return collector.stop();
+        if(config.tickets.categorywait !== message.channel.parent.id) return collector.stop();
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
@@ -182,7 +186,7 @@ async function pseudo(message, response, reason, author, platform){
         }
     });
 }
-async function description(message, reason, pseudo, description, author, platform){
+async function description(message, reason, pseudo, description, author){
     description.delete();
     let content, categoryid;
     if(description.content === ".") content = "Pas de description indiquée";
@@ -191,17 +195,18 @@ async function description(message, reason, pseudo, description, author, platfor
         message.channel.send(content);
         content = "Trop long, envoyé en message";
     }
-    categoryid = message.guild.id === config.serveridjava ? config.tickets.java.categoryopened : config.tickets.bedrock.categoryopened;
+    categoryid = config.tickets.categoryopened;
     await message.channel.edit({
         name: reason??"skip",
-        topic: "Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+") "+platform,
-        parentID: categoryid,
+        topic: "Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+")",
+        parent: categoryid,
         lockPermissions: false
-    }).catch(err => { message.channel.send("<@498159251383123969>"); message.channel.send(err)}); //Hardcoded debug
-    //await message.channel.setTopic("Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+pseudo+") "+platform);
+    }).catch(err => {
+        message.channel.send("Nous sommes actuellement surchargé de ticket, par conséquent le ticket restera en création pour une durée indéterminée");
+        message.channel.send(err)});
     //if(reason !== "skip") await message.channel.setName(reason)
     message.edit({
-        embed: {
+        embeds: [{
             title: `**__Nouveau Ticket__**`,
             color: config.color,
             timestamp: new Date(),
@@ -223,21 +228,18 @@ async function description(message, reason, pseudo, description, author, platfor
                     value: content
                 }
             ],
-        }
+        }]
     });
 
-    description.attachments.forEach(attach => {
-       message.channel.send(attach.url);
-    });
+    description.attachments.forEach(attach => {message.channel.send("Voici un lien d'un attachment probablement mort: "+attach.url);});
 }
 
 
 module.exports.config = {
     name: "new",
     description: "Ouvrir un ticket",
-    format: "+new [raison]",
+    format: "new",
     canBeUseByBot: false,
     alias: ["ticket"],
-    category: "Ticket",
-    restrictchannels: ['743940988413673563', '794597023735087116']
+    category: "Ticket"
 };

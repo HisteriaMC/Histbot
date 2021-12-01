@@ -1,11 +1,12 @@
-const config = require("../../config.json");
+const hidden = require("../../hidden.json");
 
 module.exports.run = async(client, message, args) => {
     let tagname;
     if (args[0] && args[0] === "create") {
         tagname = args[1];
         if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
-        if (!config.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
+        if (!hidden.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
+
         if (!tagname) return message.reply("Il manque le nom du tag a créer : "+this.config.format);
         if (!args[2]) return message.reply("Il manque le contenu du tag à créer : "+this.config.format)
         args = args.splice(2);
@@ -17,7 +18,7 @@ module.exports.run = async(client, message, args) => {
     } else if(args[0] && ["delete", "remove"].includes(args[0])) {
         tagname = args[1];
         if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
-        if (!config.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
+        if (!hidden.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
 
         if (!client.tags.get(tagname)) return message.reply("Ce tag n'existe pas");
         client.tags.delete(tagname);
@@ -39,9 +40,10 @@ module.exports.run = async(client, message, args) => {
 
 module.exports.config = {
     name: "tags",
-    description: "Création de tag, messages préfait pour les guides de chaque ",
-    format: "+tag <create/delete/name> [name] [content]",
+    description: "Création de tag, messages préfait pour les guides",
+    format: "tag <create/delete/name> [name] [content]",
     alias: ["tag"],
     canBeUseByBot: false,
-    category: "Utilitaire"
+    category: "Utilitaire",
+    bypassChannel: true
 };

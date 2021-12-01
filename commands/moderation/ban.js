@@ -1,11 +1,11 @@
+const {User} = require("discord.js");
 module.exports.run = async(client, message, args) => {
-    if(!message.member.permissions.has("BAN_MEMBERS")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
-    if(!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    if(!message.guild.members.cache.get(client.user.id).permissions.has('BAN_MEMBERS')) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
-    if(!args[0]) return message.reply("Format de la commande : "+module.exports.config.format);
-
-    let banned = message.guild.member(message.mentions.users.first());
+    let banned = message.mentions.users.first();
+    if(!banned && args[0]) banned = message.guild.members.cache.get(args[0]);
     if(!banned) return message.reply("Utilisateur introuvable.");
+    if(banned instanceof User) banned = message.guild.members.cache.get(banned.id);
 
     args = args.slice(1);//Enlever le pseudo du banni
     let banReason = args.join(" ");
@@ -17,7 +17,7 @@ module.exports.run = async(client, message, args) => {
 
     setTimeout(() => {
         banned.ban({reason: "Bot Histeria | " + banReason}).then(member => {
-        message.channel.send(`<a:banhammer:784899600473260042> **${member.user.username}** a bien été banni par **${message.author.username}** pour **${banReason}**.`);
+        message.reply(`<a:banhammer:784899600473260042> **${member.user.username}** a bien été banni par **${message.author.username}** pour **${banReason}**.`);
     }) .catch(err => {
         message.reply(`Désolé ${message.author} je ne peux pas ban cette personne parce que : ${err}`);
     })}, 2000);
@@ -26,7 +26,9 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "ban",
     description: "Bannir quelqu'un du serveur discord.",
-    format: "+ban <user> [raison]",
+    format: "ban <user> [raison]",
     canBeUseByBot: false,
-    category: "Moderation"
+    category: "Moderation",
+    permission: "BAN_MEMBERS",
+    needed_args: 1
 };

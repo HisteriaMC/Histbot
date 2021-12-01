@@ -1,8 +1,7 @@
-const config = require("../../config.json");
+const hidden = require("../../hidden.json");
 
 module.exports.run = async(client, message, args) => {
-    if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
-    if(!args[0]) return message.reply("Manque d'argument")
+    if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
     let command = args.join(" ");
     client.mysqlminicore.execute(command, function(err, raw) {
         if(err) message.channel.send(err)
@@ -21,8 +20,11 @@ module.exports.run = async(client, message, args) => {
 
 module.exports.config = {
     name: "evalmysql",
-    description: "Executer du mysql sur minicore",
-    format: "+evalmysql",
+    description: "Executer du mysql sur la db main",
+    format: "evalmysql <query>",
     canBeUseByBot: true,
-    category: "hidden"
+    category: "hidden",
+    needed_args: 1,
+    args: {query: "string"},
+    permission: "ADMINISTRATOR"
 };
