@@ -109,29 +109,39 @@ function xp (client, message){ //Inspired from https://github.com/Androz2091/Atl
 
 function checkSpelling(client, message){
     if(message.author.bot) return;
+    if(!message.content) return;
+    if(message.content[0].match(/[!+?\->]/)) return;
+    let content = message.content.replace(/<a*:[^:\s]*(?:[^:\s]*)*:\d+>/g)
+        .replace(/(http|ftp|https):\/\/([\w_-]+(?:\.[\w_-]+)+)([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g)
+        .replace(/<#[0-9]+>/g).replace('?');
+    if(!content) return;
+
     if(message.channel.id === config.checkSpellingChannel) {
-        reverso.getSpellCheck(message.content.replace(/<a*:[^:\s]*(?:[^:\s]*)*:\d+>/g, ''), 'French', (response) => {
+        reverso.getSpellCheck(content, 'French', (response) => {
             if(response.length <= 0) return;
             let fieldsOfFields = [[]];
             let size = 0;
             response.forEach(suggestion => {
                 let matchs = suggestion.explanation.match(/#![^#]*#\$/g);
                 let first;
-                matchs.forEach(match => {
-                    let word = match.replace('#!', '').replace('#$', '');
-                    if(!first) first = word;
-                    suggestion.explanation = suggestion.explanation.replace(match, word !== '' ? "**"+word+"**" : '');
-                });
-                let full = switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__"+suggestion.explanation;
-                size += full.length;
-                if(size > 5000){
-                    fieldsOfFields.push([]);
-                    size = full.length;
+                if(matchs) {
+                    matchs.forEach(match => {
+                        let word = match.replace('#!', '').replace('#$', '');
+                        if(!first) first = word;
+                        suggestion.explanation = suggestion.explanation.replace(match, word !== '' ? "**"+word+"**" : '');
+                    });
+                    let full = switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__"+suggestion.explanation;
+                    size += full.length;
+                    if(size > 5000){
+                        fieldsOfFields.push([]);
+                        size = full.length;
+                    }
+                    fieldsOfFields[fieldsOfFields.length - 1].push({
+                        name: switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__", // /#![^#]*#\$/
+                        value: suggestion.explanation
+                    })
                 }
-                fieldsOfFields[fieldsOfFields.length - 1].push({
-                    name: switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__", // /#![^#]*#\$/
-                    value: suggestion.explanation
-                })
+
             });
             let count = 0;
             let content = message.content.length < 1000 ? message.content : "Message trop long" ;
@@ -171,7 +181,7 @@ function checkSpelling(client, message){
                 count++;
             })
         }).catch(err => {
-            message.emoji.add("❌");
+            message.react("❌");
             console.error(err);
         });
     }

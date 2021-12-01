@@ -1,4 +1,3 @@
-const config = require('../../config.json');
 const hidden = require('../../hidden.json');
 const moment = require("moment");
 const fetch = (...args) => import('node-fetch').then(module => module.default(...args))
@@ -6,7 +5,7 @@ const fetch = (...args) => import('node-fetch').then(module => module.default(..
 module.exports.run = async(client, message, args) => {
     let pseudo = args.join("+");
     let pseudodb = args.join("_");
-    let rep = await fetch(`https://minecraftpocket-servers.com/api/?object=votes&element=claim&key=${hidden.mcpetoken}&username=${pseudo}`).then(response => response.json());
+    let rep = await fetch(`https://minecraftpocket-servers.com/api/?object=votes&element=claim&key=${hidden.mcpeToken}&username=${pseudo}`).then(response => response.json());
     if (isNaN(rep)) return message.reply("Erreur 1 !");
     if(rep === 0) return message.reply("Vous n'avez pas voté : http://vote.histeria.fr");
     if(rep === 2) return message.reply("Vous avez déjà voté");
@@ -22,7 +21,7 @@ module.exports.run = async(client, message, args) => {
         if (!results || !results[0]) return message.reply("Aucun membre trouvé avec ce pseudo dans la db");
         let result = results[0];
 
-        fetch(`https://minecraftpocket-servers.com/api/?action=post&object=votes&element=claim&key=${hidden.mcpetoken}&username=${pseudo}`).then(response => {
+        fetch(`https://minecraftpocket-servers.com/api/?action=post&object=votes&element=claim&key=${hidden.mcpeToken}&username=${pseudo}`).then(response => {
             let now = moment();
             let streak = result["streak"] + 1;
             if (result["lastconsecutive"] === today || result["lastconsecutive"] === now.add(-1, "days").format("DD-MM-YYYY")) {
