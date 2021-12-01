@@ -1,7 +1,10 @@
 const config = require("../config.json");
+const Reverso = require("reverso-api");
+const reverso = new Reverso();
 const prefix = config.prefix;
 let lastxp = {};
 let lastcount;
+
 
 module.exports = (client, message) => {
     if(message.author.id === client.user.id) return;
@@ -10,6 +13,7 @@ module.exports = (client, message) => {
     helpping(client, message);
     xp(client, message);
     counting(client, message);
+    checkSpelling(client, message);
 
     if (!message.content.startsWith(prefix)) {
         autorespond(client, message);
@@ -25,8 +29,8 @@ module.exports = (client, message) => {
     if (conf.permission && !message.member.permissions.has(conf.permission)) return message.reply("Vous n'avez pas la permission d'utiliser cette commande");
     if (conf.needed_args && conf.needed_args > args.length) return message.reply("Il manque un argument. Format: "+config.prefix + conf.format)
     if (message.author.bot && !conf.canBeUseByBot) return;
-    if (message.guild.id === config.serverid
-        && message.channel.id !== config.commandchannel
+    if (message.guild.id === config.serverId
+        && message.channel.id !== config.commandChannel
         && !message.member.permissions.has("MANAGE_MESSAGES")
         && !conf.bypassChannel) return;
     if (conf.delete) message.delete();
@@ -35,7 +39,7 @@ module.exports = (client, message) => {
 };
 
 function autorespond (client, message){
-    if(message.guild.id !== config.serverid) return;
+    if(message.guild.id !== config.serverId) return;
     if(message.author.bot) return;
     let stopped = false;
     message.content.split(' ').forEach(autorespondname => {
@@ -83,7 +87,7 @@ async function counting(client, message) {
     }
 }
 function xp (client, message){ //Inspired from https://github.com/Androz2091/AtlantaBot/blob/a56c9aaf8283703d9ad745935e4ec9163ec531ab/events/message.js#L252
-    if(![config.serverid, config.staffserverid].includes(message.guild?.id)) return;
+    if(![config.serverId, config.staffServerId].includes(message.guild?.id)) return;
     if(message.author.bot) return;
     if(message.content.length <= 5) return;
     let id = message.author.id;
@@ -100,5 +104,83 @@ function xp (client, message){ //Inspired from https://github.com/Androz2091/Atl
     const newXp = client.xpapi.getXP(id);
     if(newXp >= neededXp){
         client.xpapi.addLvl(id, won);
+    }
+}
+
+function checkSpelling(client, message){
+    if(message.author.bot) return;
+    if(message.channel.id === config.checkSpellingChannel) {
+        reverso.getSpellCheck(message.content.replace(/<a*:[^:\s]*(?:[^:\s]*)*:\d+>/g, ''), 'French', (response) => {
+            if(response.length <= 0) return;
+            let fieldsOfFields = [[]];
+            let size = 0;
+            response.forEach(suggestion => {
+                let matchs = suggestion.explanation.match(/#![^#]*#\$/g);
+                let first;
+                matchs.forEach(match => {
+                    let word = match.replace('#!', '').replace('#$', '');
+                    if(!first) first = word;
+                    suggestion.explanation = suggestion.explanation.replace(match, word !== '' ? "**"+word+"**" : '');
+                });
+                let full = switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__"+suggestion.explanation;
+                size += full.length;
+                if(size > 5000){
+                    fieldsOfFields.push([]);
+                    size = full.length;
+                }
+                fieldsOfFields[fieldsOfFields.length - 1].push({
+                    name: switchTypeSpelling(suggestion.type)+"  ->  __"+first+"__", // /#![^#]*#\$/
+                    value: suggestion.explanation
+                })
+            });
+            let count = 0;
+            let content = message.content.length < 1000 ? message.content : "Message trop long" ;
+            fieldsOfFields.forEach(field => {
+                if(count === 0){
+                    message.channel.send({
+                        embeds: [{
+                            color: config.color,
+                            title: `Message de **${message.author.tag}**`,
+                            description: ">>> " + content,
+                            thumbnail: {
+                                url: message.member.displayAvatarURL
+                            },
+                            fields: field,
+                            footer: {
+                                text: `Suggestions de corrections pour ${message.author.tag}`,
+                                image: message.author.icon_url
+                            }
+                        }]
+                    })
+                } else {
+                    message.channel.send({
+                        embeds: [{
+                            color: config.color,
+                            title: `Message de **${message.author.tag}** partie ` + (count + 1),
+                            thumbnail: {
+                                url: message.member.displayAvatarURL
+                            },
+                            fields: field,
+                            footer: {
+                                text: `Suggestions de corrections pour ${message.author.tag}`,
+                                image: message.author.icon_url
+                            }
+                        }]
+                    })
+                }
+                count++;
+            })
+        }).catch(err => {
+            message.emoji.add("❌");
+            console.error(err);
+        });
+    }
+}
+function switchTypeSpelling(type){
+    switch(type){
+        case 'Grammar': return 'Grammaire';
+        case 'Spelling': return 'Orthographe';
+        case 'Punctuation': return "Ponctuation";
+        default: return type;
     }
 }
