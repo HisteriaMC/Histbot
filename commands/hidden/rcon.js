@@ -38,13 +38,14 @@ module.exports.run = async(client, message, args) => {
     }
     rconfunc(port, reason, message, serverbase);
 };
-function rconfunc(port, reason, message, server)
+function rconfunc(port, reason, message, server, reply = true)
 {
     const rcon = new mcutil.RCON(hidden.rcon.host, { port: port, enableSRV: false, timeout: 5000, password: hidden.rcon.password});
     rcon.connect()
         .then(() => rcon.run(reason))
         .catch((error) => {message.channel.send("Erreur sur la connexion : "+error); console.error(error)});
     rcon.on('output', (out) => {
+        if(!reply) return rcon.close();
         if(out && out.length > 1900) out = "\nLa réponse est trop longue";
         else if (!out) out = "Pas de réponse";
         message.reply({
@@ -69,7 +70,7 @@ function rconfunc(port, reason, message, server)
                     }
                 ]
             }]
-        })
+        }, {allowedMentions: { repliedUser: false }})
         rcon.close();
     });
 }

@@ -14,6 +14,7 @@ module.exports = (client, message) => {
     xp(client, message);
     counting(client, message);
     checkSpelling(client, message);
+    eventPicasso(client, message);
 
     if (!message.content.startsWith(prefix)) {
         autorespond(client, message);
@@ -107,13 +108,41 @@ function xp (client, message){ //Inspired from https://github.com/Androz2091/Atl
     }
 }
 
+async function eventPicasso(client, message) {
+    if (message.channel.id !== "960965774661525514") return;
+    if (message.author.bot) return;
+    if (message.content.length < 10) {
+        //Remove message and log the message to the channel log
+        message.delete();
+        client.log("Le message de <@" + message.author.id + "> a été supprimée car il était trop court. Contenu : " + message.content, "gen");
+        message.author.send("Votre message est trop court. Veuillez relire l'annonce correctement.").catch();
+        return;
+    }
+    //Check if the message contains an image
+    if (message.attachments.size <= 0) {
+        //Remove message and log the message to the channel log
+        message.delete();
+        client.log("Le message de <@" + message.author.id + "> a été supprimée car il n'a pas d'image. Contenu : " + message.content, "gen");
+        message.author.send("Votre message n'a pas d'image. Veuillez relire l'annonce correctement.").catch();
+        return;
+    }
+    for (const emote of ['<:1_:738770632195702916>', '<:1_:738770607734390856>']) {
+        await message.react(emote);
+    }
+    await message.startThread({
+        name: 'Réaction à l\'item',
+        autoArchiveDuration: 'MAX',
+        reason: 'Thread pour réaction à l\'item',
+    });
+}
+
 function checkSpelling(client, message){
     if(message.author.bot) return;
     if(!message.content) return;
     if(message.content[0].match(/[!+?\->]/)) return;
-    let content = message.content.replace(/<a*:[^:\s]*(?:[^:\s]*)*:\d+>/g)
-        .replace(/(http|ftp|https):\/\/([\w_-]+(?:\.[\w_-]+)+)([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g)
-        .replace(/<#[0-9]+>/g).replace('?');
+    let content = message.content.replace(/<a*:[^:\s]*(?:[^:\s]*)*:\d+>/g, '')
+        .replace(/(http|ftp|https):\/\/([\w_-]+(?:\.[\w_-]+)+)([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/g, '')
+        .replace(/<#[0-9]+>/g, '').replace('?', '');
     if(!content) return;
 
     if(message.channel.id === config.checkSpellingChannel) {

@@ -23,7 +23,7 @@ module.exports.run = async(client, message) => {
 module.exports.config = {
     name: "stats",
     description: "Voir les statistiques du serveur",
-    format: "+stats",
+    format: "stats",
     canBeUseByBot: true,
     category: "Informations",
     alias: ["info"]
