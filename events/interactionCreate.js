@@ -1,9 +1,10 @@
 const config = require("../config.json");
+const {InteractionType} = require("discord-api-types");
 
 module.exports = (client, interaction) => {
     if(interaction.member.id === client.user.id) return;
     if (interaction.channel.type === 'DM') return;
-    if (!interaction.isCommand()) return;
+    if (interaction.type !== InteractionType.ApplicationCommand) return;
 
     let args = interaction.options;
     let commande = interaction.commandName;

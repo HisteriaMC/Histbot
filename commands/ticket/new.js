@@ -7,7 +7,8 @@ module.exports.run = async(client, message, args) => {
     if (desac) return message.channel.send("Les tickets sont temporairement désactivés probablement dû à une surcharge. Veuillez nous en excuser.");
     if (message.guild.id !== config.serverId) return message.channel.send("Pas de ticket sur ce serveur");
 
-    message.guild.channels.create(message.author.username, {
+    message.guild.channels.create({
+        name: 'message.author.username',
         type: 'text',
         topic: 'Ticket en attente de <@' + message.member.id+'>',
         permissionOverwrites: [
