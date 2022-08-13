@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "discord-api-types": "^0.37.2",
     "discord.js": "^14.2.0",
     "fs": "^0.0.1-security",
     "jsdom": "^17.0.0",
@@ -13,7 +14,6 @@
   },
   "devDependencies": {
     "@discordjs/rest": "^0.1.0-canary.0",
-    "discord-api-types": "^0.23.1",
     "minecraft-server-util": "^3.4.4",
     "mysql2": "^2.3.0"
   },

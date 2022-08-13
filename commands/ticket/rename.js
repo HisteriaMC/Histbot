@@ -21,7 +21,7 @@ module.exports.config = {
     canBeUseByBot: false,
     category: "Moderation",
     bypassChannel: true,
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     delete: true,
     neeeded_args: 1
 };

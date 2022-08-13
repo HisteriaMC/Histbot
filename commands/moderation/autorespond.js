@@ -38,7 +38,7 @@ module.exports.config = {
     format: "autorespond <create/delete/name/list> [name] [content]",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     needed_args: 1,
     args: {
         sub_args: {

@@ -15,6 +15,6 @@ module.exports.config = {
     format: "forceleave <pseudo>",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     needed_args: 1
 };

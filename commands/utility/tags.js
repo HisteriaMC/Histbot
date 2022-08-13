@@ -4,7 +4,7 @@ module.exports.run = async(client, message, args) => {
     let tagname;
     if (args[0] && args[0] === "create") {
         tagname = args[1];
-        if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
+        if (!message.member.permissions.has(Permissions.BAN_MEMBERS)) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
         if (!hidden.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
 
         if (!tagname) return message.reply("Il manque le nom du tag a créer : "+this.config.format);
@@ -17,7 +17,7 @@ module.exports.run = async(client, message, args) => {
         message.reply("Le tag au nom de `"+tagname+"` a été créé avec pour contenu `"+args.join(" ")+"`");
     } else if(args[0] && ["delete", "remove"].includes(args[0])) {
         tagname = args[1];
-        if (!message.member.permissions.has("MANAGE_MESSAGES")) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
+        if (!message.member.permissions.has(Permissions.BAN_MEMBERS)) return message.reply("Vous n'avez pas la permission d'utiliser cette commande !");
         if (!hidden.rcon.servers.includes(message.guild.id)) return message.reply("Les tags ne sont pas disponible sur ce serveur");
 
         if (!client.tags.get(tagname)) return message.reply("Ce tag n'existe pas");

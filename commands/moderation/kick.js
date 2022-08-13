@@ -1,6 +1,6 @@
 const {User} = require("discord.js");
 module.exports.run = async(client, message, args) => {
-    if(!message.guild.members.cache.get(client.user.id).permissions.has("KICK_MEMBERS")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    if(!message.guild.members.cache.get(client.user.id).permissions.has(Permissions.KICK_MEMBERS)) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
     let kicked = message.mentions.users.first();
     if(!kicked && args[0]) kicked = message.guild.members.cache.get(args[0]);
@@ -29,6 +29,6 @@ module.exports.config = {
     format: "kick <user> [raison]",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: "KICK_MEMBERS",
+    permission: Permissions.KICK_MEMBERS,
     needed_args: 1
 };

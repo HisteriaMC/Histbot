@@ -1,6 +1,6 @@
 const {User} = require("discord.js");
 module.exports.run = async(client, message, args) => {
-    if(!message.guild.members.cache.get(client.user.id).permissions.has("MANAGE_ROLES")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    if(!message.guild.members.cache.get(client.user.id).permissions.has(Permissions.MANAGE_ROLES)) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
     let muted = message.mentions.users.first();
     if(!muted && args[0]) muted = message.guild.members.cache.get(args[0]);
@@ -32,6 +32,6 @@ module.exports.config = {
     format: "mute <user> [raison]",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     needed_args: 1
 };

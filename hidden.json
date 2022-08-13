@@ -1,15 +1,15 @@
 {
-  "token" : "",
-  "mcpeToken": "",
+  "token" : "NzAwMDA5OTY4NDgwNDE5OTEy.GUo-Vn.msrkDp8nFFo3ZNXVGCYTP_yFiIgechgVZaYkxo",
+  "mcpeToken": "Hav6UdbY3eOLwDVIq1mpPZcgBowT2VNXs",
   "mysql": {
     "host": "histeria.fr",
     "user": "dadodasyra",
-    "password": "",
+    "password": "*[NN4i3tf8j:36Q{V",
     "schema": "discord"
   },
   "rcon": {
     "host": "histeria.fr",
-    "password": "",
+    "password": "F@[p~4CYbj;_+%exN8LwKc(D0T#?/o^RGn]$O2!,IErtV>:6MXp&iaW1m+L/d=7v:lRUb[FPy2nx@);*|?64gD]$_B!s.EM~>f8Y",
     "servers": ["699035170338111489", "760175330429632582", "791341272442077204", "589373751359963146"]
   }
 }

@@ -1,5 +1,6 @@
 const config = require("../config.json");
 const Reverso = require("reverso-api");
+const {ChannelType} = require("discord-api-types/v10");
 const reverso = new Reverso();
 const prefix = config.prefix;
 let lastxp = {};
@@ -8,13 +9,13 @@ let lastcount;
 
 module.exports = (client, message) => {
     if(message.author.id === client.user.id) return;
-    if (message.channel.type === 'DM') return;
+    if (message.channel.type === ChannelType.DM) return;
     //linkticket(message);
     helpping(client, message);
     xp(client, message);
     counting(client, message);
     checkSpelling(client, message);
-    eventPicasso(client, message);
+    //eventPicasso(client, message);
 
     if (!message.content.startsWith(prefix)) {
         autorespond(client, message);
@@ -22,8 +23,8 @@ module.exports = (client, message) => {
     }
 
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let commande = args.shift().toLowerCase();
-    let cmd = client.commands.get(commande);
+    let command = args.shift().toLowerCase();
+    let cmd = client.commands.get(command);
 
     if (!cmd) return;
     let conf = cmd.config;
@@ -32,7 +33,7 @@ module.exports = (client, message) => {
     if (message.author.bot && !conf.canBeUseByBot) return;
     if (message.guild.id === config.serverId
         && message.channel.id !== config.commandChannel
-        && !message.member.permissions.has("MANAGE_MESSAGES")
+        && !message.member.permissions.has(Permissions.MANAGE_MESSAGES)
         && !conf.bypassChannel) return;
     if (conf.delete) message.delete();
 
@@ -54,7 +55,7 @@ function autorespond (client, message){
 /*function linkticket (message){
     if (!message.channel.parent ||
         (message.channel.parent && !config.tickets.allchannels.includes(message.channel.parent.id))
-        || message.member.permissions.has("MANAGE_MESSAGES")) return;
+        || message.member.permissions.has(Permissions.BAN_MEMBERS)) return;
     if (message.content.includes('http') || message.content.includes('www.') || message.content.includes('.com'))
         message.channel.send(`${message.content} par ${message.author}`);
 
@@ -79,7 +80,7 @@ async function counting(client, message) {
 
         let num = message.content.split(' ')[0]??"no";
         if(num === 0) num = 1;
-        if(num != lastcount + 1){
+        if(num !== lastcount + 1){
             message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount);
             lastcount = 0;
             if(lastcount > 5)
@@ -108,7 +109,7 @@ function xp (client, message){ //Inspired from https://github.com/Androz2091/Atl
     }
 }
 
-async function eventPicasso(client, message) {
+/*async function eventPicasso(client, message) {
     if (message.channel.id !== "960965774661525514") return;
     if (message.author.bot) return;
     if (message.content.length < 10) {
@@ -134,7 +135,7 @@ async function eventPicasso(client, message) {
         autoArchiveDuration: 'MAX',
         reason: 'Thread pour réaction à l\'item',
     });
-}
+}*/
 
 function checkSpelling(client, message){
     if(message.author.bot) return;

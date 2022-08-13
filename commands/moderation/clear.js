@@ -1,5 +1,5 @@
 module.exports.run = async(client, message, args) => {
-    //if (!message.guild.members.cache.get(client.user).permissions.has("MANAGE_MESSAGES")) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    //if (!message.guild.members.cache.get(client.user).permissions.has(Permissions.BAN_MEMBERS)) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
     let count;
     if (args[0] === "all") count = 100000;
@@ -43,6 +43,6 @@ module.exports.config = {
     canBeUseByBot: false,
     category: "Moderation",
     delete: true,
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     needed_args: 1
 };

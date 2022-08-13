@@ -2,7 +2,7 @@ module.exports = (client, guild) => {
     const channel = guild.channels.cache
         .filter((channel) => channel.type === 'GUILD_TEXT')
         .first();
-    if (!channel || !guild.members.cache.get(client.user).permissions.has('CREATE_INSTANT_INVITE')) return;
+    if (!channel || !guild.members.cache.get(client.user).permissions.has(Permissions.CREATE_INSTANT_INVITE)) return;
 
     channel.createInvite({maxAge: 0, maxUses: 0})
     .then(async (invite) => {

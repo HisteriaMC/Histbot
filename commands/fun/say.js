@@ -17,7 +17,7 @@ module.exports.config = {
     format: "say <message>",
     category: "Fun",
     canBeUseByBot: false,
-    permission: "MANAGE_MESSAGES",
+    permission: Permissions.BAN_MEMBERS,
     needed_args: 1,
     args: {message: "string"}
 };
