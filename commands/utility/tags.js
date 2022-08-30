@@ -31,8 +31,8 @@ module.exports.run = async(client, message, args) => {
             client.tags.forEach((value, key) => {list.push(key);});
             message.reply("Voici la liste des tags : "+list.join(", "));
         } else {
-            message.delete();
             if (!client.tags.get(tagname)) return message.reply("Ce tag n'existe pas");
+            message.delete();
             message.channel.send(client.tags.get(tagname));
         }
     }
