@@ -49,10 +49,11 @@ class run {
                     .then(() => console.log("Successfully edited vote message"))
                     .catch(() => console.error("Erreur lors du message de vote pour update"));
                 found = true;
+                if (!this.lastvote) this.lastvote = message.createdAt.getDate();
             }
         });
 
-        if (d.getHours() === 16 && this.lastvote !== d.getDate()) {//Maintenant fonctionnel
+        if (d.getHours() === 16 && this.lastvote !== d.getDate()) {
             this.lastvote = d.getDate();
             let cmd = this.client.commands.get("castvote");
             if (!cmd) return;
@@ -146,10 +147,7 @@ class run {
             let now = Math.floor(Date.now() / 1000);
             if(!results) return;
             results.forEach(row => {
-                console.log(row["expire"])
-
                 if(row["expire"] < now) {
-                    console.log("unbanning")
                     //ban is expired
                     client.mysql.query(`DELETE FROM countBanned WHERE user = ?`, [row["user"]]);
                     //fetch user and remove his role

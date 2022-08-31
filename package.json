@@ -2,7 +2,7 @@
   "name": "HistBot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "histbot.js",
   "dependencies": {
     "discord-api-types": "^0.37.2",
     "discord.js": "^14.2.0",
