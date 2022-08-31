@@ -1,5 +1,8 @@
+const {ActivityType} = require("discord-api-types/v10");
 const mcutil = require('minecraft-server-util');
 const config = require('./config.json');
+const hidden = require('./hidden.json');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 class run {
     async vote() {
@@ -42,7 +45,9 @@ class run {
                         }
                     ]
                 }];
-                message.edit({ content: "<@&"+config.voteRole+">", embeds }).catch(() => console.err("Erreur lors du message de vote pour update"));
+                message.edit({ content: "<@&"+config.voteRole+">", embeds })
+                    .then(() => console.log("Successfully edited vote message"))
+                    .catch(() => console.error("Erreur lors du message de vote pour update"));
                 found = true;
             }
         });
@@ -60,7 +65,7 @@ class run {
         this.client.guilds.fetch(config.serverId).then(
             guild => {
                 this.client.user.setActivity(`${guild.memberCount} membres | +help`, {
-                    type: "STREAMING",
+                    type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/dadodasyra"
                 });
                 setTimeout(() => {
@@ -73,7 +78,7 @@ class run {
         mcutil.statusBedrock('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
             .then((response) => {
                 this.client.user.setActivity(`joueurs: ${response["onlinePlayers"]}/${response["maxPlayers"]}`, {
-                    type: "STREAMING",
+                    type: ActivityType.Streaming,
                     url: "https://www.twitch.tv/dadodasyra"
                 })
             })
@@ -88,7 +93,7 @@ class run {
 
     changestatus3() {
         this.client.user.setActivity("play.histeria.fr | "+config.port, {
-            type: "STREAMING",
+            type: ActivityType.Streaming,
             url: "https://www.twitch.tv/dadodasyra"
         });
         setTimeout(() => {
@@ -135,12 +140,37 @@ class run {
         });
     }
 
+    async checkCountBanned() {
+        let client = this.client;
+        client.mysql.query(`SELECT * FROM countBanned`, function(err, results) {
+            let now = Math.floor(Date.now() / 1000);
+            if(!results) return;
+            results.forEach(row => {
+                console.log(row["expire"])
+
+                if(row["expire"] < now) {
+                    console.log("unbanning")
+                    //ban is expired
+                    client.mysql.query(`DELETE FROM countBanned WHERE user = ?`, [row["user"]]);
+                    //fetch user and remove his role
+                    client.guilds.cache.get(config.serverId).members.fetch(row["user"]).then(member => {
+                        if (!member) return;
+                        member.roles.remove(config.countBannedRole);
+                    });
+                }
+            });
+        });
+    }
+
     constructor(client) {
         this.client = client;
         this.changestatus();
+        this.vote();
+        this.checkCountBanned();
         setInterval(() => {this.checkideas()}, 120 * 1000); //2 min
-        setInterval(() => {client.xpapi.save()}, 600 * 1000);
-        setInterval(() => {this.vote()}, 900 * 1000);
+        setInterval(() => {client.xpapi.save()}, 600 * 1000); //10 min
+        setInterval(() => {this.vote()}, 900 * 1000); //15 min
+        setInterval(() => {this.checkCountBanned()}, 180 * 1000); //3 min
     }
 }
 module.exports = run;

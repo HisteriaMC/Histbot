@@ -1,5 +1,6 @@
 const config = require("../../config.json");
-const {TextChannel, MessageActionRow, MessageSelectMenu} = require("discord.js");
+const {TextChannel, ActionRowBuilder, SelectMenuBuilder} = require("discord.js");
+const {PermissionFlagsBits, ChannelType} = require("discord-api-types/v10");
 let desac = false;
 
 module.exports.run = async(client, message, args) => {
@@ -8,21 +9,21 @@ module.exports.run = async(client, message, args) => {
     if (message.guild.id !== config.serverId) return message.channel.send("Pas de ticket sur ce serveur");
 
     message.guild.channels.create({
-        name: 'message.author.username',
-        type: 'text',
+        name: message.author.username,
+        type: ChannelType.GuildText,
         topic: 'Ticket en attente de <@' + message.member.id+'>',
         permissionOverwrites: [
             {
                 id: message.member.id,
-                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
+                allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks]
             },
             {
                 id: config.serverId,
-                deny: ["VIEW_CHANNEL"]
+                deny: [PermissionFlagsBits.ViewChannel]
             },
             {
                 id: config.tickets.role,
-                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS"]
+                allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks]
             }
         ],
         parent: config.tickets.categoryWait, reason: 'Ticket de ' + message.author.tag
@@ -44,13 +45,14 @@ module.exports.run = async(client, message, args) => {
                 value: key
             })
         }
-        const row = new MessageActionRow()
+        const row = new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId('select')
                     .setPlaceholder('Choisissez ici le sujet de votre ticket')
                     .addOptions(options),
             );
+
         let newmsg = await c.send({
             embeds: [{
                 title: `**__Nouveau Ticket__**`,
@@ -71,7 +73,8 @@ module.exports.run = async(client, message, args) => {
         });
         await newmsg.pin().then( () => {c.messages.fetch({ limit: 1 }).then(messages => {messages.first().delete();})});
 
-        const collector = newmsg.createMessageComponentCollector({ componentType: 'SELECT_MENU', time: 300000 });
+        const filter = (interaction) => interaction.customId === 'select';
+        const collector = newmsg.createMessageComponentCollector({ filter, time: 300000 });
         collector.on('collect', async interaction => {
             collector.stop();
             await interaction.deferUpdate();
@@ -79,13 +82,14 @@ module.exports.run = async(client, message, args) => {
         });
         collector.on('end', () => {
             if(!newmsg.channel) return;
-            if(collector.collected === 0){
+            if(collector.collected.size === 0){
+                console.log("Ticket of " + message.author.tag + " timeout on open");
                 newmsg.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes." +
-                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
+                    "\nVeuillez réessayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
                 require("../../sleep.js")(5000);
                 newmsg.channel.delete();
                 message.author.send("Nous n'avons pas eu de réponse dans votre ticket depuis 5 minutes que vous n'avez pas finir d'ouvrir, le ticket a été fermé."+
-                    "\nVeuillez réesayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
+                    "\nVeuillez réessayer d'ouvrir un ticket et n'oubliez pas de définir le sujet du ticket.");
             }
         });
     });

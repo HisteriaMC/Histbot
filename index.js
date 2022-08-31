@@ -62,7 +62,7 @@ function getDirectories(path) {
     });
 }
 async function loadcommands() {
-    let f = await fs.readdirSync(path.resolve(__dirname, './commands/'));
+    let f = fs.readdirSync(path.resolve(__dirname, './commands/'));
     let commands = f.filter(f => f.split('.').pop() === 'js');
     let total = 0;
 
@@ -156,7 +156,7 @@ client.log = async function log(message, platform = "all") {
     let d = new Date();
     channel.send(`**${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}** ${message}`);
 }
-/*
+
 async function exitHandler(options, exitCode) {
     console.log(`Bot down pour ${exitCode}`)
     client.log(`Bot down pour ${exitCode}`)
@@ -171,5 +171,8 @@ process.on('exit', exitHandler.bind(null,{cleanup:true}));
 process.on('SIGINT', exitHandler.bind(null, {exit:true}));//Ctrl+C
 process.on('SIGUSR1', exitHandler.bind(null, {exit:true})); //KILL PID
 process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
-process.on('uncaughtException', exitHandler.bind(null, {exit:true})); //ERreur non log*/
+process.on('uncaughtException', function (exception) {
+    console.log(exception)
+    exitHandler({exit: true}, exception.message+"\n"+exception.stack);
+}); //ERreur non log
 start();

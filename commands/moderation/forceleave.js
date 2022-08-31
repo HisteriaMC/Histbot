@@ -1,4 +1,5 @@
 const hidden = require("../../hidden.json");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
@@ -15,6 +16,6 @@ module.exports.config = {
     format: "forceleave <pseudo>",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: Permissions.BAN_MEMBERS,
+    permission: PermissionFlagsBits.BanMembers,
     needed_args: 1
 };

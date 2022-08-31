@@ -1,3 +1,5 @@
+const {PermissionFlagsBits} = require("discord-api-types/v10");
+
 module.exports.run = async(client, message, args) => {
     if(!args[0]) return message.reply("Format de la commande : "+module.exports.config.format);
     message.delete();
@@ -17,7 +19,7 @@ module.exports.config = {
     format: "say <message>",
     category: "Fun",
     canBeUseByBot: false,
-    permission: Permissions.BAN_MEMBERS,
+    permission: PermissionFlagsBits.BanMembers,
     needed_args: 1,
     args: {message: "string"}
 };

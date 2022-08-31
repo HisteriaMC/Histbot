@@ -1,4 +1,5 @@
 const config = require('../../config.json');
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
     let target = message.guild.members.cache.get(message.mentions.users.first());
@@ -8,7 +9,7 @@ module.exports.run = async(client, message, args) => {
     if(!args[0]){
         client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
     } else {
-        if(message.member.permissions.has(Permissions.BAN_MEMBERS) && [config.serverId, config.staffServerId].includes(message.guild.id)) {
+        if(message.member.permissions.has(PermissionFlagsBits.BanMembers) && [config.serverId, config.staffServerId].includes(message.guild.id)) {
             if(target){
                 client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
             } else if(args[0].match(/^\d+$/g)){
@@ -25,7 +26,7 @@ function sendResults(message, results, who, args, id = true)
 {
     if(!results[0]) return message.channel.send('Aucun résultat trouvé');
 
-    if(message.author.id == who) who = 'Vos transcripts';
+    if(message.author.id === who) who = 'Vos transcripts';
     else if(id) who = 'Transcripts de <@'+who+'> ('+results[0].name+')';
     else who = 'Transcripts de '+who+' (<@'+results[0].userid+'> '+results[0].name+')'
 

@@ -16,7 +16,7 @@ module.exports = (client, interaction) => {
     if (interaction.member.bot && !conf.canBeUseByBot) return;
     if (interaction.guild.id === config.serverid
         && interaction.channel.id !== config.commandchannel
-        && !interaction.member.permissions.has(Permissions.BAN_MEMBERS)
+        && !interaction.member.permissions.has(PermissionFlagsBits.BanMembers)
         && !conf.bypassChannel) return;
     if (conf.delete) interaction.delete();
 

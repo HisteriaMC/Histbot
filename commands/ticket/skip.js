@@ -41,7 +41,7 @@ module.exports.run = async(client, message) => {
                 if(!topic) topic = "";
                 let splitted = topic.split('@').pop();
                 splitted = splitted.split('>').shift();
-                message.channel.setTopic("Ticket ouvert pour skip par <@" + splitted ?? message.author.id+"> (skip)");
+                message.channel.setTopic("Ticket ouvert pour skip par <@" + (splitted ?? message.author.id) + "> (skip)");
                 message.channel.setParent(categoryid, { lockPermissions: false });
             }catch(e){}
         })

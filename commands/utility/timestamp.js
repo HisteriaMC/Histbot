@@ -1,6 +1,4 @@
 module.exports.run = async(client, message, args) => {
-    console.log("hello"
-    )
     let letter = 'f';
     if(args[0]) letter = args[0];
 

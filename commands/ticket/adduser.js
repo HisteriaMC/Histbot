@@ -10,8 +10,8 @@ module.exports.run = async(client, message, args) => {
         if (!member) return message.reply("L'utilisateur mentionné n'est pas valide");
 
         await message.channel.permissionOverwrites.edit(member.id, {
-            'VIEW_CHANNEL': true,
-            'SEND_MESSAGES': true
+            VIEW_CHANNEL: true,
+            SendMessages: true
         }, "Ajout d'utilisateur dans un ticket");
 
         message.reply("<@" + member.id + "> a bien été rajouté au ticket");

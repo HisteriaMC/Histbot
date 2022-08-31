@@ -1,6 +1,8 @@
 const {User} = require("discord.js");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
+
 module.exports.run = async(client, message, args) => {
-    if(!message.guild.members.cache.get(client.user.id).permissions.has(Permissions.MANAGE_ROLES)) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
+    if(!message.guild.members.cache.get(client.user.id).permissions.has(PermissionFlagsBits.ManageRoles)) return message.channel.send("Je n'ai pas la permission !").catch(console.error);
 
     let unmuted = message.mentions.users.first();
     if(!unmuted && args[0]) unmuted = message.guild.members.cache.get(args[0]);
@@ -28,6 +30,6 @@ module.exports.config = {
     format: "unmute <user>",
     category: "Moderation",
     canBeUseByBot: false,
-    permission: Permissions.BAN_MEMBERS,
+    permission: PermissionFlagsBits.BanMembers,
     needed_args: 1
 };

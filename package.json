@@ -10,7 +10,7 @@
     "jsdom": "^17.0.0",
     "moment": "^2.24.0",
     "node-fetch": "^3.0.0",
-    "reverso-api": "^2.19.0"
+    "reverso-api": "^2.21.2"
   },
   "devDependencies": {
     "@discordjs/rest": "^0.1.0-canary.0",

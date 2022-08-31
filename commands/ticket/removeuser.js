@@ -9,8 +9,8 @@ module.exports.run = async(client, message, args) => {
         if (!member) return message.reply("L'utilisateur mentionné n'est pas valide");
 
         await message.channel.permissionOverwrites.edit(member.id, {
-            'VIEW_CHANNEL': false,
-            'SEND_MESSAGES': false
+            ViewChannel: false,
+            SendMessages: false
         }, "Supressin d'utilisateur dans un ticket");
 
         message.reply("<@" + member.id + "> a bien été supprimé du ticket");

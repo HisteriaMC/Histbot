@@ -1,5 +1,6 @@
 const config = require("../../config.json");
 const hidden = require("../../hidden.json");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
     let autorespondname, serverid;
@@ -38,7 +39,7 @@ module.exports.config = {
     format: "autorespond <create/delete/name/list> [name] [content]",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: Permissions.BAN_MEMBERS,
+    permission: PermissionFlagsBits.BanMembers,
     needed_args: 1,
     args: {
         sub_args: {

@@ -1,6 +1,7 @@
 const config = require("../config.json");
 const Reverso = require("reverso-api");
-const {ChannelType} = require("discord-api-types/v10");
+const {PermissionFlagsBits, ChannelType} = require("discord-api-types/v10");
+const SupportedLanguages = require("reverso-api/src/entities/languages");
 const reverso = new Reverso();
 const prefix = config.prefix;
 let lastxp = {};
@@ -33,7 +34,7 @@ module.exports = (client, message) => {
     if (message.author.bot && !conf.canBeUseByBot) return;
     if (message.guild.id === config.serverId
         && message.channel.id !== config.commandChannel
-        && !message.member.permissions.has(Permissions.MANAGE_MESSAGES)
+        && !message.member.permissions.has(PermissionFlagsBits.ManageMessages)
         && !conf.bypassChannel) return;
     if (conf.delete) message.delete();
 
@@ -55,7 +56,7 @@ function autorespond (client, message){
 /*function linkticket (message){
     if (!message.channel.parent ||
         (message.channel.parent && !config.tickets.allchannels.includes(message.channel.parent.id))
-        || message.member.permissions.has(Permissions.BAN_MEMBERS)) return;
+        || message.member.permissions.has(PermissionFlagsBits.BanMembers)) return;
     if (message.content.includes('http') || message.content.includes('www.') || message.content.includes('.com'))
         message.channel.send(`${message.content} par ${message.author}`);
 
@@ -65,26 +66,45 @@ function helpping (client, message){
 }
 async function counting(client, message) {
     if (message.channel.id === config.counting && message.author.id !== client.user.id) {
-        if (!lastcount) {
+        if (lastcount === -1) return; //searching for the first message
+
+        if (lastcount == null) {
+            lastcount = -1;
             let found = false;
             let messages = await message.channel.messages.fetch({limit: 5}).catch(err => console.log(err));
+            let i = 0;
+
             messages.forEach(msg => {
-                let numtest = msg.content.split(' ')[0]??"no";
-                if(!found && Number.isInteger(numtest)){
-                    lastcount = numtest;
-                    found = true;
+                if (i !== 0) {
+                    let numtest = msg.content.split(' ')[0]??"no";
+
+                    if(!found){
+                        let parsed = parseInt(numtest);
+
+                        if(isNaN(parsed)) lastcount = 0;
+                        else lastcount = parsed;
+
+                        found = true;
+                    }
                 }
+                i++;
             });
             if(!found) lastcount = 0;
         }
 
         let num = message.content.split(' ')[0]??"no";
-        if(num === 0) num = 1;
-        if(num !== lastcount + 1){
-            message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount);
+        if(parseInt(num) !== (lastcount + 1)){
+            if(lastcount > 3){
+                await message.member.roles.add(config.countBannedRole, "Fail sur le count à " + lastcount);
+
+                //ban time depends on lastcount
+                let timestamp = Math.floor((Date.now() / 1000) + (lastcount * 1000) + 86400); //86400 of default ban + 1000sec/count
+
+                await message.member.send("Vous avez été banni jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R> du channel de counting car vous avez fait un count qui n'est pas valide");
+                message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount +", il a été banni du salon jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R>)");
+                client.mysql.execute("INSERT INTO `countBanned` (user, expire, failed_at) VALUES(?, ?, ?);", [message.author.id, timestamp, lastcount]);
+            } else message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount);
             lastcount = 0;
-            if(lastcount > 5)
-                await message.channel.permissionOverwrites.edit(message.author.id, {'SEND_MESSAGES': false}, "Fail sur le count à " + lastcount);
         } else lastcount = lastcount + 1;
     }
 }
@@ -147,8 +167,11 @@ function checkSpelling(client, message){
     if(!content) return;
 
     if(message.channel.id === config.checkSpellingChannel) {
-        reverso.getSpellCheck(content, 'French', (response) => {
-            if(response.length <= 0) return;
+        reverso.getSpellCheck(content, SupportedLanguages.FRENCH, (err, response) => {
+            if (err) throw err;
+            if (!response) throw "No response from Reverso";
+            response = response.corrections;
+            if (response.length <= 0) return;
             let fieldsOfFields = [[]];
             let size = 0;
             response.forEach(suggestion => {

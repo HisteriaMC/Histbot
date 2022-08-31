@@ -29,10 +29,10 @@ module.exports.run = async(client, message) => {
     let emotecloseid = config.tickets.emoteClose.split(":")[2].replace(">", "");
 
     await newmsg.react(emotecloseid);
-    const filter = (reaction) => reaction.emoji.id === emotecloseid;
+    const filter = (reaction, user) => reaction.emoji.id === emotecloseid && user.id !== client.user.id;
     const collector = newmsg.createReactionCollector({ filter, time: 60000 });
 
-    collector.on('collect', async react => {
+    collector.on('collect', async (react) => {
         d = new Date()
         collector.stop();
         this.indeleting[message.channel.id] = Date.now() + 10000;
@@ -50,7 +50,7 @@ module.exports.run = async(client, message) => {
         });
         react.remove();
         await newmsg.react(config.idees.emoteNo);
-        const filter = (reaction) => reaction.emoji.id === config.idees.emoteNo.split(":")[2].replace(">", "");
+        const filter = (reaction, user) => reaction.emoji.id === config.idees.emoteNo.split(":")[2].replace(">", "")  && user.id !== client.user.id;
 
         const collector2 = newmsg.createReactionCollector({filter,  time: 7000 });
         collector2.on('collect', async (react, user) => {
