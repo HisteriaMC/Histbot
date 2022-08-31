@@ -26,5 +26,6 @@ module.exports.config = {
     format: "members",
     canBeUseByBot: true,
     category: "Informations",
-    delete: true
+    delete: true,
+    alias: ["info", "stats"]
 };

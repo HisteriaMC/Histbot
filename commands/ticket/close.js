@@ -53,10 +53,12 @@ module.exports.run = async(client, message) => {
         const filter = (reaction, user) => reaction.emoji.id === config.idees.emoteNo.split(":")[2].replace(">", "")  && user.id !== client.user.id;
 
         const collector2 = newmsg.createReactionCollector({filter,  time: 7000 });
+        let cancelled = false;
         collector2.on('collect', async (react, user) => {
+            cancelled = true;
             d = new Date()
             newmsg.edit({
-                embed: {
+                embeds: [{
                     title: `**__Close Ticket__**`,
                     color: config.color,
                     timestamp: d,
@@ -65,7 +67,7 @@ module.exports.run = async(client, message) => {
                         text: "@Histeria " + new Date().getFullYear()
                     },
                     description: "Suppression annulée par "+user.username
-                }
+                }]
             })
             react.remove();
             collector2.stop()
@@ -77,7 +79,7 @@ module.exports.run = async(client, message) => {
 
         await createTranscript(message, transcriptname, client);
         await require("../../sleep")(5000)
-        if(newmsg.embeds[0].description.includes("annulée")) {
+        if(newmsg.embeds[0].description.includes("annulée") || cancelled) {
             fs.unlinkSync(config.tickets.pathTranscripts + transcriptname + '.html');
             return;
         }

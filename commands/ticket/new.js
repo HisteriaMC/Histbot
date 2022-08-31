@@ -82,6 +82,7 @@ module.exports.run = async(client, message, args) => {
         });
         collector.on('end', () => {
             if(!newmsg.channel) return;
+            if(config.tickets.categoryWait !== newmsg.channel.parent.id) return collector.stop();
             if(collector.collected.size === 0){
                 console.log("Ticket of " + message.author.tag + " timeout on open");
                 newmsg.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes." +
