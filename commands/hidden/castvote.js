@@ -10,6 +10,7 @@ module.exports.run = async(client, message) => {
     }
 
     const file = await fetch('https://minecraftpocket-servers.com/api/?object=servers&element=detail&key='+hidden.mcpeToken).then(response => response.json());
+    if(!file) return console.error("Error when getting details from minecraftpocket-servers");
     const filefinal = Object.values(file);
     const d = new Date();
 

@@ -8,6 +8,7 @@ class run {
     async vote() {
         const d = new Date();
         const file = await fetch('https://minecraftpocket-servers.com/api/?object=servers&element=detail&key=' + hidden.mcpeToken).then(response => response.json());
+        if(!file) return console.error("Error when getting details from minecraftpocket-servers");
         const filefinal = Object.values(file);
 
         let messages = await this.client.guilds.cache.get(config.serverId).channels.cache.get(config.castVote).messages.fetch({limit: 5});
