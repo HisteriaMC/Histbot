@@ -159,7 +159,7 @@ client.log = async function log(message, platform = "all") {
 
 async function exitHandler(options, exitCode) {
     console.log(`Bot down pour ${exitCode}`)
-    client.log(`Bot down pour ${exitCode}`)
+    await client.log(`Bot down pour ${exitCode}`)
     if (options.cleanup) {
         await client.xpapi.save();
         return;

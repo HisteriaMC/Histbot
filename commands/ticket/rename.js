@@ -22,7 +22,7 @@ module.exports.config = {
     canBeUseByBot: false,
     category: "Moderation",
     bypassChannel: true,
-    permission: PermissionFlagsBits.BanMembers,
+    permission: PermissionFlagsBits.ManageMessages,
     delete: true,
     neeeded_args: 1
 };

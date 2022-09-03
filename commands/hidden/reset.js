@@ -1,4 +1,5 @@
 const config = require("../../config.json");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message) => {
     if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
@@ -15,6 +16,6 @@ module.exports.config = {
     format: "reboot",
     canBeUseByBot: true,
     category: "hidden",
-    permission: "ADMINISTRATOR",
+    permission: PermissionFlagsBits.Administrator,
     alias: ["reset"]
 };

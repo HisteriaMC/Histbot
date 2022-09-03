@@ -123,7 +123,7 @@ module.exports.run = async(client, message) => {
         }).catch(() => console.log("Impossible de dm le closeur d'un ticket"));
     });
     collector.on('end', collected => {
-        if(config.tickets.categoryWait !== message.channel.parent?.id) return;
+        if(config.tickets.categoryWait !== message.channel?.parent?.id) return;
         if(collected.size === 0) newmsg.channel.send("Absence de plus de 1 minute, annulation");
     });
 };
@@ -298,6 +298,7 @@ function replacelinks(content)
 }
 function replacemarkdown(content)
 {
+    if (!content) return content;
     let foundsbold = content.match(/\*\*([^]*?)\*\*/g);
     if(foundsbold)
     foundsbold.forEach(found => {

@@ -1,6 +1,7 @@
 const hidden = require("../../hidden.json");
 const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
@@ -83,7 +84,7 @@ module.exports.config = {
     category: "Admin",
     alias: ["jrcon"],
     rconfunc: rconfunc,
-    permission: "ADMINISTRATOR",
+    permission: PermissionFlagsBits.Administrator,
     needed_args: 2,
     args: {
         server: "string",
