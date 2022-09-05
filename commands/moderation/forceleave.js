@@ -16,6 +16,6 @@ module.exports.config = {
     format: "forceleave <pseudo>",
     canBeUseByBot: false,
     category: "Moderation",
-    permission: PermissionFlagsBits.BanMembers,
+    permission: PermissionFlagsBits.ManageMessages,
     needed_args: 1
 };

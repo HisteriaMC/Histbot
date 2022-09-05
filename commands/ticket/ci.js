@@ -3,7 +3,7 @@ moment.locale("fr");
 const config = require("../../config.json");
 
 module.exports.run = async(client, message, args) => {
-    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
+    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.channel.send("Cette commande est à exécuter dans un ticket.");
 
     let topic = message.channel.topic;
     if(!topic) topic = "";

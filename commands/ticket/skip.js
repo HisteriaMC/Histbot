@@ -3,7 +3,7 @@ moment.locale("fr");
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
+    if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.channel.send("Cette commande est à exécuter dans un ticket.");
     message.channel.messages.fetch({ limit: 10 }).then(messages => {
         messages.forEach(base => {
             try{
