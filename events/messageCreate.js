@@ -44,6 +44,11 @@ module.exports = (client, message) => {
 function autorespond (client, message){
     if(message.guild.id !== config.serverId) return;
     if(message.author.bot) return;
+    // this is to trigger the autorespond if the word is in () or "" or followed by a ponctuation mark
+    list_to_replace = ["\"", "(", ")", "[", "]", "{", "}", "'", ".", ",", ":", ";", "?", "/", "\\", "!"];
+    for (const char of list_to_replace) {
+      message.content = message.content.replaceAll(char, " ");
+    }
     let stopped = false;
     message.content.split(' ').forEach(autorespondname => {
         autorespondname = autorespondname.toLowerCase();
