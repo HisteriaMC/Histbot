@@ -9,7 +9,7 @@ module.exports.run = async(client, message, args) => {
     if(!args[0]){
         client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
     } else {
-        if(message.member.permissions.has(PermissionFlagsBits.BanMembers) && [config.serverId, config.staffServerId].includes(message.guild.id)) {
+        if(message.member.permissions.has(PermissionFlagsBits.ManageMessages) && [config.serverId, config.staffServerId].includes(message.guild.id)) {
             if(target){
                 client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
             } else if(args[0].match(/^\d+$/g)){

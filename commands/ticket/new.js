@@ -176,13 +176,13 @@ async function pseudo(message, response, reason, author){
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', desc => {
         if(desc.me) return;
-        if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop;
+        if(config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop;
         msgdescription.delete();
         description(message, reason, content, desc, author);
         collector.stop();
     });
     collector.on('end', collected => {
-        if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop();
+        if(config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop();
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
