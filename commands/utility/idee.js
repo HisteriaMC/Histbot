@@ -23,6 +23,6 @@ module.exports.config = {
     format: "idee <idée>",
     alias: ["idée", "suggest", "suggestion"],
     canBeUseByBot: false,
-    category: "Utilitaire",
+    category: "hidden",
     needed_args: 1
 };

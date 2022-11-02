@@ -107,7 +107,7 @@ async function counting(client, message) {
 
                 await message.member.send("Vous avez été banni jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R> du channel de counting car vous avez fait un count qui n'est pas valide");
                 message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount +", il a été banni du salon jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R>)");
-                client.mysql.execute("INSERT INTO `countBanned` (user, expire, failed_at) VALUES(?, ?, ?);", [message.author.id, timestamp, lastcount]);
+                client.mysqldiscord.execute("INSERT INTO `countBanned` (user, expire, failed_at) VALUES(?, ?, ?);", [message.author.id, timestamp, lastcount]);
             } else message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount);
             lastcount = 0;
         } else lastcount = lastcount + 1;

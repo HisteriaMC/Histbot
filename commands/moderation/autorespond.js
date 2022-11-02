@@ -12,7 +12,7 @@ module.exports.run = async(client, message, args) => {
 
         if (!client.autorespond.get(autorespondname)) return message.reply("Cet autorespond n'existe pas");
         client.autorespond.delete(autorespondname);
-        client.mysql.execute("DELETE FROM `autorespond` WHERE autorespond = ?;", [autorespondname]);
+        client.mysqldiscord.execute("DELETE FROM `autorespond` WHERE autorespond = ?;", [autorespondname]);
         message.reply("Le autorespond au nom de `"+autorespondname+"` a été supprimé");
     } else if(args[0] === "list"){
         let list = [];
@@ -28,7 +28,7 @@ module.exports.run = async(client, message, args) => {
 
         if (client.autorespond.get(autorespondname)) return message.reply("Cet autorespond existe déjà");
         client.autorespond.set(autorespondname, args.join(" "));
-        client.mysql.execute("INSERT INTO `autorespond` (server, autorespond, content) VALUES(?, ?, ?);", [serverid ?? message.guild.id, autorespondname, args.join(" ")]);
+        client.mysqldiscord.execute("INSERT INTO `autorespond` (server, autorespond, content) VALUES(?, ?, ?);", [serverid ?? message.guild.id, autorespondname, args.join(" ")]);
         message.reply("Autorespond créé !");
     }
 };

@@ -8,7 +8,7 @@ module.exports.xpmanager =
         }
 
         initializeDB() {
-            this.client.mysql.query('SELECT * FROM `xp`;',(err, results) => {
+            this.client.mysqldiscord.query('SELECT * FROM `xp`;',(err, results) => {
                 if(!results) return console.error("Impossible de trouver l'xp " + err);
                 results.forEach(result => {
                     this.setFull(result.id, {id: result.id, xp: result.xp, lvl: result.lvl}, false)
@@ -70,7 +70,7 @@ module.exports.xpmanager =
             for (const user of Object.values(this.xp)) {
                 if (!user.changed) continue;
                 let xp = user.xp, lvl = user.lvl, id = user.id;
-                await this.client.mysql.execute("INSERT INTO `xp` VALUES ('" + id + "', '" + xp + "', '" + lvl + "') " +
+                await this.client.mysqldiscord.execute("INSERT INTO `xp` VALUES ('" + id + "', '" + xp + "', '" + lvl + "') " +
                     "ON DUPLICATE KEY UPDATE xp = '" + xp + "', lvl = '" + lvl + "';");
             }
             //await require("sleep.js")(10);

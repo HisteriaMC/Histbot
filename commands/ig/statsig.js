@@ -1,7 +1,7 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    client.mysqlminicore.query("SELECT * FROM `stats` WHERE player = ?", [args[0]], function (err, results){
+    client.mysqlingame.query("SELECT * FROM `stats` WHERE player = ?", [args[0]], function (err, results){
         if(err) {
             console.error(err);
             message.reply("Erreur");
@@ -28,7 +28,7 @@ module.exports.run = async(client, message, args) => {
                 },
                 {
                     name: "Première connexion",
-                    value: String(result.firstjoin),
+                    value: String("<t:"+result.firstjoin+":R> (<t:"+result.firstjoin+":F>)"),
                     inline: true
                 },
                 {
@@ -53,14 +53,7 @@ module.exports.run = async(client, message, args) => {
                     inline: true
                 });
         }
- 
-        if(result.device !== ""){
-            fields.push({
-                name: "Appareil",
-                value: String(result.device),
-                inline: true
-            });
-        }
+
         message.reply({
             embeds: [{
                 title: `Information du joueur **${result.player}**`,

@@ -100,7 +100,7 @@ module.exports.run = async(client, message) => {
         }
         name = channelname === username ? "Inconnu" : channelname;
 
-        client.mysql.execute('INSERT INTO `transcripts` VALUES (?, ?, ?, ?)',
+        client.mysqldiscord.execute('INSERT INTO `transcripts` VALUES (?, ?, ?, ?)',
             [transcriptname, name, id, username]);
         message.channel.delete();
         client.log(`Le ticket '${channelname}' de ${user?.tag||"introuvable"} a été fermé par ${message.author.tag} `+

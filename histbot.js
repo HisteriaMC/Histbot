@@ -2,8 +2,7 @@ const Discord = require('discord.js');
 /*const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { SlashCommandBuilder } = require('@discordjs/builders');*/
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const {Permissions} = require("discord-api-types/v10");
+const { Client } = require('discord.js');
 const client = new Client({ intents: 3276799 }); //38734
 const fs = require('fs');
 const mysql = require('mysql2');
@@ -14,22 +13,16 @@ const path = require("path");
 
 //let commandstoregister = [];
 client.commands = new Discord.Collection();
-client.mysql = mysql.createConnection({
+client.mysqldiscord = mysql.createConnection({
     host: hidden.mysql.host,
     user: hidden.mysql.user,
     database: hidden.mysql.schema,
     password: hidden.mysql.password
 });
-client.mysqlminicore = mysql.createConnection({
+client.mysqlingame = mysql.createConnection({
     host: hidden.mysql.host,
     user: hidden.mysql.user,
-    database: 'minicore',
-    password: hidden.mysql.password
-});
-client.backgrade = mysql.createConnection({
-    host: hidden.mysql.host,
-    user: hidden.mysql.user,
-    database: 'back',
+    database: 'v6',
     password: hidden.mysql.password
 });
 client.tags = new Discord.Collection();
@@ -74,7 +67,7 @@ async function loadcommands() {
     let directories = getDirectories(path.resolve(__dirname, './commands/'));
 
     for (const direct of directories) {
-        let filedirect = await fs.readdirSync(path.resolve(__dirname, './commands/' + direct));
+        let filedirect = fs.readdirSync(path.resolve(__dirname, './commands/' + direct));
         let commandsdirect = filedirect.filter(filedirect => filedirect.split('.').pop() === 'js');
         commandsdirect.forEach((f) => {
             let cmd = require(`./commands/${direct}/${f}`);
@@ -123,7 +116,7 @@ function loadcommand(commande)
 }
 function loadtags()
 {
-    client.mysql.query('SELECT * FROM `tags`;', function(err, results) {
+    client.mysqldiscord.query('SELECT * FROM `tags`;', function(err, results) {
         if(!results) return;
         results.forEach(row => {
             client.tags.set(row["tag"], row["content"]);
@@ -132,7 +125,7 @@ function loadtags()
 }
 function loadautorespond()
 {
-    client.mysql.query('SELECT * FROM `autorespond`;', function(err, results) {
+    client.mysqldiscord.query('SELECT * FROM `autorespond`;', function(err, results) {
         if(!results) return;
         results.forEach(row => {
             if(row["server"] === config.serverId) client.autorespond.set(row["autorespond"], row["content"]);

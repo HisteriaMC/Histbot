@@ -144,13 +144,13 @@ class run {
 
     async checkCountBanned() {
         let client = this.client;
-        client.mysql.query(`SELECT * FROM countBanned`, function(err, results) {
+        client.mysqldiscord.query(`SELECT * FROM countBanned`, function(err, results) {
             let now = Math.floor(Date.now() / 1000);
             if(!results) return;
             results.forEach(row => {
                 if(row["expire"] < now) {
                     //ban is expired
-                    client.mysql.query(`DELETE FROM countBanned WHERE user = ?`, [row["user"]]);
+                    client.mysqldiscord.query(`DELETE FROM countBanned WHERE user = ?`, [row["user"]]);
                     //fetch user and remove his role
                     client.guilds.cache.get(config.serverId).members.fetch(row["user"]).then(member => {
                         if (!member) return;

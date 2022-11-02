@@ -9,6 +9,7 @@
     "fs": "^0.0.1-security",
     "jsdom": "^17.0.0",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.38",
     "node-fetch": "^3.0.0",
     "reverso-api": "^2.21.2",
     "shelljs": "^0.8.5"

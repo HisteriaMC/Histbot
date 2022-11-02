@@ -12,15 +12,21 @@ module.exports.run = async(client, message, args) => {
 
     let port;
     switch(serverbase){
-        case "faction1": case "f1": case "fac1": port = 19133; break;
-        case "faction2": case "f2": case "fac2": port = 19134; break;
-	    case "faction3": case "f3": case "fac3": port = 19135; break;
-        case "minage1": case "min1": port = 19141; break;
-        case "minage2": case "min2": port = 19142; break;
-        case "minage3": case "min3": port = 19143; break;
-        case "minage4": case "min4": port = 19144; break;
-        case "lobby": port = 19132; break;
-        case "test": port = 19150; break;
+        case "faction1": case "f1": case "fac1": port = 19101; break;
+        case "faction2": case "f2": case "fac2": port = 19102; break;
+	    case "faction3": case "f3": case "fac3": port = 19103; break;
+        case "minage1": case "min1": port = 19201; break;
+        case "minage2": case "min2": port = 19202; break;
+        case "minage3": case "min3": port = 19203; break;
+        case "minage4": case "min4": port = 19204; break;
+        case "lobby": case "lobby1": port = 19001; break;
+        case "lobby2": port = 19002; break;
+        case "lobby3": port = 19003; break;
+        case "lobby4": port = 19004; break;
+        case "lobby5": port = 19005; break;
+        case "lobby6": port = 19006; break;
+        case "lobby7": port = 19007; break;
+        case "test": port = 19503; break;
         case "all": port = "all"; break;
         default:
             if(isNaN(serverbase)) port = serverbase;
@@ -33,7 +39,7 @@ module.exports.run = async(client, message, args) => {
         return;
     }
     if(port === "all"){
-        [19132, 19133, 19134, 19141, 19142, 19143, 19144, 19135]
+        [19001, 19002, 19003, 19004, 19005, 19006, 19007, 19101, 19102, 19103, 19201, 19202, 19203, 19204]
             .forEach(element => setTimeout(function(){rconfunc(element, reason, message, element)}, 5500));
         return;
     }

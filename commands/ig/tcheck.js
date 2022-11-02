@@ -2,7 +2,7 @@ const config = require('../../config.json');
 const moment = require('moment');
 
 module.exports.run = async(client, message, args) => {
-    client.mysqlminicore.query("SELECT * FROM `banPlayers` WHERE player = ?", [args[0]], function (err, results){
+    client.mysqlingame.query("SELECT * FROM `ban` WHERE player = ?", [args[0]], function (err, results){
         if(err) {
             console.error(err);
             message.reply("Erreur");

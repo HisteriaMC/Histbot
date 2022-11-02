@@ -1,7 +1,7 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    client.mysqlminicore.query("SELECT * FROM `money` WHERE userName = ?", [args[0]], function (err, results){
+    client.mysqlingame.query("SELECT * FROM `money` WHERE player = ?", [args[0]], function (err, results){
         if(err) {
             console.error(err);
             message.reply("Erreur");
@@ -12,14 +12,14 @@ module.exports.run = async(client, message, args) => {
 
         message.reply({
             embeds: [{
-                title: `Information du joueur **${result.username}**`,
+                title: `Information du joueur **${result.player}**`,
                 color: config.color,
                 timestamp: new Date(),
                 footer: {
                     icon_url: config.imageURL,
                     text: "@Histeria "+new Date().getFullYear()
                 },
-                description: `**${result.username}** a **${result.money}$**`
+                description: `**${result.player}** a **${result.money}$**`
             }]
         })
     })

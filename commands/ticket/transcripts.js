@@ -7,17 +7,17 @@ module.exports.run = async(client, message, args) => {
 
     let callback = function(err, results) {sendResults(message, results, target?.id, args)};
     if(!args[0]){
-        client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
+        client.mysqldiscord.execute('SELECT * FROM `transcripts` WHERE userid = ?', [message.author.id], callback);
     } else {
         if(message.member.permissions.has(PermissionFlagsBits.ManageMessages) && [config.serverId, config.staffServerId].includes(message.guild.id)) {
             if(target){
-                client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
+                client.mysqldiscord.execute('SELECT * FROM `transcripts` WHERE userid = ?', [target.id], callback);
             } else if(args[0].match(/^\d+$/g)){
-                client.mysql.execute('SELECT * FROM `transcripts` WHERE userid = ?', [args[0]], callback);
+                client.mysqldiscord.execute('SELECT * FROM `transcripts` WHERE userid = ?', [args[0]], callback);
             } else if(args[0] === 'name') {
                     if (!args[1]) return message.reply('Il manque le nom de la personne ciblée');
                     target = args[1];
-                    client.mysql.execute('SELECT * FROM `transcripts` WHERE username = ?', [target], callback);
+                    client.mysqldiscord.execute('SELECT * FROM `transcripts` WHERE username = ?', [target], callback);
             }
         } else return message.reply("Vous n'avez pas la permission");
     }

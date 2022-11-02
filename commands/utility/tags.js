@@ -14,7 +14,7 @@ module.exports.run = async(client, message, args) => {
 
         if (client.tags.get(tagname)) return message.reply("Ce tag existe déjà");
         client.tags.set(tagname, args.join(" "));
-        client.mysql.execute("INSERT INTO `tags` (tag, content) VALUES(?, ?);", [tagname, args.join(" ")]);
+        client.mysqldiscord.execute("INSERT INTO `tags` (tag, content) VALUES(?, ?);", [tagname, args.join(" ")]);
         message.reply("Le tag au nom de `"+tagname+"` a été créé avec pour contenu `"+args.join(" ")+"`");
     } else if(args[0] && ["delete", "remove"].includes(args[0])) {
         tagname = args[1];
@@ -23,7 +23,7 @@ module.exports.run = async(client, message, args) => {
 
         if (!client.tags.get(tagname)) return message.reply("Ce tag n'existe pas");
         client.tags.delete(tagname);
-        client.mysql.execute("DELETE FROM `tags` WHERE tag = ?;", [tagname]);
+        client.mysqldiscord.execute("DELETE FROM `tags` WHERE tag = ?;", [tagname]);
         message.reply("Le tag au nom de `"+tagname+"` a été supprimé");
     } else {
         tagname = args[0];

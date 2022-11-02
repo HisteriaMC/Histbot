@@ -4,7 +4,7 @@ const {PermissionFlagsBits} = require("discord-api-types/v10");
 module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
     let command = args.join(" ");
-    client.mysqlminicore.execute(command, function(err, raw) {
+    client.mysqlingame.execute(command, function(err, raw) {
         if(err) message.channel.send(err)
         if(raw){
             let results = "";

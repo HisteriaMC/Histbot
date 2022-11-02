@@ -14,7 +14,6 @@ const list = [
     "Je n'ai qu'une chose a répondre... OUI !",
     "Je n'ai point d'avis sur cela.",
     "Tu devrais demander à Speedy.",
-    "Tu devrais demander à Raznov.",
     "Ça reste entre nous, mais je pense que tu as raison !" ,
     "Sans aucun doute.",
     "Très probable.",
