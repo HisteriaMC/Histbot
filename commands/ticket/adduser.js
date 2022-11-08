@@ -2,6 +2,7 @@ const moment = require("moment");
 moment.locale("fr");
 const config = require("../../config.json");
 const {User} = require("discord.js");
+const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
     if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.")
@@ -31,5 +32,6 @@ module.exports.config = {
     canBeUseByBot: false,
     category: "Ticket",
     needed_args: 1,
-    bypassChannel: true
+    bypassChannel: true,
+    permission: PermissionFlagsBits.ManageMessages
 };
