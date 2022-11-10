@@ -44,7 +44,6 @@
             "7": "Grades/Boutique",
             "8": "Autres"
         },
-        "emoteClose": "<a:yes:847551934902829067>",
-        "pathTranscripts": "/var/www/transcripts/"
+        "emoteClose": "<a:yes:847551934902829067>"
     }
 }
