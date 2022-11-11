@@ -10,14 +10,14 @@ module.exports.run = async(client, message, args) => {
 
     let SSHcommand = "";
     if(args[0]) {
-        SSHcommand = "cp /root/servers/miscs/" + args[0] + "/plugins/"+plugin+"/ /root/servers/upload/ -r && ";
+        SSHcommand = "cp /root/servers/miscs/" + args[0] + "/"+path+"/"+plugin+"/ /root/servers/upload/ -r && ";
     }
 
     SSHcommand += "cd /root/servers/upload/ && ./upload.sh " + path + " " + plugin;
+    message.reply(SSHcommand);
     let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent:true}).stdout;
-    message.reply(replied);
     //count lines of replied
-    let lines = replied.split("\r").length;
+    let lines = replied.split("\n").length;
     message.reply("On va dire que ça a marché hein, réponse de "+lines+" lignes");
 };
 
