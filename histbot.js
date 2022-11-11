@@ -15,12 +15,14 @@ const path = require("path");
 client.commands = new Discord.Collection();
 client.mysqldiscord = mysql.createConnection({
     host: hidden.mysql.host,
+    port: hidden.mysql.port,
     user: hidden.mysql.user,
     database: hidden.mysql.schema,
     password: hidden.mysql.password
 });
 client.mysqlingame = mysql.createConnection({
     host: hidden.mysql.host,
+    port: hidden.mysql.port,
     user: hidden.mysql.user,
     database: 'v6',
     password: hidden.mysql.password

@@ -11,7 +11,7 @@ module.exports.run = async(client, message, args) => {
     if(rep === 2) return message.reply("Vous avez déjà voté");
     if(rep !== 1) return message.reply("Erreur !");
     let today = moment().tz("America/New_York").format("DD/MM/YYYY");
-    client.mysqlingame.query("SELECT * FROM `votecalendar` WHERE player = ?", [pseudodb], async function (err, results) {
+    client.mysqlingame.query("SELECT * FROM `voteCalendar` WHERE player = ?", [pseudodb], async function (err, results) {
         if (err) {
             console.error(err);
             message.reply("Erreur dans la db");
@@ -25,10 +25,10 @@ module.exports.run = async(client, message, args) => {
             let yesterday = moment().tz("America/New_York").add(-1, "days").format("DD/MM/YYYY");
             let streak = result["streak"] + 1;
             if (result["lastconsecutive"] === today || result["lastconsecutive"] === yesterday) {
-                client.mysqlingame.query("UPDATE votecalendar SET lastconsecutive = ?, streak = ? WHERE player = ?;", [today, streak, pseudodb])
+                client.mysqlingame.query("UPDATE voteCalendar SET lastconsecutive = ?, streak = ? WHERE player = ?;", [today, streak, pseudodb])
                 message.reply("Vous avez maintenant un streak de " + streak)
             } else {
-                client.mysqlingame.query("UPDATE votecalendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ? WHERE player = ?;", [today, today, streak, pseudodb])
+                client.mysqlingame.query("UPDATE voteCalendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ? WHERE player = ?;", [today, today, streak, pseudodb])
                 message.reply("Vous perdez votre streak, il était à " + streak)
             }
         });

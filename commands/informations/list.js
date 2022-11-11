@@ -2,7 +2,7 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    mcutil.queryFull('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
+    mcutil.queryFull('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
             let clean = getCleanPlayers(response.players);
             let d = new Date();

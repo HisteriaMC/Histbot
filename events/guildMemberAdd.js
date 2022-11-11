@@ -8,7 +8,7 @@ module.exports = (client, member) => {
     channel.send(`**[<a:ANNONCE:700068339929710693>]** ${member.user} vient de rejoindre Histeria`);
 
 
-    if(member.guild.id === config.serverid) mcutil.statusBedrock('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
+    if(member.guild.id === config.serverid) mcutil.statusBedrock('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
             const d = new Date();
 

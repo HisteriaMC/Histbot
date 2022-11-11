@@ -14,7 +14,7 @@ module.exports.run = async(client, message, args) => {
     }
 
     SSHcommand += "cd /root/servers/upload/ && ./upload.sh " + path + " " + plugin;
-    let replied = shell.exec("ssh root@v6.histeria.fr -p 25 \"" + SSHcommand + "\"", {silent:true}).stdout;
+    let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent:true}).stdout;
     message.reply(replied);
     //count lines of replied
     let lines = replied.split("\r").length;

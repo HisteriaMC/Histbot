@@ -2,7 +2,7 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 
 module.exports.run = async(client, message) => {
-    mcutil.statusBedrock('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
+    mcutil.statusBedrock('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => replywithembed(response.port, response, message))
         .catch((error) => {
             message.channel.send("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");

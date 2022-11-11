@@ -77,7 +77,7 @@ class run {
     }
 
     async changestatus2() {
-        mcutil.statusBedrock('histeria.fr', {port: config.port, enableSRV: true, timeout: 5000})
+        mcutil.statusBedrock('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
             .then((response) => {
                 this.client.user.setActivity(`joueurs: ${response["onlinePlayers"]}/${response["maxPlayers"]}`, {
                     type: ActivityType.Streaming,
