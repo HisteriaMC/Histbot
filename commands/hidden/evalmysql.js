@@ -8,12 +8,16 @@ module.exports.run = async(client, message, args) => {
         if(err) message.channel.send(err)
         if(raw){
             let results = "";
-            raw.forEach(result => {
-                for (const [key, val] of Object.entries(result)) {
-                    results = results.concat("**"+key+":** "+val+"\n");
-                }
-                results = results.concat("\n");
-            });
+            //check if raw is an array or an object
+            if(raw?.length > 0){
+                raw.forEach(result => {
+                    for (const [key, val] of Object.entries(result)) {
+                        results = results.concat("**"+key+":** "+val+"\n");
+                    }
+                    results = results.concat("\n");
+                });
+            } else results = raw.toString();
+
             message.channel.send(results)
         }
     });

@@ -5,7 +5,7 @@ module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
 
     let rcon = client.commands.get("rcon");
-    rcon.config.rconfunc(19101, "safegive " + args.join(' '), message, "fac1");
+    rcon.config.rconfunc(19503, "safegive " + args.join(' '), message, "fac1");
 };
 
 module.exports.config = {

@@ -1,5 +1,4 @@
 const config = require('../../config.json');
-const moment = require('moment');
 
 module.exports.run = async(client, message, args) => {
     client.mysqlingame.query("SELECT * FROM `ban` WHERE player = ?", [args[0]], function (err, results){
@@ -35,7 +34,7 @@ module.exports.run = async(client, message, args) => {
                     },
                     {
                         name: "Fin du ban le",
-                        value: moment.unix(result.banTime).format("LLL") +` (${moment.unix(result.banTime).fromNow()})`
+                        value: '<t:'+result.time+':F> (<t:'+result.time+':R>)'
                     }
                 ]
             }]

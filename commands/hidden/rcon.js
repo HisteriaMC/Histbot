@@ -24,8 +24,6 @@ module.exports.run = async(client, message, args) => {
         case "lobby3": port = 19003; break;
         case "lobby4": port = 19004; break;
         case "lobby5": port = 19005; break;
-        case "lobby6": port = 19006; break;
-        case "lobby7": port = 19007; break;
         case "test": port = 19503; break;
         case "all": port = "all"; break;
         default:
@@ -39,7 +37,7 @@ module.exports.run = async(client, message, args) => {
         return;
     }
     if(port === "all"){
-        [19001, 19002, 19003, 19004, 19005, 19006, 19007, 19101, 19102, 19103, 19201, 19202, 19203, 19204]
+        [19001, 19002, 19003, 19004, 19005, 19101, 19102, 19103, 19201, 19202, 19203, 19204]
             .forEach(element => setTimeout(function(){rconfunc(element, reason, message, element)}, 5500));
         return;
     }
