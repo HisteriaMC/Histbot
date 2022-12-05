@@ -5,8 +5,10 @@ const Discord = require("discord.js");
 const fs = require('fs');
 const path = require("path");
 const jsdom = require('jsdom');
+const util = require("util");
 const { JSDOM } = jsdom;
 this.indeleting = {};
+const shell = require('shelljs');
 
 module.exports.run = async(client, message) => {
     if (!message.channel.parent || !config.tickets.allChannels.includes(message.channel.parent.id)) return message.reply("Cette commande est à exécuter dans un ticket.");
@@ -69,18 +71,25 @@ module.exports.run = async(client, message) => {
                     description: "Suppression annulée par "+user.username
                 }]
             })
-            react.remove();
+            await react.remove();
             collector2.stop()
         });
+        //While the transcript name exist in the mysql database, we add a random number to the name
+
         let transcriptname = require('crypto').randomBytes(3).toString('hex');
-        while(fs.existsSync(transcriptname)){
-            transcriptname = require('crypto').randomBytes(3).toString('hex');
+        let transcriptionExist = true;
+        const query = util.promisify(client.mysqldiscord.query).bind(client.mysqldiscord);
+
+        while(transcriptionExist) {
+            const results = await query("SELECT * FROM `transcripts` WHERE id = ?", [transcriptname]);
+            if(results.length > 0) transcriptname = require('crypto').randomBytes(3).toString('hex');
+            else transcriptionExist = false;
         }
 
         await createTranscript(message, transcriptname, client);
         await require("../../sleep")(5000)
         if(newmsg.embeds[0].description.includes("annulée") || cancelled) {
-            fs.unlinkSync(config.tickets.pathTranscripts + transcriptname + '.html');
+            shell.exec("ssh root@192.168.1.103 \"rm /var/www/transcripts.histeria.fr/"+transcriptname+".html\"")
             return;
         }
 
@@ -127,6 +136,10 @@ module.exports.run = async(client, message) => {
         if(collected.size === 0) newmsg.channel.send("Absence de plus de 1 minute, annulation");
     });
 };
+
+async function exec(s) {
+
+}
 
 async function createTranscript(message, transcriptname, client) { //Tests
     const dom = new JSDOM(fs.readFileSync(path.resolve(__dirname, './template/template.html'), 'utf8'));
@@ -203,7 +216,10 @@ async function createTranscript(message, transcriptname, client) { //Tests
     script.append(vue);
     body.appendChild(script);
 
-    await fs.writeFileSync(config.tickets.pathTranscripts + transcriptname + '.html', document.documentElement.outerHTML); //Enregistrer l'entête du serveur
+    await fs.writeFileSync('/tmp/transcripts/' + transcriptname + '.html', document.documentElement.outerHTML); //Enregistrer l'entête du serveur
+    //Send tmp file through rsync to the server
+    let result = await shell.exec('rsync /tmp/transcripts/' + transcriptname + '.html root@192.168.1.103:/var/www/transcripts.histeria.fr/', {silent:true}).stdout;
+    await fs.unlinkSync('/tmp/transcripts/' + transcriptname + '.html');
 }
 function replaceescape(content)
 {

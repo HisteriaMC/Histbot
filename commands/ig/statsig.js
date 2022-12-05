@@ -38,11 +38,10 @@ module.exports.run = async(client, message, args) => {
                 },
             ];
         if(result.online === "offline") {
-            let lastconnexion = convertwithday(Date.now()/1000 - result.join);
             fields.push(
                 {
                     name: "Dernière connexion",
-                    value: `${lastconnexion.day} jours, ${lastconnexion.hour} heures, ${lastconnexion.minute} minutes et ${lastconnexion.second} secondes`,
+                    value: String("<t:"+result.join+":R> (<t:"+result.join+":F>)"),
                     inline: true
                 });
         } else {

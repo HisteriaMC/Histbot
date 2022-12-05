@@ -15,7 +15,7 @@ class run {
         let found = false;
         messages.forEach(message => {
             if(message.author.id === this.client.user.id && !found){
-                const embeds = [{
+                /*const embeds = [{
                     "color": config.color,
                     "title": "**__VOTE__**",
                     url: "https://bit.ly/histeriavote",
@@ -34,7 +34,7 @@ class run {
                         },
                         {
                             "name": "Récupère ta récompense",
-                            "value": "Récupère ta récompense avec **/vote** en jeu"
+                            "value": "Récupère ta récompense avec **\/vote** en jeu"
                         },
                         {
                             "name": "Notifications de Vote",
@@ -46,15 +46,18 @@ class run {
                         }
                     ]
                 }];
-                message.edit({ content: "<@&"+config.voteRole+">", embeds })
+                message.edit({ content: "<@&"+config.voteRole+">", embeds }) It seems to cause rate limits
                     .then(() => console.log("Successfully edited vote message"))
-                    .catch(() => console.error("Erreur lors du message de vote pour update"));
+                    .catch(() => console.error("Erreur lors du message de vote pour update"));*/
                 found = true;
                 if (!this.lastvote) this.lastvote = message.createdAt.getDate();
             }
         });
 
+        console.log(d.getHours())
+
         if (d.getHours() === 16 && this.lastvote !== d.getDate()) {
+            console.log("Sending vote message, current hour is "+d.getHours()+ " and last vote was "+this.lastvote);
             this.lastvote = d.getDate();
             let cmd = this.client.commands.get("castvote");
             if (!cmd) return;

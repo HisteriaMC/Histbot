@@ -34,7 +34,7 @@ module.exports.run = async(client, message, args) => {
                     },
                     {
                         name: "Fin du ban le",
-                        value: '<t:'+result.time+':F> (<t:'+result.time+':R>)'
+                        value: String('<t:'+result.time+':F> (<t:'+result.time+':R>)')
                     }
                 ]
             }]
