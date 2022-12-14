@@ -65,7 +65,7 @@ module.exports.run = async(client, message, args) => {
                 fields: [
                     {
                         name: "Sujet du ticket",
-                        value: "Veuillez choisir dans la menu en dessous le sujet du ticket"
+                        value: "Veuillez choisir dans le menu en dessous le sujet du ticket"
                     }
                 ],
             }],

@@ -41,7 +41,7 @@ module.exports.run = async(client, message, args) => {
             fields.push(
                 {
                     name: "Dernière connexion",
-                    value: String("<t:"+result.join+":R> (<t:"+result.join+":F>)"),
+                    value: String("<t:"+result.quit+":R> (<t:"+result.quit+":F>)"),
                     inline: true
                 });
         } else {
@@ -80,19 +80,6 @@ function convert(time)
     return {hour: hour??0, minute: minute??0, second: second??0};
 }
 
-function convertwithday(time)
-{
-    let day, hourSec, hour, minuteSec, minute, remainingSec, second;
-    day = Math.floor(time / 86400);
-    hourSec = time % 86400;
-    hour = Math.floor(hourSec / 3600);
-    minuteSec = hourSec % 3600;
-    minute = Math.floor(minuteSec / 60);
-    remainingSec = minuteSec % 60;
-    second = Math.ceil(remainingSec);
-
-    return {day: day??0, hour: hour??0, minute: minute??0, second: second??0};
-}
 module.exports.config = {
     name: "stats",
     description: "Voir les informations d'un joueur en jeu",

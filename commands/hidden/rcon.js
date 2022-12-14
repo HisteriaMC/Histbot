@@ -53,29 +53,32 @@ function rconfunc(port, reason, message, server, reply = true)
         if(!reply) return rcon.close();
         if(out && out.length > 1900) out = "\nLa réponse est trop longue";
         else if (!out) out = "Pas de réponse";
-        message.reply({
-            embeds: [{
-                title: `RCON sur **${server}**`,
-                color: config.color,
-                timestamp: new Date(),
-                footer: {
-                    icon_url: config.imageURL,
-                    text: "@Histeria "+new Date().getFullYear()
-                },
-                fields: [
-                    {
-                        name: 'Requête',
-                        value: String(reason),
-                        inline: true
+        if (message) {
+            message.reply({
+                embeds: [{
+                    title: `RCON sur **${server}**`,
+                    color: config.color,
+                    timestamp: new Date(),
+                    footer: {
+                        icon_url: config.imageURL,
+                        text: "@Histeria "+new Date().getFullYear()
                     },
-                    {
-                        name: 'Réponse',
-                        value: String(out),
-                        inline: true
-                    }
-                ]
-            }]
-        }, {allowedMentions: { repliedUser: false }})
+                    fields: [
+                        {
+                            name: 'Requête',
+                            value: String(reason),
+                            inline: true
+                        },
+                        {
+                            name: 'Réponse',
+                            value: String(out),
+                            inline: true
+                        }
+                    ]
+                }]
+            }, {allowedMentions: { repliedUser: false }})
+        }
+
         rcon.close();
     });
 }
