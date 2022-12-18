@@ -103,7 +103,7 @@ async function counting(client, message) {
                 await message.member.roles.add(config.countBannedRole, "Fail sur le count à " + lastcount);
 
                 //ban time depends on lastcount
-                let timestamp = Math.floor((Date.now() / 1000) + (lastcount * 1000) + 86400); //86400 of default ban + 1000sec/count
+                let timestamp = Math.floor((Date.now() / 1000) + (lastcount * 3600 * 3) + 86400); //86400 of default ban + 3 hours/count
 
                 await message.member.send("Vous avez été banni jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R> du channel de counting car vous avez fait un count qui n'est pas valide");
                 message.channel.send("On recommence à 0 à cause de <@"+message.author.id+"> on était à "+lastcount +", il a été banni du salon jusqu'au <t:"+timestamp+":f> (<t:"+timestamp+":R>)");
