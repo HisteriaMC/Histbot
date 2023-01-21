@@ -28,7 +28,7 @@ module.exports.run = async(client, message, args) => {
                 client.mysqlingame.query("UPDATE voteCalendar SET lastconsecutive = ?, streak = ? WHERE player = ?;", [today, streak, pseudodb])
                 message.reply("Vous avez maintenant un streak de " + streak)
             } else {
-                client.mysqlingame.query("UPDATE voteCalendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ? WHERE player = ?;", [today, today, streak, pseudodb])
+                client.mysqlingame.query("UPDATE voteCalendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ? WHERE player = ?;", [today, today, 1, pseudodb])
                 message.reply("Vous perdez votre streak, il était à " + streak)
             }
         });
