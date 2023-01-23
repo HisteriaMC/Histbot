@@ -44,6 +44,11 @@
             "7": "Grades/Boutique",
             "8": "Autres"
         },
-        "emoteClose": "<a:yes:847551934902829067>"
+        "emoteClose": "<a:yes:847551934902829067>",
+
+        "roles" : {
+            "guide" : "1067176963023831103",
+            "moderateur" : "1067174499738452098"
+        }
     }
 }
