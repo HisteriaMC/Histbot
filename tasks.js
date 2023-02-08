@@ -54,8 +54,6 @@ class run {
             }
         });
 
-        console.log(d.getHours())
-
         if (d.getHours() === 16 && this.lastvote !== d.getDate()) {
             console.log("Sending vote message, current hour is "+d.getHours()+ " and last vote was "+this.lastvote);
             this.lastvote = d.getDate();
