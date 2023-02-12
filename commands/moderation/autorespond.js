@@ -35,7 +35,7 @@ module.exports.run = async(client, message, args) => {
 
 module.exports.config = {
     name: "autorespond",
-    description: "Création d'autorespon avec des messages préfaits",
+    description: "Création d'autorespond avec des messages préfaits",
     format: "autorespond <create/delete/name/list> [name] [content]",
     canBeUseByBot: false,
     category: "Moderation",

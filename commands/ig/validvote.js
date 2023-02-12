@@ -37,7 +37,7 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "validvote",
     description: "Vérifier et valider votre vote",
-    format: "valivote <pseudo>",
+    format: "validvote <pseudo>",
     alias: ["verifvote", "voteig", "validationvote", "validevote"],
     canBeUseByBot: false,
     category: "In Game",

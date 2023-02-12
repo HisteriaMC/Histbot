@@ -13,7 +13,7 @@ module.exports.config = {
     description: "Deban un joueur en jeu",
     format: "tpardon <pseudo>",
     canBeUseByBot: false,
-    category: "In Game",
+    category: "Moderation",
     alias: ["pardon", "tunban"],
     permission: PermissionFlagsBits.BanMembers,
     needed_args: 1,
