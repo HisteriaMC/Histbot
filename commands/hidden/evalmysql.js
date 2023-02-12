@@ -18,7 +18,8 @@ module.exports.run = async(client, message, args) => {
                 });
             } else results = raw.toString();
 
-            message.channel.send(results)
+            if(results !== "") message.channel.send(results);
+            else message.channel.send("Pas de résultats");
         }
     });
 };
