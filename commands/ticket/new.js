@@ -129,7 +129,7 @@ async function reason(message, reason, author, platform) {
         collector.stop();
     });
     collector.on('end', collected => {
-        if(config.tickets.categoryWait !== message.channel.parent.id) return;
+        if(!message.channel || config.tickets.categoryWait !== message.channel?.parent.id) return;
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
@@ -182,7 +182,7 @@ async function pseudo(message, response, reason, author){
         collector.stop();
     });
     collector.on('end', collected => {
-        if(config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop();
+        if(!message.channel || config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop();
         if(collected.size === 0){
             message.channel.send("Absence de plus de 5 minutes, fermeture du ticket dans 5 secondes");
             require("../../sleep.js")(5000);
