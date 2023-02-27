@@ -1,5 +1,5 @@
 {
-    "prefix" : "+",
+    "prefix": "+",
     "port": 19132,
 
     "serverId": "699035170338111489",
@@ -13,13 +13,17 @@
     "castVote": "1009443215688089660",
     "voteRole": "1009443346713940038",
 
-    "color" : 12914197,
+    "color": 12914197,
     "imageURL": "https://cdn.discordapp.com/avatars/700009968480419912/fc674c381af96f8e5659a83a1927083a.png",
+    "owners": [
+        "498159251383123969",
+        "238570701685129217",
+        "207473467518353409"
+    ],
 
-    "owners" : ["498159251383123969", "238570701685129217", "207473467518353409"],
-    "welcome" : "789971039089721384",
+    "welcome": "793559683633643520",
 
-    "counting" : "862315746730442782",
+    "counting": "862315746730442782",
     "countBannedRole": "1014503586694176868",
 
     "idees": {
@@ -27,22 +31,26 @@
         "emoteYes": "<a:yes:847551934902829067>",
         "emoteNo": "<a:no:847551980737790023>"
     },
+
     "tickets": {
-        "allChannels": ["716242136198152222", "699038481506238536", "793565615222685719"],
+        "allChannels": [
+            "716242136198152222",
+            "699038481506238536",
+            "793565615222685719"
+        ],
         "categoryWait": "716242136198152222",
         "categoryOpened": "699038481506238536",
         "categoryClosed": "793565615222685719",
         "role": "789980290915369000",
 
         "reasons": {
-            "1": "Arnaques en échange",
-            "2": "Changement de comptes",
-            "3": "Contestation de sanction",
-            "4": "Trap/Tpkill",
-            "5": "Questions",
-            "6": "Use bug",
-            "7": "Grades/Boutique",
-            "8": "Autres"
+            "1": "Changement de comptes",
+            "2": "Contestation de sanction",
+            "3": "Trap/Tpkill",
+            "4": "Questions",
+            "5": "Use bug",
+            "6": "Grades/Boutique",
+            "7": "Autres"
         },
         "emoteClose": "<a:yes:847551934902829067>"
     }
