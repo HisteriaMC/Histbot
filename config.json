@@ -41,7 +41,6 @@
         "categoryWait": "716242136198152222",
         "categoryOpened": "699038481506238536",
         "categoryClosed": "793565615222685719",
-        "role": "789980290915369000",
 
         "reasons": {
             "1": "Changement de comptes",
@@ -52,6 +51,12 @@
             "6": "Grades/Boutique",
             "7": "Autres"
         },
-        "emoteClose": "<a:yes:847551934902829067>"
+        "emoteClose": "<a:yes:847551934902829067>",
+
+        "roles" : {
+            "guide": "789968383276744734",
+            "moderateur": "789967266225324092",
+            "staff": "789980290915369000"
+        }
     }
 }
