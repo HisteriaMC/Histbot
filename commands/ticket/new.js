@@ -22,7 +22,7 @@ module.exports.run = async(client, message, args) => {
                 deny: [PermissionFlagsBits.ViewChannel]
             },
             {
-                id: config.tickets.role,
+                id: config.tickets.roles.staff,
                 allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.EmbedLinks]
             }
         ],
