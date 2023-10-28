@@ -14,7 +14,7 @@ module.exports.run = async(client, message, args) => {
     switch(serverbase){
         case "faction1": case "f1": case "fac1": port = 19101; break;
         case "faction2": case "f2": case "fac2": port = 19102; break;
-	case "faction3": case "f3": case "fac3": port = 19103; break;
+	    case "faction3": case "f3": case "fac3": port = 19103; break;
         case "minage1": case "min1": port = 19201; break;
         case "minage2": case "min2": port = 19202; break;
         case "minage3": case "min3": port = 19203; break;
@@ -25,15 +25,15 @@ module.exports.run = async(client, message, args) => {
         case "lobby4": port = 19004; break;
         case "lobby5": port = 19005; break;
         case "nico1": port = 19503; break;
-	case "build1": case "b1": port = 19501; break;
-	case "build2": case "b2": port = 19502; break;
-	case "event1": port = 18001; break;
-	case "event2": port = 18002; break;
-	case "nico1pm5": port = 19603; break;
-	case "ailfepm5": port = 19604; break;
-        
+	    case "build1": case "b1": port = 19501; break;
+	    case "build2": case "b2": port = 19502; break;
+	    case "event1": port = 18001; break;
+	    case "event2": port = 18002; break;
+	    case "nico1pm5": port = 19603; break;
+	    case "ailfepm5": port = 19604; break;
+
 	case "all": port = "all"; break;
-	
+
         default:
             if(isNaN(serverbase)) port = serverbase;
             else port = "error";
