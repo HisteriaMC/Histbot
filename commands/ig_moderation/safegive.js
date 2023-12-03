@@ -4,6 +4,9 @@ const {PermissionFlagsBits} = require("discord-api-types/v10");
 module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
 
+    let link = client.commands.get("link");
+    args[0] = await link.parseArg(args[0], message, client.mysqlingame);
+
     let rcon = client.commands.get("rcon");
     rcon.config.rconfunc(19102, "safegive " + args.join(' '), message, "fac1");
 };

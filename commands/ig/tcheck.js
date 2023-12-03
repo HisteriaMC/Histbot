@@ -1,7 +1,10 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    client.mysqlingame.query("SELECT * FROM `ban` WHERE player = ?", [args[0]], function (err, results){
+    let link = client.commands.get("link");
+    let username = await link.parseArg(args[0], message, client.mysqlingame);
+
+    client.mysqlingame.query("SELECT * FROM `ban` WHERE player = ?", [username], function (err, results){
         if(err) {
             console.error(err);
             message.reply("Erreur");
@@ -45,10 +48,10 @@ module.exports.run = async(client, message, args) => {
 module.exports.config = {
     name: "tcheck",
     description: "Voir les informations d'un joueur banni",
-    format: "tcheck <pseudo>",
+    format: "tcheck [pseudo]",
     canBeUseByBot: false,
     category: "In Game",
-    needed_args: 1,
+    needed_args: 0,
     iglink: true,
     args: {pseudo: "string"}
 };

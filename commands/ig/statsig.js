@@ -1,7 +1,10 @@
 const config = require('../../config.json');
 
 module.exports.run = async(client, message, args) => {
-    client.mysqlingame.query("SELECT * FROM `stats` WHERE player = ?", [args[0]], function (err, results){
+    let link = client.commands.get("link");
+    let username = await link.parseArg(args[0], message, client.mysqlingame);
+
+    client.mysqlingame.query("SELECT * FROM `stats` WHERE player = ?", [username], function (err, results){
         if(err) {
             console.error(err);
             message.reply("Erreur");
@@ -83,11 +86,11 @@ function convert(time)
 module.exports.config = {
     name: "stats",
     description: "Voir les informations d'un joueur en jeu",
-    format: "stats <pseudo>",
+    format: "stats [pseudo]",
     alias: ["statsingame", "statsplayer", "statsi", "statsig"],
     canBeUseByBot: false,
     category: "In Game",
     iglink: true,
-    needed_args: 1,
+    needed_args: 0,
     args: {pseudo: "string"}
 };
