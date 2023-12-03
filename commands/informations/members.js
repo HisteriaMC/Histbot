@@ -27,5 +27,5 @@ module.exports.config = {
     canBeUseByBot: true,
     category: "Informations",
     delete: true,
-    alias: ["info", "stats"]
+    alias: ["info"]
 };
