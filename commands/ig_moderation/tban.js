@@ -6,6 +6,7 @@ module.exports.run = async(client, message, args) => {
 
     let link = client.commands.get("link");
     args[0] = await link.parseArg(args[0], message, client.mysqlingame);
+    if (!args[0]) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
     rcon.config.rconfunc(19102, "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, "nico1");

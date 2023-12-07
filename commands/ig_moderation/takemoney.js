@@ -7,6 +7,7 @@ module.exports.run = async(client, message, args) => {
 
     let link = client.commands.get("link");
     let username = await link.parseArg(args[0], message, client.mysqlingame);
+    if (!username) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
     rcon.config.rconfunc(19101, "takemoney " + username + " " + args[1], message, "fac1");

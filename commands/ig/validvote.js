@@ -7,6 +7,7 @@ module.exports.run = async(client, message, args) => {
 
     let link = client.commands.get("link");
     pseudo = await link.parseArg(pseudo, message, client.mysqlingame);
+    if (!pseudo) return; //error message already thrown
 
     let rep = await fetch(`https://minecraftpocket-servers.com/api/?object=votes&element=claim&key=${hidden.mcpeToken}&username=${pseudo}`).then(response => response.json());
     if (isNaN(rep)) return message.reply("Erreur 1 !");

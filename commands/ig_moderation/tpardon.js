@@ -7,6 +7,7 @@ module.exports.run = async (client, message, args) => {
 
     let link = client.commands.get("link");
     let username = await link.parseArg(args[0], message, client.mysqlingame);
+    if (!username) return; //error message already thrown
 
     client.mysqlingame.query('SELECT * FROM ban WHERE player = ?', [username], (err, results) => {
         if (err) {
