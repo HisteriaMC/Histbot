@@ -4,6 +4,7 @@ module.exports.run = async(client, message, args) => {
     //check if already linked
     if (!args[0]) {
         let result = await this.parseArg(args[0], message, client.mysqlingame, true);
+        if (!result) return; //error message already sent
 
         message.reply({
             embeds: [{
@@ -140,7 +141,7 @@ function getFromDiscordId(mysql, id) {
 async function parseArg(arg, message, mysql, fullResult = false) {
     if (!arg) {
         let result = await this.getFromDiscordId(mysql, message.author.id);
-        if (!result) return message.reply("Aucun compte lié à votre discord");
+        if (!result) return message.reply("Aucun compte lié à votre discord, pour en lier un veuillez utiliser `/link` en jeu.");
 
         return fullResult ? result : result.player;
     } else {
