@@ -78,7 +78,16 @@ module.exports.run = async(client, message, args) => {
         collector.on('collect', async interaction => {
             collector.stop();
             await interaction.deferUpdate();
-            await reason(newmsg, config.tickets.reasons[interaction.values[0]], message.author);
+
+            let link = client.commands.get("link");
+            let username = await link.getFromDiscordId(client.mysqlingame, message.author.id);
+            let subject = config.tickets.reasons[interaction.values[0]];
+
+            if (!username) {
+                await reason(newmsg, subject, message.author);
+            } else {
+                await pseudo(newmsg, username.player, subject, message.author);
+            }
         });
         collector.on('end', () => {
             if(!newmsg.channel) return;
@@ -96,7 +105,7 @@ module.exports.run = async(client, message, args) => {
     });
 };
 
-async function reason(message, reason, author, platform) {
+async function reason(message, reason, author) {
     message.edit({
         embeds: [{
             title: `**__Nouveau Ticket__**`,
@@ -125,7 +134,7 @@ async function reason(message, reason, author, platform) {
     collector.on('collect', m => {
         if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop();
         msgpseudo.delete();
-        pseudo(message, m, reason, author, platform);
+        pseudo(message, m.content, reason, author);
         collector.stop();
     });
     collector.on('end', collected => {
@@ -141,12 +150,9 @@ async function reason(message, reason, author, platform) {
 }
 
 async function pseudo(message, response, reason, author){
-    response.delete();
-    let content;
-    if(response.content === ".") content = "Pas de pseudo indiqué";
-    else content = response.content;
-    content = content.replace('<@', 'TAG_PROTECT');
-    //await message.channel.setTopic("2. Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+content+")");
+    if(response === "." || !response) response = "Pas de pseudo indiqué";
+    response = response.replace('<@', 'TAG_PROTECT');
+    //await message.channel.setTopic("2. Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+response+")");
     message.edit({
         embeds: [{
             title: `**__Nouveau Ticket__**`,
@@ -163,14 +169,15 @@ async function pseudo(message, response, reason, author){
                 },
                 {
                     name: "Pseudo in game",
-                    value: content
+                    value: response
                 },
                 {
                     name: "Description approfondie",
                     value: "**Veuillez indiquer une description approfondie du problème, n'hésitez pas à rajouter des documents par la suite ou des liens**"
                 }
-            ],
-        }]
+            ]
+        }],
+        components: []
     });
     let msgdescription = await message.channel.send("**Veuillez indiquer une description approfondie du problème n'hésitez pas à inclure des liens**");
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
@@ -178,7 +185,7 @@ async function pseudo(message, response, reason, author){
         if(desc.me) return;
         if(config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop;
         msgdescription.delete();
-        description(message, reason, content, desc, author);
+        description(message, reason, response, desc, author);
         collector.stop();
     });
     collector.on('end', collected => {
@@ -234,7 +241,8 @@ async function description(message, reason, pseudo, description, author){
                     value: content
                 }
             ],
-        }]
+        }],
+        components: []
     });
 
     description.attachments.forEach(attach => {message.channel.send("Voici un lien d'un attachment probablement mort: "+attach.url);});
