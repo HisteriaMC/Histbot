@@ -14,11 +14,12 @@ module.exports.run = async(client, message, args) => {
     }
 
     SSHcommand += "cd /root/servers/upload/ && ./upload.sh " + path + " " + plugin;
-    message.reply();
-    let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent:true}).stdout;
-    //count lines of replied
-    let lines = replied.split("\n").length;
-    message.reply(SSHcommand+"\nOn va dire que ça a marché hein, réponse de "+lines+" lignes\n"+replied.split("\n").slice(0, 3).join("\n"));
+    message.reply("En attente de réponse..").then(async (msg) => {
+        let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent: true}).stdout;
+        //count lines of replied
+        let lines = replied.split("\n").length;
+        msg.edit(SSHcommand + "\nOn va dire que ça a marché hein, réponse de " + lines + " lignes\n" + replied.split("\n").slice(0, 3).join("\n"));
+    });
 };
 
 module.exports.config = {
