@@ -5,10 +5,10 @@ module.exports.run = async(client, message) => {
     mcutil.queryFull('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
             let clean = getCleanPlayers(response.players, stafflist);
-            let trueonlineplayers = response.onlinePlayers - getTrueOnlinePlayers(response.players, stafflist)
+            let onlineplayerws = response.onlinePlayers - getStaffOnlinePlayers(response.players, stafflist) // online player without staff
             let d = new Date();
 
-            const title = `Liste de joueurs connectés sur le serveur (${trueonlineplayers}/${response.maxPlayers})`;
+            const title = `Liste de joueurs connectés sur le serveur (${onlineplayerws}/${response.maxPlayers})`;
 
             switch(clean.type){
                 case "message":
@@ -103,11 +103,11 @@ function getCleanPlayers(players, stafflist)
     return { type: type, list: cleanlist };
 }
 
-function getTrueOnlinePlayers(players, stafflist) // Sert à avoir un nombre de joueurs connectés cohérent avec la liste (response.onlinePlayers)
+function getStaffOnlinePlayers(players, stafflist) // Sert à avoir le nombre de staffs connectés
 {
+    staffnbr = 0
     players.forEach(player => {
         // Nombre de staff(s) connecté(s)
-        staffnbr = 0
         if (stafflist.includes(player)) {
             staffnbr += 1
         }
