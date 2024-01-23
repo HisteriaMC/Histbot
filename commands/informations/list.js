@@ -4,9 +4,12 @@ const config = require("../../config.json");
 module.exports.run = async(client, message) => {
     mcutil.queryFull('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
-            let clean = getCleanPlayers(response.players);
+            let clean = getCleanPlayers(response.players, stafflist);
+            let trueonlineplayers = response.onlinePlayers - getTrueOnlinePlayers(response.players, stafflist)
             let d = new Date();
-            const title = `Liste de joueurs connectés sur le serveur (${response.onlinePlayers}/${response.maxPlayers})`;
+
+            const title = `Liste de joueurs connectés sur le serveur (${trueonlineplayers}/${response.maxPlayers})`;
+
             switch(clean.type){
                 case "message":
                     message.channel.send(title);
@@ -50,7 +53,28 @@ module.exports.run = async(client, message) => {
             message.reply("Erreur lors de la récupération du statut, serveur hors ligne ? `" + error + "`");
         });
 };
-function getCleanPlayers(players)
+
+//Liste des staffs (modérateurs ou +) :
+stafflist = [
+    "Firekate78",
+    "TomGammeur14",
+    "RaTzyMc69",
+    "SwitAzyaFr",
+    "Pixiaxi",
+    "Fir3Kaat76",
+    "TomGammeur41", 
+    "Zeleph_2222", 
+    "Quaster2", 
+    "Loris_redstone",
+    "CercleTour32576", 
+    "MaisQuasar14755", 
+    "ModItam",
+    "dadodasyra",
+    "AilfeLirik", 
+    "ElfeLyrique640"
+]
+
+function getCleanPlayers(players, stafflist)
 {
     if(players.length === 0) return {type: "message", list: ["Aucun joueur"]}
     let cleanlist = [];
@@ -62,14 +86,34 @@ function getCleanPlayers(players)
     else type = "message";
 
     players.forEach(player => {
-        if(stringplayers.length > 1984){
-            cleanlist.push(stringplayers.substr(0, stringplayers.length -2));
-            stringplayers = "";
+        // Filtrage
+        if (!stafflist.includes(player)) {
+            if (stringplayers.length > 1984) {
+                cleanlist.push(stringplayers.substr(0, stringplayers.length - 2));
+                stringplayers = "";
+            }
+            stringplayers = stringplayers.concat(player + ", ");
         }
-        stringplayers = stringplayers.concat(player+", ");
     });
-    cleanlist.push(stringplayers.substr(0, stringplayers.length -2));
-    return {type: type, list: cleanlist};
+
+    if (stringplayers.length > 0) {
+        cleanlist.push(stringplayers.substr(0, stringplayers.length - 2));
+    }
+
+    return { type: type, list: cleanlist };
+}
+
+function getTrueOnlinePlayers(players, stafflist) // Sert à avoir un nombre de joueurs connectés cohérent avec la liste (response.onlinePlayers)
+{
+    players.forEach(player => {
+        // Nombre de staff(s) connecté(s)
+        staffnbr = 0
+        if (stafflist.includes(player)) {
+            staffnbr += 1
+        }
+    });
+
+    return staffnbr;
 }
 
 module.exports.config = {
