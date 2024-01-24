@@ -105,7 +105,7 @@ function getCleanPlayers(players, stafflist)
 
 function getStaffOnlinePlayers(players, stafflist) // Sert à avoir le nombre de staffs connectés
 {
-    staffnbr = 0
+    let staffCount = 0
     players.forEach(player => {
         // Nombre de staff(s) connecté(s)
         if (stafflist.includes(player)) {
