@@ -113,7 +113,7 @@ function getOnlineStaffCount(players, stafflist) // Sert à avoir le nombre de s
         }
     });
 
-    return staffnbr;
+    return staffCount;
 }
 
 module.exports.config = {
