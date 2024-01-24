@@ -109,7 +109,7 @@ function getOnlineStaffCount(players, stafflist) // Sert à avoir le nombre de s
     players.forEach(player => {
         // Nombre de staff(s) connecté(s)
         if (stafflist.includes(player)) {
-            staffnbr += 1
+            staffCount += 1
         }
     });
 
