@@ -69,9 +69,8 @@ stafflist = [
     "CercleTour32576", 
     "MaisQuasar14755", 
     "ModItam",
-    "dadodasyra",
-    "AilfeLirik", 
-    "ElfeLyrique640"
+    "Zeleph 2222",
+    "Loris redstone"
 ]
 
 function getCleanPlayers(players, stafflist)
