@@ -103,7 +103,7 @@ function getCleanPlayers(players, stafflist)
     return { type: type, list: cleanlist };
 }
 
-function getStaffOnlinePlayers(players, stafflist) // Sert à avoir le nombre de staffs connectés
+function getOnlineStaffCount(players, stafflist) // Sert à avoir le nombre de staffs connectés
 {
     let staffCount = 0
     players.forEach(player => {
