@@ -5,10 +5,10 @@ module.exports.run = async(client, message) => {
     mcutil.queryFull('192.168.1.42', {port: config.port, enableSRV: true, timeout: 5000})
         .then((response) => {
             let clean = getCleanPlayers(response.players, stafflist);
-            let onlineplayerws = response.onlinePlayers - getStaffOnlinePlayers(response.players, stafflist) // online player without staff
+            let onlineplayers = response.onlinePlayers - onlineStaffCount //online player without staff
             let d = new Date();
 
-            const title = `Liste de joueurs connectés sur le serveur (${onlineplayerws}/${response.maxPlayers})`;
+            const title = `Liste de joueurs connectés sur le serveur (${onlineplayers}/${response.maxPlayers})`;
 
             switch(clean.type){
                 case "message":
@@ -54,25 +54,6 @@ module.exports.run = async(client, message) => {
         });
 };
 
-//Liste des staffs (modérateurs ou +) :
-stafflist = [
-    "Firekate78",
-    "TomGammeur14",
-    "RaTzyMc69",
-    "SwitAzyaFr",
-    "Pixiaxi",
-    "Fir3Kaat76",
-    "TomGammeur41", 
-    "Zeleph_2222", 
-    "Quaster2", 
-    "Loris_redstone",
-    "CercleTour32576", 
-    "MaisQuasar14755", 
-    "ModItam",
-    "Zeleph 2222",
-    "Loris redstone"
-]
-
 function getCleanPlayers(players, stafflist)
 {
     if(players.length === 0) return {type: "message", list: ["Aucun joueur"]}
@@ -102,19 +83,26 @@ function getCleanPlayers(players, stafflist)
     return { type: type, list: cleanlist };
 }
 
-function getOnlineStaffCount(players, stafflist) // Sert à avoir le nombre de staffs connectés
-{
-    let staffCount = 0
-    players.forEach(player => {
-        // Nombre de staff(s) connecté(s)
-        if (stafflist.includes(player)) {
-            staffCount += 1
-        }
-    });
+onlineStaffCount = players.filter(value => stafflist.includes(value)).size;
 
-    return staffCount;
-}
-
+stafflist = [
+    "Firekate78",
+    "TomGammeur14",
+    "RaTzyMc69",
+    "SwitAzyaFr",
+    "Pixiaxi",
+    "Fir3Kaat76",
+    "TomGammeur41", 
+    "Zeleph_2222", 
+    "Quaster2", 
+    "Loris_redstone",
+    "CercleTour32576", 
+    "MaisQuasar14755", 
+    "ModItam",
+    "dadodasyra",
+    "AilfeLirik", 
+    "ElfeLyrique640"
+]
 module.exports.config = {
     name: "list",
     description: "Donne la liste des joueurs connectés au serveur",
