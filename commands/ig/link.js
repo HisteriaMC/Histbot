@@ -143,7 +143,10 @@ function getFromDiscordId(mysql, id) {
 async function parseArg(arg, message, mysql, fullResult = false) {
     if (!arg) {
         let result = await this.getFromDiscordId(mysql, message.author.id);
-        if (!result) return message.reply("Aucun compte lié à votre discord, pour en lier un veuillez utiliser `/link` en jeu.");
+        if (!result) {
+            message.reply("Aucun compte lié à votre discord, pour en lier un veuillez utiliser `/link` en jeu.");
+            return null;
+        }
 
         return fullResult ? result : result.player;
     } else {
@@ -152,7 +155,10 @@ async function parseArg(arg, message, mysql, fullResult = false) {
         let target = message.guild.members.cache.get(arg);
         if (target) {
             let result = await this.getFromDiscordId(mysql, target.id);
-            if (!result) return message.reply("Aucun compte lié au discord de " + target.user.username);
+            if (!result) {
+                message.reply("Aucun compte lié au discord de " + target.user.username);
+                return null;
+            }
 
             return fullResult ? result : result.player;
         } else if (!fullResult) return arg;
