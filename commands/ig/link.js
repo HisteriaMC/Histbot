@@ -77,6 +77,8 @@ module.exports.run = async(client, message, args) => {
 
                         client.mysqlingame.query("DELETE FROM `discordVerification` WHERE code = ?", [code]);
 
+                        client.commands.get("refreshrank").run(client, message, []);
+
                         message.reply({
                             embeds: [{
                                 title: `Liaison du joueur **${result.player}**`,

@@ -50,6 +50,9 @@ async function start() {
 
     await client.login(hidden.token).catch(error => console.log("Erreur de connexion : " + error));
     await loadcommands();
+
+    refreshrank()
+    setInterval(refreshrank,    60 * 60 * 1000); // 1 hour
 }
 function getDirectories(path) {
     return fs.readdirSync(path).filter(function (file) {
@@ -134,6 +137,11 @@ function loadautorespond()
         });
     });
 }
+function refreshrank()
+{
+    client.commands.get("refreshrank").update(client);
+}
+
 process.stdin.resume();
 client.log = async function log(message, platform = "all") {
     let channelid;
