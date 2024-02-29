@@ -3,7 +3,6 @@ const {PermissionsBitField} = require("discord.js");
 const shell = require('shelljs')
 
 module.exports.run = async(client, message, args) => {
-    console.log("world")
     if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
 
     let SSHcommand = "cd /root/servers && ./updateserver.sh "+(args[0] ?? "");

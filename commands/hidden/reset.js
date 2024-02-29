@@ -11,11 +11,11 @@ module.exports.run = async(client, message) => {
 };
 
 module.exports.config = {
-    name: "reboot",
+    name: "reset",
     description: "Reboot le bot",
-    format: "reboot",
+    format: "reset",
     canBeUseByBot: true,
     category: "hidden",
     permission: PermissionFlagsBits.Administrator,
-    alias: ["reset"]
+    alias: ["rebootbot"]
 };
