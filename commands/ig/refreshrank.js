@@ -1,8 +1,8 @@
 const config = require('../../config.json');
 
-module.exports.run = async(client, message, args) => {
+module.exports.run = async(client, message) => {
     let link = client.commands.get("link");
-    let username = await link.parseArg(args[0], message, client.mysqlingame);
+    let username = await link.parseArg(null, message, client.mysqlingame);
     if (!username) return; //error message already thrown
 
     client.mysqlingame.query("SELECT * FROM `permsPlayers` WHERE player = ?", [username], async function (err, results) {
