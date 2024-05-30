@@ -1,9 +1,11 @@
 const config = require("../../config.json");
 const {PermissionsBitField} = require("discord.js");
 const shell = require('shelljs')
+const hidden = require("../../hidden.json");
 
 module.exports.run = async(client, message, args) => {
-    if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
+    //if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
+    if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
 
     if (args[0] === "all") args[0] = "";
     let SSHcommand = "cd /root/servers && ./reboot.sh "+args[0]+" "+(args[1]??"");
