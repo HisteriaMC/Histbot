@@ -89,8 +89,9 @@ function rconfunc(port, reason, message, server, reply = true) {
                                 inline: true
                             }
                         ]
-                    }]
-                }, {allowedMentions: { repliedUser: false }});
+                    }],
+                    allowedMentions: { repliedUser: false }
+                });
             }
 
             rcon.close();
