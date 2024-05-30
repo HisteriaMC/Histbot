@@ -1,4 +1,3 @@
-const config = require("../../config.json");
 const {PermissionsBitField} = require("discord.js");
 const shell = require('shelljs')
 const hidden = require("../../hidden.json");
@@ -13,9 +12,8 @@ module.exports.run = async(client, message, args) => {
     message.reply("En attente de réponse..").then((msg) => {
         shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent:true}, (code, stdout, stderr) => {
             // This callback function will be called when the SSH command finishes executing
-            let replied = stdout;
             //count lines of replied
-            msg.edit(SSHcommand+"\n"+replied);
+            msg.edit(SSHcommand+"\n"+stdout);
         });
     });
 };

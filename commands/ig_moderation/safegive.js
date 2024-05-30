@@ -9,7 +9,7 @@ module.exports.run = async(client, message, args) => {
     if (!args[0]) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
-    rcon.config.rconfunc(19102, "safegive " + args.join(' '), message, "fac1");
+    rcon.config.rconfunc(19102, "safegive " + args.join(' '), message, "fac2");
 };
 
 module.exports.config = {
