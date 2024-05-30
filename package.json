@@ -17,7 +17,7 @@
   "devDependencies": {
     "@discordjs/rest": "^0.1.0-canary.0",
     "minecraft-server-util": "^3.4.4",
-    "mysql2": "^2.3.0"
+    "mysql2": "^3.9.7"
   },
   "scripts": {
     "test2": "echo \"Error: no test specified\" && exit 1"
