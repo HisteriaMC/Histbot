@@ -51,45 +51,51 @@ module.exports.run = async(client, message, args) => {
     }
     rconfunc(port, reason, message, serverbase);
 };
-function rconfunc(port, reason, message, server, reply = true, callback = function () {})
-{
-    const rcon = new mcutil.RCON(hidden.rcon.host, { port: port, enableSRV: false, timeout: 5000, password: hidden.rcon.password});
-    rcon.connect()
-        .then(() => rcon.run(reason))
-        .catch((error) => {message.channel.send("Erreur sur la connexion : "+error); console.error(error)});
-    rcon.on('output', (out) => {
-        if(out && out.length > 1900) out = "\nLa réponse est trop longue";
-        else if (!out) out = "Pas de réponse";
-        if (callback) callback(out);
-        if(!reply) return rcon.close();
+function rconfunc(port, reason, message, server, reply = true) {
+    return new Promise((resolve, reject) => {
+        const rcon = new mcutil.RCON(hidden.rcon.host, { port: port, enableSRV: false, timeout: 5000, password: hidden.rcon.password});
+        rcon.connect()
+            .then(() => rcon.run(reason))
+            .catch((error) => {
+                if (message) {
+                    message.channel.send("Erreur sur la connexion : "+error);
+                }
+                console.error(error);
+                reject(error);
+            });
+        rcon.on('output', (out) => {
+            if(out && out.length > 1900) out = "\nLa réponse est trop longue";
+            else if (!out) out = "Pas de réponse";
 
-        if (message) {
-            message.reply({
-                embeds: [{
-                    title: `RCON sur **${server}**`,
-                    color: config.color,
-                    timestamp: new Date(),
-                    footer: {
-                        icon_url: config.imageURL,
-                        text: "@Histeria "+new Date().getFullYear()
-                    },
-                    fields: [
-                        {
-                            name: 'Requête',
-                            value: String(reason),
-                            inline: true
+            if (message && reply) {
+                message.reply({
+                    embeds: [{
+                        title: `RCON sur **${server}**`,
+                        color: config.color,
+                        timestamp: new Date(),
+                        footer: {
+                            icon_url: config.imageURL,
+                            text: "@Histeria "+new Date().getFullYear()
                         },
-                        {
-                            name: 'Réponse',
-                            value: String(out),
-                            inline: true
-                        }
-                    ]
-                }]
-            }, {allowedMentions: { repliedUser: false }})
-        }
+                        fields: [
+                            {
+                                name: 'Requête',
+                                value: String(reason),
+                                inline: true
+                            },
+                            {
+                                name: 'Réponse',
+                                value: String(out),
+                                inline: true
+                            }
+                        ]
+                    }]
+                }, {allowedMentions: { repliedUser: false }});
+            }
 
-        rcon.close();
+            rcon.close();
+            resolve(out);
+        });
     });
 }
 
