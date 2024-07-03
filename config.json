@@ -45,11 +45,10 @@
         "reasons": {
             "1": "Changement de comptes",
             "2": "Contestation de sanction",
-            "3": "Trap/Tpkill",
-            "4": "Questions",
-            "5": "Use bug",
-            "6": "Grades/Boutique",
-            "7": "Autres"
+            "3": "Questions",
+            "4": "Use bug",
+            "5": "Grades/Boutique",
+            "6": "Autres"
         },
         "emoteClose": "<a:yes:847551934902829067>",
 
