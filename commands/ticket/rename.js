@@ -7,10 +7,10 @@ module.exports.run = async(client, message, args) => {
     let categoryid = config.tickets.categoryClosed;
     let arg = args.slice(0).join(' ');
     if (arg === "effectué" || arg === "ok") {
-        await message.channel.setParent(categoryid);
+        await message.channel.setParent(categoryid, { lockPermissions: false });
         message.channel.setName('effectué')
     } else {
-        if(message.channel.parent.id === categoryid) await message.channel.setParent(config.tickets.categoryOpened);
+        if(message.channel.parent.id === categoryid) await message.channel.setParent(config.tickets.categoryOpened, { lockPermissions: false });
         message.channel.setName(arg)
     }
 };
