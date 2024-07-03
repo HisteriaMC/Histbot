@@ -84,9 +84,9 @@ module.exports.run = async(client, message, args) => {
             let subject = config.tickets.reasons[interaction.values[0]];
 
             if (!username) {
-                await reason(newmsg, subject, message.author);
+                await reason(client, newmsg, subject, message.author);
             } else {
-                await pseudo(newmsg, username.player, subject, message.author);
+                await pseudo(client, newmsg, username.player, subject, message.author);
             }
         });
         collector.on('end', () => {
@@ -105,7 +105,7 @@ module.exports.run = async(client, message, args) => {
     });
 };
 
-async function reason(message, reason, author) {
+async function reason(client, message, reason, author) {
     message.edit({
         embeds: [{
             title: `**__Nouveau Ticket__**`,
@@ -132,9 +132,10 @@ async function reason(message, reason, author) {
     let msgpseudo = await message.channel.send('**Veuillez répondre ci-dessous avec votre pseudo en jeu (écrivez . si non-nécessaire)**');
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', m => {
+        if (m.author.id === client.user.id) return;
         if(config.tickets.categoryWait !== message.channel.parent.id) return collector.stop();
         msgpseudo.delete();
-        pseudo(message, m.content, reason, author);
+        pseudo(client, message, m.content, reason, author);
         collector.stop();
     });
     collector.on('end', collected => {
@@ -149,7 +150,7 @@ async function reason(message, reason, author) {
     });
 }
 
-async function pseudo(message, response, reason, author){
+async function pseudo(client, message, response, reason, author){
     if(response === "." || !response) response = "Pas de pseudo indiqué";
     response = response.replace('<@', 'TAG_PROTECT');
     //await message.channel.setTopic("2. Ticket ouvert pour " + reason + " par <@" + author.id+"> ("+response+")");
@@ -182,7 +183,7 @@ async function pseudo(message, response, reason, author){
     let msgdescription = await message.channel.send("**Veuillez indiquer une description approfondie du problème n'hésitez pas à inclure des liens**");
     const collector = message.channel.createMessageCollector({ filter: m => m.content !== "", time: 300000 });
     collector.on('collect', desc => {
-        if(desc.me) return;
+        if (desc.author.id === client.user.id) return;
         if(config.tickets.categoryWait !== message.channel?.parent.id) return collector.stop;
         msgdescription.delete();
         description(message, reason, response, desc, author);
