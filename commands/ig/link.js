@@ -23,7 +23,7 @@ module.exports.run = async(client, message, args) => {
             let result = await this.getFromDiscordId(client.mysqlingame, message.author.id);
             if (!result) return message.reply("Aucun compte lié à votre discord");
 
-            client.mysqlingame.query("DELETE FROM `discordLink` WHERE discord = ?", [message.author.id], function (err) {
+            client.mysqlingame.query("DELETE FROM `discord_link` WHERE discord = ?", [message.author.id], function (err) {
                 if (err) {
                     console.error(err);
                     return message.reply("Erreur");
@@ -69,7 +69,7 @@ module.exports.run = async(client, message, args) => {
                     }
 
                     let linkedOn = Math.round(Date.now() / 1000);
-                    client.mysqlingame.query("INSERT INTO `discordLink` (discord, player, linkedOn) VALUES (?, ?, ?)", [message.author.id, result.player, linkedOn], function (err) {
+                    client.mysqlingame.query("INSERT INTO `discord_link` (discord, player, linkedOn) VALUES (?, ?, ?)", [message.author.id, result.player, linkedOn], function (err) {
                         if (err) {
                             console.error(err);
                             return message.reply("Erreur");
