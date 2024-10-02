@@ -54,7 +54,7 @@ module.exports.run = async(client, message, args) => {
                 let response = await this.getFromDiscordId(client.mysqlingame, message.author.id);
                 if (response) return message.reply("Vous êtes déjà lié à un compte");
 
-                client.mysqlingame.query("SELECT * FROM `discordVerification` WHERE code = ?", [code], function (err, results) {
+                client.mysqlingame.query("SELECT * FROM `discord_verification` WHERE code = ?", [code], function (err, results) {
                     if (err) {
                         console.error(err);
                         return message.reply("Erreur");
@@ -64,7 +64,7 @@ module.exports.run = async(client, message, args) => {
                     let result = results[0];
 
                     if (result.expire < (Date.now() / 1000)) {
-                        client.mysqlingame.query("DELETE FROM `discordVerification` WHERE code = ?", [code]);
+                        client.mysqlingame.query("DELETE FROM `discord_verification` WHERE code = ?", [code]);
                         return message.reply("Code expiré");
                     }
 
@@ -75,7 +75,7 @@ module.exports.run = async(client, message, args) => {
                             return message.reply("Erreur");
                         }
 
-                        client.mysqlingame.query("DELETE FROM `discordVerification` WHERE code = ?", [code]);
+                        client.mysqlingame.query("DELETE FROM `discord_verification` WHERE code = ?", [code]);
 
                         client.commands.get("refreshrank").run(client, message, []);
 
