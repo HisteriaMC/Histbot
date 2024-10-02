@@ -5,15 +5,20 @@ const shell = require('shelljs')
 module.exports.run = async(client, message, args) => {
     if (!config.owners.includes(message.author.id)) return message.channel.send(`**Seulement le bg peut faire ça** :sunglasses:`)
 
-    let plugin = args[1] ?? "MiniCoreV6";
-    let path = args[2] ?? "plugins";
-
     let SSHcommand = "";
-    if(args[0]) {
-        SSHcommand = "cp /root/servers/miscs/" + args[0] + "/"+path+"/"+plugin+"/ /root/servers/upload/ -r && ";
-    }
+    if (args[0] === "beta") {
+        let server = args[1] ?? "betatest";
+        SSHcommand = "for dir in v7/*/plugins; do cp -r miscs/"+server+"/plugins/* \"$dir\"; done\n"
+    } else {
+        let plugin = args[1] ?? "MiniCore";
+        let path = args[2] ?? "plugins";
 
-    SSHcommand += "cd /root/servers/upload/ && ./upload.sh " + path + " " + plugin;
+        if(args[0]) {
+            SSHcommand = "cp /root/servers/miscs/" + args[0] + "/"+path+"/"+plugin+"/ /root/servers/upload/ -r && ";
+        }
+
+        SSHcommand += "cd /root/servers/upload/ && ./upload.sh " + path + " " + plugin;
+    }
     message.reply("En attente de réponse..").then(async (msg) => {
         let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent: true}).stdout;
         //count lines of replied
