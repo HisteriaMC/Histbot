@@ -8,7 +8,7 @@ module.exports.run = async(client, message, args) => {
     let SSHcommand = "";
     if (args[0] === "beta") {
         let server = args[1] ?? "betatest";
-        SSHcommand = "for dir in v7/*/plugins; do cp -r miscs/"+server+"/plugins/* \"$dir\"; done\n"
+        SSHcommand = `cd /root/servers && for dir in v7/*/plugins; do echo \"Copying files to \\$dir\"; cp -r miscs/${server}/plugins/* \"\\$dir\"; done`;
     } else {
         let plugin = args[1] ?? "MiniCore";
         let path = args[2] ?? "plugins";
@@ -23,7 +23,7 @@ module.exports.run = async(client, message, args) => {
         let replied = shell.exec("ssh root@192.168.1.100 \"" + SSHcommand + "\"", {silent: true}).stdout;
         //count lines of replied
         let lines = replied.split("\n").length;
-        msg.edit(SSHcommand + "\nOn va dire que ça a marché hein, réponse de " + lines + " lignes\n" + replied.split("\n").slice(0, 3).join("\n"));
+        msg.edit("`" + SSHcommand + "`\nOn va dire que ça a marché hein, réponse de **" + lines + "** lignes\n" + replied.split("\n").slice(0, 3).join("\n"));
     });
 };
 
