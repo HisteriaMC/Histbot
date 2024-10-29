@@ -118,9 +118,13 @@ function getFromInGame(mysql, username) {
             if (err) {
                 console.error(err);
                 reject(err);
+                return;
             }
 
-            if (!results || !results[0]) resolve(null);
+            if (!results || !results[0]) {
+                resolve(null);
+                return;
+            }
             resolve(results[0]);
         })
     })
@@ -132,9 +136,13 @@ function getFromDiscordId(mysql, id) {
             if (err) {
                 console.error(err);
                 reject(err);
+                return;
             }
 
-            if (!results || !results[0]) resolve(null);
+            if (!results || !results[0]) {
+                resolve(null);
+                return;
+            }
             resolve(results[0]);
         })
     })
