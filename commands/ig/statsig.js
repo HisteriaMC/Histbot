@@ -5,47 +5,57 @@ module.exports.run = async(client, message, args) => {
     let username = await link.parseArg(args[0], message, client.mysqlingame);
     if (!username) return; //error message already thrown
 
-    client.mysqlingame.query("SELECT * FROM `stats` WHERE player = ?", [username], function (err, results){
-        if(err) {
+    client.mysqlingame.query("SELECT * FROM `stats` WHERE player = ?", [username], async function (err, results) {
+        if (err) {
             console.error(err);
             message.reply("Erreur");
         }
 
-        if(!results || !results[0]) return message.reply("Aucun membre trouvé avec ce pseudo");
+        if (!results || !results[0]) return message.reply("Aucun membre trouvé avec ce pseudo");
         let result = results[0];
-        let timeig = convert(result.total + (result.online !== "offline" ? Date.now()/1000 - result.join : 0));
+        let timeig = convert(result.total + (result.online !== "offline" ? Date.now() / 1000 - result.join : 0));
         let fields = [
-                {
-                    name: "Kills",
-                    value: String(result.kill),
-                    inline: true
-                },
-                {
-                    name: "Death",
-                    value: String(result.death),
-                    inline: true
-                },
-                {
-                    name: "Ratio",
-                    value: String(Math.round(((result.kill < 2 ? 1 : result.kill) / (result.death < 2 ? 1 : result.death)) * 100) / 100),
-                    inline: true
-                },
-                {
-                    name: "Première connexion",
-                    value: String("<t:"+result.firstjoin+":R> (<t:"+result.firstjoin+":F>)"),
-                    inline: true
-                },
-                {
-                    name: "Temps de jeu",
-                    value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
-                    inline: true
-                },
-            ];
-        if(result.online === "offline") {
+            {
+                name: "Kills",
+                value: String(result.kill),
+                inline: true
+            },
+            {
+                name: "Death",
+                value: String(result.death),
+                inline: true
+            },
+            {
+                name: "Ratio",
+                value: String(Math.round(((result.kill < 2 ? 1 : result.kill) / (result.death < 2 ? 1 : result.death)) * 100) / 100),
+                inline: true
+            },
+            {
+                name: "Première connexion",
+                value: String("<t:" + result.firstjoin + ":R> (<t:" + result.firstjoin + ":F>)"),
+                inline: true
+            },
+            {
+                name: "Temps de jeu",
+                value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
+                inline: true
+            },
+            {
+                name: "Money",
+                value: (await getMoney(client.mysqlingame, username)) + "$",
+                inline: true
+            },
+            {
+                name: "Faction",
+                value: (await getFaction(client.mysqlingame, username) ?? "Aucune"),
+                inline: true
+            },
+        ];
+        if (result.online === "offline") {
             fields.push(
                 {
                     name: "Dernière connexion",
-                    value: String("<t:"+result.quit+":R> (<t:"+result.quit+":F>)"),
+                    value: String("<t:" + result.quit + ":R> (<t:" + result.quit + ":F>)"),
                     inline: true
                 });
         } else {
@@ -64,7 +74,7 @@ module.exports.run = async(client, message, args) => {
                 timestamp: new Date(),
                 footer: {
                     icon_url: config.imageURL,
-                    text: "@Histeria "+new Date().getFullYear()
+                    text: "@Histeria " + new Date().getFullYear()
                 },
                 fields: fields
             }]
@@ -82,6 +92,39 @@ function convert(time)
     second = Math.ceil(remainingSec);
 
     return {hour: hour??0, minute: minute??0, second: second??0};
+}
+
+async function getMoney(mysql, player) {
+    return new Promise((resolve, reject) => {
+        mysql.query("SELECT * FROM `money` WHERE player = ?", [player], function (err, results) {
+            if (err) {
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            if (!results || !results[0]) resolve(null);
+            resolve(results[0].money);
+        })
+    })
+}
+
+async function getFaction(mysql, player) {
+    return new Promise((resolve, reject) => {
+        mysql.query("SELECT * FROM `factions` WHERE JSON_CONTAINS(members, JSON_QUOTE(?), '$')", [player], function (err, results) {
+            if (err) {
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            if (!results || !results[0]) {
+                resolve(null);
+                return;
+            }
+            resolve(results[0].name);
+        })
+    })
 }
 
 module.exports.config = {
