@@ -31,13 +31,13 @@ module.exports.run = async(client, message, args) => {
                 inline: true
             },
             {
-                name: "Première connexion",
-                value: String("<t:" + result.firstjoin + ":R> (<t:" + result.firstjoin + ":F>)"),
+                name: "Faction",
+                value: (await getFaction(client.mysqlingame, username) ?? "Aucune"),
                 inline: true
             },
             {
-                name: "Temps de jeu",
-                value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
+                name: "Grade",
+                value: (await getRank(client.mysqlingame, username) ?? "Unknown"),
                 inline: true
             },
             {
@@ -46,8 +46,13 @@ module.exports.run = async(client, message, args) => {
                 inline: true
             },
             {
-                name: "Faction",
-                value: (await getFaction(client.mysqlingame, username) ?? "Aucune"),
+                name: "Première connexion",
+                value: String("<t:" + result.firstjoin + ":R> (<t:" + result.firstjoin + ":F>)"),
+                inline: true
+            },
+            {
+                name: "Temps de jeu",
+                value: `${timeig.hour} heures, ${timeig.minute} et ${timeig.second} secondes`,
                 inline: true
             },
         ];
@@ -80,7 +85,6 @@ module.exports.run = async(client, message, args) => {
             }]
         })
     })
-        
 };
 function convert(time)
 {
@@ -123,6 +127,24 @@ async function getFaction(mysql, player) {
                 return;
             }
             resolve(results[0].name);
+        })
+    })
+}
+
+async function getRank(mysql, player) {
+    return new Promise((resolve, reject) => {
+        mysql.query("SELECT * FROM `ranks` WHERE player = ?", [player], function (err, results) {
+            if (err) {
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            if (!results || !results[0]) {
+                resolve(null);
+                return;
+            }
+            resolve(results[0].rank);
         })
     })
 }
