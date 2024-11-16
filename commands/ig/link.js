@@ -23,7 +23,7 @@ module.exports.run = async(client, message, args) => {
             let result = await this.getFromDiscordId(client.mysqlingame, message.author.id);
             if (!result) return message.reply("Aucun compte lié à votre discord");
 
-            client.mysqlingame.query("DELETE FROM `discordLink` WHERE discord = ?", [message.author.id], function (err) {
+            client.mysqlingame.query("DELETE FROM `discord_link` WHERE discord = ?", [message.author.id], function (err) {
                 if (err) {
                     console.error(err);
                     return message.reply("Erreur");
@@ -69,7 +69,7 @@ module.exports.run = async(client, message, args) => {
                     }
 
                     let linkedOn = Math.round(Date.now() / 1000);
-                    client.mysqlingame.query("INSERT INTO `discordLink` (discord, player, linkedOn) VALUES (?, ?, ?)", [message.author.id, result.player, linkedOn], function (err) {
+                    client.mysqlingame.query("INSERT INTO `discord_link` (discord, player, linkedOn) VALUES (?, ?, ?)", [message.author.id, result.player, linkedOn], function (err) {
                         if (err) {
                             console.error(err);
                             return message.reply("Erreur");
@@ -114,7 +114,7 @@ module.exports.run = async(client, message, args) => {
 
 function getFromInGame(mysql, username) {
     return new Promise((resolve, reject) => {
-        mysql.query("SELECT * FROM `discordLink` WHERE player = ?", [username], function (err, results) {
+        mysql.query("SELECT * FROM `discord_link` WHERE player = ?", [username], function (err, results) {
             if (err) {
                 console.error(err);
                 reject(err);
@@ -128,7 +128,7 @@ function getFromInGame(mysql, username) {
 
 function getFromDiscordId(mysql, id) {
     return new Promise((resolve, reject) => {
-        mysql.query("SELECT * FROM `discordLink` WHERE discord = ?", [id], function (err, results) {
+        mysql.query("SELECT * FROM `discord_link` WHERE discord = ?", [id], function (err, results) {
             if (err) {
                 console.error(err);
                 reject(err);

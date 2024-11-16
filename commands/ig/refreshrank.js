@@ -5,7 +5,7 @@ module.exports.run = async(client, message) => {
     let username = await link.parseArg(null, message, client.mysqlingame);
     if (!username) return; //error message already thrown
 
-    client.mysqlingame.query("SELECT * FROM `permsPlayers` WHERE player = ?", [username], async function (err, results) {
+    client.mysqlingame.query("SELECT * FROM `ranks` WHERE player = ?", [username], async function (err, results) {
         if (err) {
             console.error(err);
             message.reply("Erreur");
@@ -28,7 +28,7 @@ module.exports.run = async(client, message) => {
         await message.member.roles.add(discordRank, "Refresh rank");
         message.reply(`Vous avez reçu le grade ${rank}`);
 
-        client.mysqlingame.query("SELECT * FROM `tempRank` WHERE player = ?", [username],
+        client.mysqlingame.query("SELECT * FROM `temp_rank` WHERE player = ?", [username],
             function (err, results) {
             if (err) {
                 console.error(err);
