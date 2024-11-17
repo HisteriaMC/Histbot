@@ -77,7 +77,7 @@ module.exports.run = async(client, message, args) => {
 
                         client.mysqlingame.query("DELETE FROM `discord_verification` WHERE code = ?", [code]);
 
-                        client.commands.get("refreshrank").run(client, message, []);
+                        client.commands.get("refreshrank").run(client, message, ["link"]);
 
                         message.reply({
                             embeds: [{
@@ -91,10 +91,9 @@ module.exports.run = async(client, message, args) => {
                                 description: `**<@${message.author.id}>** est désormais relié à **${result.player}**`
                             }]
                         });
-
                     });
                 });
-            } else message.reply("Aucun compte lié à ce discord ou à ce pseudo");
+            }
         } else {
             message.reply({
                 embeds: [{

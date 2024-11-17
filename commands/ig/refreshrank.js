@@ -1,6 +1,6 @@
 const config = require('../../config.json');
 
-module.exports.run = async(client, message) => {
+module.exports.run = async(client, message, args) => {
     let link = client.commands.get("link");
     let username = await link.parseArg(null, message, client.mysqlingame);
     if (!username) return; //error message already thrown
@@ -20,10 +20,11 @@ module.exports.run = async(client, message) => {
         if (permissions.includes("utility.prefix")) {
             await message.member.roles.add(config.ranks.OmegaPerso, "Refresh rank");
             message.reply("Vous avez reçu le grade Omega Perso");
+            return;
         }
 
         let discordRank = config.ranks[rank];
-        if (!discordRank) return message.reply("Erreur: Rank non trouvé");
+        if (!discordRank && args[0] !== "link") return message.reply("Erreur: Rank non trouvé");
 
         await message.member.roles.add(discordRank, "Refresh rank");
         message.reply(`Vous avez reçu le grade ${rank}`);
