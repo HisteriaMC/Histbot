@@ -113,9 +113,9 @@ async function getMoney(mysql, player) {
     })
 }
 
-async function getFaction(mysql, player) {
+async function getFaction(mysql, player) {''
     return new Promise((resolve, reject) => {
-        mysql.query("SELECT * FROM `factions` WHERE JSON_CONTAINS(members, JSON_QUOTE(?), '$')", [player], function (err, results) {
+        mysql.query("SELECT * FROM `factions` WHERE JSON_CONTAINS_PATH(members, 'one', CONCAT('$.', ?));", [player], function (err, results) {
             if (err) {
                 console.error(err);
                 reject(err);
