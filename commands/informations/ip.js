@@ -31,5 +31,6 @@ module.exports.config = {
     format: "ip",
     canBeUseByBot: true,
     category: "Informations",
-    delete: true
+    delete: true,
+    bypassChannel: true
 };
