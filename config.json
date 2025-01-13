@@ -43,12 +43,14 @@
         "categoryClosed": "793565615222685719",
 
         "reasons": {
-            "1": "Changement de comptes",
+            "1": "Changement de compte",
             "2": "Contestation de sanction",
             "3": "Questions",
-            "4": "Use bug",
             "5": "Grades/Boutique",
-            "6": "Autres"
+            "6": "Report joueur",
+            "7": "Anti duplication",
+            "8": "Remboursement",
+            "9": "Autres"
         },
         "emoteClose": "<a:yes:847551934902829067>",
 
