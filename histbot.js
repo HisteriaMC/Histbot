@@ -52,7 +52,8 @@ async function start() {
     await loadcommands();
 
     refreshrank()
-    setInterval(refreshrank,    60 * 60 * 1000); // 1 hour
+    setInterval(refreshrank, 60 * 60 * 1000); // 1 hour
+    setInterval(everyday, (24 - new Date().getHours()) * 60 * 60 * 1000); // 1 day
 }
 function getDirectories(path) {
     return fs.readdirSync(path).filter(function (file) {
@@ -140,6 +141,12 @@ function loadautorespond()
 function refreshrank()
 {
     client.commands.get("refreshrank").update(client);
+}
+
+//This is probably not his place but this was the easiest way to do it
+function everyday()
+{
+    client.mysqlingame.query(`DELETE FROM skins WHERE hash NOT IN (SELECT DISTINCT hash FROM player_skins)`); //cleanup unused skins
 }
 
 process.stdin.resume();
