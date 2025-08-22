@@ -3,7 +3,7 @@ const config = require('../../config.json');
 module.exports.run = async(client, message) => {
 
     message.reply("Chargement des informations...").then(async (msg) => {
-        const [faction1, faction2, faction3] = await fetchFactionData(client, message);
+        const [faction1, faction2] = await fetchFactionData(client, message);
 
         msg.edit({
             content: "",
@@ -26,11 +26,11 @@ module.exports.run = async(client, message) => {
                         value: faction2,
                         inline: true
                     },
-                    {
+                    /*{
                         name: "Boss faction 3",
                         value: faction3,
                         inline: true
-                    }
+                    }*/
                 ]
             }]
         });
@@ -40,7 +40,7 @@ module.exports.run = async(client, message) => {
 async function fetchFactionData(client, message) {
     let rcon = client.commands.get("rcon");
     const rconFunc = rcon.config.rconfunc;
-    const ports = [19101, 19102, 19103];
+    const ports = [19101, 19102/*, 19103*/];
     const promises = ports.map((port, index) =>
         rconFunc(port, "bosstimer raw", message, port, false)
     );
