@@ -11,7 +11,7 @@ module.exports.run = async(client, message, args) => {
     let rcon = client.commands.get("rcon");
     ban(rcon, args, message.member, message);
     //this is a tricky hack to hardcode the staff which ban
-    [19001, 19002, 19003, 19004, 19005, 19101, 19102, 19103, 19201, 19202, 19203, 19204]
+    [19001, 19002, 19003, 19004, 19005, 19101, 19102, /*19103,*/ 19201, 19202, 19203, 19204]
         .forEach(element => setTimeout(function(){rcon.config.rconfunc(element, "kick "+args.join(' '), message, element, false)}, 5500));
 };
 
