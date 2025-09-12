@@ -32,7 +32,7 @@ module.exports.run = async(client, message, args) => {
             },
             {
                 name: "Faction",
-                value: (await getFaction(client.mysqlingame, username) ?? "Aucune"),
+                value: (await getFaction(client.mysqlingame, result.player) ?? "Aucune"),
                 inline: true
             },
             {
