@@ -17,7 +17,7 @@ module.exports.run = async(client, message, args) => {
         let rank = result.rank;
         let permissions = result.perms.split(",");
 
-        if (permissions.includes("utility.prefix")) {
+        if (permissions.includes("utility.prefix") && rank === "Omega") {
             await message.member.roles.add(config.ranks.OmegaPerso, "Refresh rank");
             message.reply("Vous avez reçu le grade Omega Perso");
             return;
