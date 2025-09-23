@@ -27,12 +27,17 @@ module.exports.run = async(client, message, args) => {
 
         fetch(`https://minecraftpocket-servers.com/api/?action=post&object=votes&element=claim&key=${hidden.mcpeToken}&username=${pseudo}`).then(() => {
             let yesterday = moment().tz("America/New_York").add(-1, "days").format("DD/MM/YYYY");
+            let twoDayAgo = moment().tz("America/New_York").add(-2, "days").format("DD/MM/YYYY");
             let streak = result["streak"] + 1;
             if (result["lastconsecutive"] === today || result["lastconsecutive"] === yesterday) {
-                client.mysqlingame.query("UPDATE vote_calendar SET lastconsecutive = ?, streak = ? WHERE player = ?;", [today, streak, pseudo])
+                let shield = Math.min(result["shield"] + 1, 15);
+                client.mysqlingame.query("UPDATE vote_calendar SET lastconsecutive = ?, streak = ?, shield = ? WHERE player = ?;", [today, streak, shield, pseudo])
                 message.reply("Vous avez maintenant un streak de " + streak)
+            } else if(result["lastconsecutive"] === twoDayAgo && result["shield"] === 15) {
+                client.mysqlingame.query("UPDATE vote_calendar SET lastconsecutive = ?, streak = ?, shield = ? WHERE player = ?;", [today, streak, 0, pseudo])
+                message.reply("La protection de vote c'est activé ! Elle retombe à 0.\nVous avez maintenant un streak de " + streak)
             } else {
-                client.mysqlingame.query("UPDATE vote_calendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ? WHERE player = ?;", [today, today, 1, pseudo])
+                client.mysqlingame.query("UPDATE vote_calendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ?, shield = ? WHERE player = ?;", [today, today, 1, 0, pseudo])
                 message.reply("Vous perdez votre streak, il était à " + streak)
             }
         });
