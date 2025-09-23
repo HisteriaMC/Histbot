@@ -35,7 +35,7 @@ module.exports.run = async(client, message, args) => {
                 message.reply("Vous avez maintenant un streak de " + streak)
             } else if(result["lastconsecutive"] === twoDayAgo && result["shield"] === 15) {
                 client.mysqlingame.query("UPDATE vote_calendar SET lastconsecutive = ?, streak = ?, shield = ? WHERE player = ?;", [today, streak, 0, pseudo])
-                message.reply("La protection de vote c'est activé ! Elle retombe à 0.\nVous avez maintenant un streak de " + streak)
+                message.reply("La protection de vote s'est activée ! Elle retombe à 0.\nVous avez maintenant un streak de " + streak)
             } else {
                 client.mysqlingame.query("UPDATE vote_calendar SET firstconsecutive = ?, lastconsecutive = ?, streak = ?, shield = ? WHERE player = ?;", [today, today, 1, 0, pseudo])
                 message.reply("Vous perdez votre streak, il était à " + streak)
