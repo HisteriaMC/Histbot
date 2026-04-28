@@ -8,18 +8,24 @@ module.exports.run = async(client, message, args) => {
     if(!banned && args[0]) banned = message.guild.members.cache.get(args[0]);
     if(!banned) return message.reply("Utilisateur introuvable.");
     if(banned instanceof User) banned = message.guild.members.cache.get(banned.id);
+    
+    let author = message.guild.members.cache.get(message.author.id);
+    let posAuthor = author.roles.highest.position;
+    let posBanned = banned.roles.highest.position;
+    
+    if (posBanned >= posAuthor) return message.reply("Tu ne peux pas bannir une pesonne avec un grade équivalent ou supérieur au tien !")
 
     args = args.slice(1);//Enlever le pseudo du banni
     let banReason = args.join(" ");
     if(!banReason) banReason = "Aucune raison fournie";
-    if(!banned.bannable) return message.reply(`Je ne peut pas ban ${banned.user} parce que c'est une personne plus puissante que moi :sob:`)
+    if(!banned.bannable) return message.reply(`Je ne peux pas ban ${banned.user} parce que c'est une personne plus puissante que moi :sob:`)
 
     await banned.send(`Vous avez été banni du serveur **${message.guild.name}** par **${message.author.username}** pour **${banReason}** <a:banhammer:784899600473260042>`)
         .catch(error => {console.log("Impossible de dm le banni "+message.guild.name+" erreur : "+error)})
 
     setTimeout(() => {
         banned.ban({reason: "Bot Histeria | " + banReason}).then(member => {
-        message.reply(`<a:banhammer:784899600473260042> **${member.user.username}** a bien été banni par **${message.author.username}** pour **${banReason}**.`);
+        message.reply(`<:AYAYAYYAYAYAAAYYYA:721481611346182214> **${member.user.username}** a bien été banni par **${message.author.username}** pour **${banReason}**.`);
     }) .catch(err => {
         message.reply(`Désolé ${message.author} je ne peux pas ban cette personne parce que : ${err}`);
     })}, 2000);
