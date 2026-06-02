@@ -70,8 +70,9 @@ module.exports = (client, oldMember, member) => {
           
           let playerIG = result[0].player;
           let rank = await getRank(client.mysqlingame, playerIG);
+          let rankLs = ['histerien', 'vip'];
           
-          if (rank !== 'histerien') return;
+          if (!rank.includes(rankLs)) return;
           
           setRank(playerIG, 'booster');
           

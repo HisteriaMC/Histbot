@@ -13,8 +13,24 @@ module.exports.run = async(client, message, args) => {
 
         if (!results || !results[0]) return message.reply("Aucun joueur trouvé avec ce pseudo");
         let result = results[0];
+        
 
         let rank = result.rank;
+        let rankLs = ['histerien', 'vip'];
+        //rank can be changed by booster rank (ig)
+        
+        if (message.member.roles.cache.has(config.ranks.Booster) && rank.includes(rankLs)) {
+            
+            setRank(result.player, 'booster')
+            
+            message.reply('Le grade **booster** vous a été ajouté en jeu.')
+            
+        } else if (message.member.roles.cache.has(config.ranks.Booster) && rank === 'booster') {
+            
+            setRank(result.player, 'histerien')
+            message.reply('Le grade **booster** vous a été retiré en jeu.')
+        }
+        
         let permissions = result.perms.split(",");
 
         if (permissions.includes("utility.prefix") && rank === "Omega") {
@@ -43,6 +59,16 @@ module.exports.run = async(client, message, args) => {
                 [message.author.id, result.new, result.expire]);
         });
     })
+    
+    function setRank(player, rank) {
+        client.mysqlingame.query('UPDATE ranks SET rank = ? WHERE player = ?', [rank, player], function(err) {
+            
+            if (err) {
+                console.log('Une erreur est survenue ' + err)
+            }
+        })
+    }
+    
 };
 
 //Check every hour if a player has a rank that should be removed
@@ -69,6 +95,7 @@ module.exports.update = async(client) => {
         });
     });
 };
+
 
 module.exports.config = {
     name: "refreshrank",
