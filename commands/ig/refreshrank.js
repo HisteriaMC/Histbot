@@ -19,13 +19,13 @@ module.exports.run = async(client, message, args) => {
         let rankLs = ['histerien', 'vip'];
         //rank can be changed by booster rank (ig)
         
-        if (message.member.roles.cache.has(config.ranks.Booster) && rank.includes(rankLs)) {
+        if (message.member.roles.cache.has(config.ranks.Booster) && rankLs.includes(rank)) {
             
             setRank(result.player, 'booster')
             
             message.reply('Le grade **booster** vous a été ajouté en jeu.')
             
-        } else if (message.member.roles.cache.has(config.ranks.Booster) && rank === 'booster') {
+        } else if (!message.member.roles.cache.has(config.ranks.Booster) && rank === 'booster') {
             
             setRank(result.player, 'histerien')
             message.reply('Le grade **booster** vous a été retiré en jeu.')

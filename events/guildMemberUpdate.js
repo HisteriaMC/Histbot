@@ -72,9 +72,12 @@ module.exports = (client, oldMember, member) => {
           let rank = await getRank(client.mysqlingame, playerIG);
           let rankLs = ['histerien', 'vip'];
           
-          if (!rank.includes(rankLs)) return;
+          if (!rankLs.includes(rank)) return;
           
           setRank(playerIG, 'booster');
+          member.send('Le grade **booster** vous a été ajouté sur le compte **' + playerIG + '**.').catch((err) => {
+              console.log('Le user suivant a désactivé ses messages privés: ' + member.username)
+          })
           
             
         })
@@ -98,6 +101,9 @@ module.exports = (client, oldMember, member) => {
           if (rank !== 'booster') return;
           
           setRank(playerIG, 'histerien');
+          member.send('Le grade **booster** vous a été retiré sur le compte **' + playerIG + '**.').catch((err) => {
+              console.log('Le user suivant a désactivé ses messages privés: ' + member.username)
+          })
           
             
         });

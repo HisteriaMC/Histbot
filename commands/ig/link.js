@@ -23,11 +23,11 @@ module.exports.run = async(client, message, args) => {
             let result = await this.getFromDiscordId(client.mysqlingame, message.author.id);
             if (!result) return message.reply("Aucun compte lié à votre discord");
             
-            let rankIG = await getRank(client.mysqlingame, result[0].player);
+            let rankIG = await getRank(client.mysqlingame, result.player);
             
             if (rankIG === 'booster') {
                 
-                    client.mysqlingame.query('UPDATE ranks SET ranks = ? WHERE player = ?', ['histerien', result[0].player], function(err) {
+                    client.mysqlingame.query('UPDATE ranks SET rank = ? WHERE player = ?', ['histerien', result.player], function(err) {
                         
                         if (err) {
                             console.log('Une erreur est survenue ' + err)
