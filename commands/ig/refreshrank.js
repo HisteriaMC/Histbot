@@ -27,7 +27,7 @@ module.exports.run = async(client, message, args) => {
             
         } else if (!message.member.roles.cache.has(config.ranks.Booster) && rank === 'booster') {
             
-            setRank(result.player, 'histerien')
+            setRank(result.player, 'Histerien')
             message.reply('Le grade **booster** vous a été retiré en jeu.')
         }
         
