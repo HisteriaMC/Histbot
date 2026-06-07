@@ -25,9 +25,9 @@ module.exports.run = async(client, message, args) => {
             
             let rankIG = await getRank(client.mysqlingame, result.player);
             
-            if (rankIG === 'booster') {
+            if (rankIG === 'Booster') {
                 
-                    client.mysqlingame.query('UPDATE ranks SET rank = ? WHERE player = ?', ['histerien', result.player], function(err) {
+                    client.mysqlingame.query('UPDATE ranks SET rank = ? WHERE player = ?', ['Histerien', result.player], function(err) {
                         
                         if (err) {
                             console.log('Une erreur est survenue ' + err)
