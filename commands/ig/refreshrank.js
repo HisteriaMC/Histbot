@@ -16,7 +16,7 @@ module.exports.run = async(client, message, args) => {
         
 
         let rank = result.rank;
-        let rankLs = ['histerien', 'vip'];
+        let rankLs = ['Histerien', 'VIP'];
         //rank can be changed by booster rank (ig)
         
         if (message.member.roles.cache.has(config.ranks.Booster) && rankLs.includes(rank)) {
