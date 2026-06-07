@@ -21,7 +21,7 @@ module.exports.run = async(client, message, args) => {
         
         if (message.member.roles.cache.has(config.ranks.Booster) && rankLs.includes(rank)) {
             
-            setRank(result.player, 'booster')
+            setRank(result.player, 'Booster')
             
             message.reply('Le grade **booster** vous a été ajouté en jeu.')
             
