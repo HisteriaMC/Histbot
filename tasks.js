@@ -2,6 +2,7 @@ const {ActivityType} = require("discord-api-types/v10");
 const mcutil = require('minecraft-server-util');
 const config = require('./config.json');
 const hidden = require('./hidden.json');
+const linkmanager = require('./linkmanager');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 class run {
@@ -167,6 +168,8 @@ class run {
         this.changestatus();
         this.vote();
         this.checkCountBanned();
+        //Installs its own interval once, ready can fire again after a reconnection
+        linkmanager.start(client).catch(err => console.error("Démarrage du module de liaison : " + err));
         setInterval(() => {this.checkideas()}, 120 * 1000); //2 min
         setInterval(() => {client.xpapi.save()}, 600 * 1000); //10 min
         setInterval(() => {this.vote()}, 900 * 1000); //15 min

@@ -59,6 +59,16 @@
         }
     },
 
+    "booster": {
+        "enabled": true,
+        "rank": "Boosteur",
+        "days": 7,
+        "defaultRank": "Histerien",
+        "eligibleRanks": ["Histerien", "VIP", "Interplanetaire"],
+        "rconPorts": [19101, 19102, 19001, 19201, 19202],
+        "sweepMinutes": 60
+    },
+
     "ranks": {
         "Donateur": "802626827285430272",
         "OmegaPerso": "789981723248427038",

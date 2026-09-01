@@ -1,4 +1,5 @@
 const config = require('../../config.json');
+const linkmanager = require('../../linkmanager');
 
 module.exports.run = async(client, message, args) => {
     //check if already linked
@@ -28,6 +29,11 @@ module.exports.run = async(client, message, args) => {
                     console.error(err);
                     return message.reply("Erreur");
                 }
+
+                //The link is what granted the rank roles and the booster rank, so the
+                //unlink is what takes them back
+                linkmanager.onUnlink(client, message.author.id)
+                    .catch(error => console.error("Nettoyage de la déliaison de " + message.author.id + " : " + error));
 
                 message.reply({
                     embeds: [{
@@ -77,7 +83,13 @@ module.exports.run = async(client, message, args) => {
 
                         client.mysqlingame.query("DELETE FROM `discord_verification` WHERE code = ?", [code]);
 
-                        client.commands.get("refreshrank").run(client, message, ["link"]);
+                        Promise.resolve()
+                            .then(() => client.commands.get("refreshrank").run(client, message, ["link"]))
+                            .catch(error => console.error("Refresh du rank après liaison : " + error));
+
+                        //A member who boosted before linking gets his booster rank now
+                        linkmanager.onLink(client, message.author.id)
+                            .catch(error => console.error("Grade booster après liaison de " + message.author.id + " : " + error));
 
                         message.reply({
                             embeds: [{
