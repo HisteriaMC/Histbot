@@ -40,9 +40,8 @@ module.exports.run = async(client, message) => {
 async function fetchFactionData(client, message) {
     let rcon = client.commands.get("rcon");
     const rconFunc = rcon.config.rconfunc;
-    const ports = [19101, 19102/*, 19103*/];
-    const promises = ports.map((port, index) =>
-        rconFunc(port, "bosstimer raw", message, port, false)
+    const promises = config.rcon.factions.map(name =>
+        rconFunc(config.rcon.ports[name], "bosstimer raw", message, name, false)
     );
 
     try {

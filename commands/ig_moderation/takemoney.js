@@ -1,4 +1,5 @@
 const hidden = require("../../hidden.json");
+const config = require("../../config.json");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
@@ -10,7 +11,7 @@ module.exports.run = async(client, message, args) => {
     if (!username) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
-    rcon.config.rconfunc(19101, "takemoney " + username + " " + args[1], message, "fac1");
+    rcon.config.rconfunc(config.rcon.ports.faction1, "takemoney " + username + " " + args[1], message, "fac1");
 };
 
 module.exports.config = {

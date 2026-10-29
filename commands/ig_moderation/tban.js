@@ -1,4 +1,5 @@
 const hidden = require("../../hidden.json");
+const config = require("../../config.json");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
@@ -11,19 +12,20 @@ module.exports.run = async(client, message, args) => {
     let rcon = client.commands.get("rcon");
     ban(rcon, args, message.member, message);
     //this is a tricky hack to hardcode the staff which ban
-    [19001, 19002, 19003, 19004, 19005, 19101, 19102, /*19103,*/ 19201, 19202, 19203, 19204, 18000]
-        .forEach(element => setTimeout(function(){rcon.config.rconfunc(element, "kick "+args.join(' '), message, element, false)}, 5500));
+    config.rcon.kick
+        .forEach(name => setTimeout(function(){rcon.config.rconfunc(config.rcon.ports[name], "kick "+args.join(' '), message, name, false)}, 5500));
 };
 
-function ban(rcon, args, member, message, port = 19101) {
-    rcon.config.rconfunc(port, "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, port)
+//Tries each faction in turn until one of them takes the ban
+function ban(rcon, args, member, message, index = 0) {
+    let name = config.rcon.factions[index];
+    rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name)
         .catch(err => {
             console.log(err);
-            let newPort = port + 1;
-            if (newPort === 19104) {
+            if (index + 1 >= config.rcon.factions.length) {
                 return message.reply("Aucun serveur accesible", {allowedMentions: { repliedUser: false }});
             }
-            ban(rcon, args, member, message, newPort);
+            ban(rcon, args, member, message, index + 1);
         });
 }
 

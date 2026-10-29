@@ -47,11 +47,18 @@ function boosterConf() {
     return config.booster || {};
 }
 
+//The RCON ports of booster.rconServers, in order. Unknown names are dropped.
+function boosterPorts() {
+    let servers = boosterConf().rconServers;
+    if (!Array.isArray(servers)) return [];
+    return servers.filter(name => Object.hasOwn(config.rcon.ports, name)).map(name => config.rcon.ports[name]);
+}
+
 //Everything the booster feature needs before it may touch anything. Fails closed.
 function boosterConfigured() {
     let conf = boosterConf();
     return typeof conf.rank === "string" && conf.rank !== ""
-        && Array.isArray(conf.rconPorts) && conf.rconPorts.length > 0
+        && boosterPorts().length > 0
         && Number.isInteger(conf.days) && conf.days > 0;
 }
 
@@ -108,7 +115,7 @@ async function rconFirst(client, command) {
     let run = rconFunc(client);
     if (!run) return null;
 
-    for (const port of boosterConf().rconPorts) {
+    for (const port of boosterPorts()) {
         try {
             let output = await withTimeout(run(port, command, null, port, false), RCON_TIMEOUT, port);
             return {port: port, output: output == null ? "" : String(output)};
@@ -125,7 +132,7 @@ async function rconBroadcast(client, command, skipPort) {
     let run = rconFunc(client);
     if (!run) return;
 
-    for (const port of boosterConf().rconPorts) {
+    for (const port of boosterPorts()) {
         if (port === skipPort) continue;
         await withTimeout(run(port, command, null, port, false), RCON_TIMEOUT, port).catch(() => null);
     }

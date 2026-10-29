@@ -3,6 +3,16 @@ const mcutil = require('minecraft-server-util');
 const config = require("../../config.json");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
+//Shortcuts to the server names of config.rcon.ports, which also work as-is
+const aliases = {
+    "f1": "faction1", "fac1": "faction1",
+    "f2": "faction2", "fac2": "faction2",
+    "min1": "minage1", "min2": "minage2", "min3": "minage3", "min4": "minage4",
+    "lobby": "lobby1",
+    "b1": "build1",
+    "b2": "build2"
+};
+
 module.exports.run = async(client, message, args) => {
     if (!hidden.rcon.servers.includes(message.channel.guild.id)) return message.channel.send("Petit malin va ! Tu croyais me berner comme ça");
 
@@ -10,47 +20,18 @@ module.exports.run = async(client, message, args) => {
     let reason = args.join(" ");
     if(reason === "help") return message.reply("La commande help est bloquée car elle cause des soucis");
 
-    let port;
-    switch(serverbase){
-        case "faction1": case "f1": case "fac1": port = 19101; break;
-        case "faction2": case "f2": case "fac2": port = 19102; break;
-	    //case "faction3": case "f3": case "fac3": port = 19103; break;
-        case "minage1": case "min1": port = 19201; break;
-        case "minage2": case "min2": port = 19202; break;
-        case "minage3": case "min3": port = 19203; break;
-        case "minage4": case "min4": port = 19204; break;
-        case "lobby": case "lobby1": port = 19001; break;
-        case "lobby2": port = 19002; break;
-        case "lobby3": port = 19003; break;
-        case "lobby4": port = 19004; break;
-        case "lobby5": port = 19005; break;
-        case "nico1": port = 19503; break;
-	    case "build1": case "b1": port = 19501; break;
-	    case "build2": case "b2": port = 19502; break;
-	    case "event1": port = 18001; break;
-	    case "event2": port = 18002; break;
-	    case "nico1pm5": port = 19603; break;
-	    case "ailfepm5": port = 19604; break;
-        case "farmzone": port = 18000; break;
-
-	    case "all": port = "all"; break;
-
-        default:
-            if(isNaN(serverbase)) port = serverbase;
-            else port = "error";
-        break;
-    }
-
-    if(port === "error"){
-        message.reply("Le serveur n'existe pas, veuillez choisir un serveur [fac1 à 3 | min1 à 4 | lobby | all]");
+    if(serverbase === "all"){
+        config.rcon.all
+            .forEach(name => setTimeout(function(){rconfunc(config.rcon.ports[name], reason, message, name)}, 5500));
         return;
     }
-    if(port === "all"){
-        [19001, 19002, 19003, 19004, 19005, 19101, 19102, /*19103,*/ 19201, 19202, 19203, 19204, 19501, 19502, 18000, 18001, 18002, 19603, 19604]
-            .forEach(element => setTimeout(function(){rconfunc(element, reason, message, element)}, 5500));
+
+    let name = Object.hasOwn(aliases, serverbase) ? aliases[serverbase] : serverbase;
+    if(!Object.hasOwn(config.rcon.ports, name)){
+        message.reply("Le serveur n'existe pas, veuillez choisir un serveur [fac1 à 2 | min1 à 4 | lobby | all]");
         return;
     }
-    rconfunc(port, reason, message, serverbase);
+    rconfunc(config.rcon.ports[name], reason, message, name);
 };
 function rconfunc(port, reason, message, server, reply = true) {
     return new Promise((resolve, reject) => {
@@ -104,7 +85,7 @@ function rconfunc(port, reason, message, server, reply = true) {
 module.exports.config = {
     name: "rcon",
     description: "Envoyer des commandes au serveur MC",
-    format: "rcon <fac1 à 3 | min1 à 4 | lobby | all> <commande>",
+    format: "rcon <fac1 à 2 | min1 à 4 | lobby | all> <commande>",
     canBeUseByBot: false,
     category: "Admin",
     alias: ["jrcon"],
