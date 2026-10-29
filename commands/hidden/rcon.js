@@ -22,7 +22,7 @@ module.exports.run = async(client, message, args) => {
 
     if(serverbase === "all"){
         config.rcon.all
-            .forEach(name => setTimeout(function(){rconfunc(config.rcon.ports[name], reason, message, name)}, 5500));
+            .forEach(name => rconfunc(config.rcon.ports[name], reason, message, name).catch(() => null));
         return;
     }
 

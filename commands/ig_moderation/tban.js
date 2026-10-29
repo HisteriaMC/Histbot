@@ -10,23 +10,24 @@ module.exports.run = async(client, message, args) => {
     if (!args[0]) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
-    ban(rcon, args, message.member, message);
-    //this is a tricky hack to hardcode the staff which ban
+    if (!await ban(rcon, args, message)) return;
+    //kick only once the ban landed, so the player cannot rejoin before it exists
     config.rcon.kick
-        .forEach(name => setTimeout(function(){rcon.config.rconfunc(config.rcon.ports[name], "kick "+args.join(' '), message, name, false)}, 5500));
+        .forEach(name => rcon.config.rconfunc(config.rcon.ports[name], "kick "+args.join(' '), message, name, false).catch(() => null));
 };
 
-//Tries each faction in turn until one of them takes the ban
-function ban(rcon, args, member, message, index = 0) {
-    let name = config.rcon.factions[index];
-    rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name)
-        .catch(err => {
+//Tries each faction in turn until one of them takes the ban. Resolves to whether one did.
+async function ban(rcon, args, message) {
+    for (const name of config.rcon.factions) {
+        try {
+            await rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name);
+            return true;
+        } catch (err) {
             console.log(err);
-            if (index + 1 >= config.rcon.factions.length) {
-                return message.reply("Aucun serveur accesible", {allowedMentions: { repliedUser: false }});
-            }
-            ban(rcon, args, member, message, index + 1);
-        });
+        }
+    }
+    message.reply({content: "Aucun serveur accesible", allowedMentions: { repliedUser: false }});
+    return false;
 }
 
 module.exports.config = {
