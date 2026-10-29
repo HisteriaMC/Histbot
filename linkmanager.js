@@ -629,5 +629,6 @@ module.exports = {
     rememberRole: rememberRole,
     rankRoleIds: rankRoleIds,
     mainMember: mainMember,
-    query: query
+    query: query,
+    withTimeout: withTimeout
 };

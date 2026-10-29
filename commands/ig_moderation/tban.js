@@ -1,5 +1,6 @@
 const hidden = require("../../hidden.json");
 const config = require("../../config.json");
+const {withTimeout} = require("../../linkmanager");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
@@ -17,10 +18,11 @@ module.exports.run = async(client, message, args) => {
 };
 
 //Tries each faction in turn until one of them takes the ban. Resolves to whether one did.
+//A faction that accepts the connection but never answers counts as down, or the kicks would never run.
 async function ban(rcon, args, message) {
     for (const name of config.rcon.factions) {
         try {
-            await rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name);
+            await withTimeout(rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name), 8000, name);
             return true;
         } catch (err) {
             console.log(err);
