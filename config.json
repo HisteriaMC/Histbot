@@ -65,8 +65,34 @@
         "days": 7,
         "defaultRank": "Histerien",
         "eligibleRanks": ["Histerien", "VIP", "Interplanetaire"],
-        "rconPorts": [19101, 19102, 19001, 19201, 19202],
+        "rconServers": ["faction1", "faction2", "lobby1", "minage1", "minage2"],
         "sweepMinutes": 60
+    },
+
+    "rcon": {
+        "ports": {
+            "lobby1": 20000,
+            "lobby2": 20001,
+            "lobby3": 20002,
+            "lobby4": 20003,
+            "lobby5": 20004,
+            "faction1": 20005,
+            "faction2": 20006,
+            "minage1": 20007,
+            "minage2": 20008,
+            "minage3": 20009,
+            "minage4": 20010,
+            "farmzone": 20011,
+            "build1": 20012,
+            "build2": 20013,
+            "event1": 20014,
+            "event2": 20015,
+            "ailfepm5": 20016,
+            "betatest": 20017
+        },
+        "all": ["lobby1", "lobby2", "lobby3", "lobby4", "lobby5", "faction1", "faction2", "minage1", "minage2", "minage3", "minage4", "build1", "build2", "farmzone", "event1", "event2", "ailfepm5"],
+        "kick": ["lobby1", "lobby2", "lobby3", "lobby4", "lobby5", "faction1", "faction2", "minage1", "minage2", "minage3", "minage4", "farmzone"],
+        "factions": ["faction1", "faction2"]
     },
 
     "ranks": {

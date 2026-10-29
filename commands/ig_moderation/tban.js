@@ -1,4 +1,6 @@
 const hidden = require("../../hidden.json");
+const config = require("../../config.json");
+const {withTimeout} = require("../../linkmanager");
 const {PermissionFlagsBits} = require("discord-api-types/v10");
 
 module.exports.run = async(client, message, args) => {
@@ -9,22 +11,25 @@ module.exports.run = async(client, message, args) => {
     if (!args[0]) return; //error message already thrown
 
     let rcon = client.commands.get("rcon");
-    ban(rcon, args, message.member, message);
-    //this is a tricky hack to hardcode the staff which ban
-    [19001, 19002, 19003, 19004, 19005, 19101, 19102, /*19103,*/ 19201, 19202, 19203, 19204, 18000]
-        .forEach(element => setTimeout(function(){rcon.config.rconfunc(element, "kick "+args.join(' '), message, element, false)}, 5500));
+    if (!await ban(rcon, args, message)) return;
+    //kick only once the ban landed, so the player cannot rejoin before it exists
+    config.rcon.kick
+        .forEach(name => rcon.config.rconfunc(config.rcon.ports[name], "kick "+args.join(' '), message, name, false).catch(() => null));
 };
 
-function ban(rcon, args, member, message, port = 19101) {
-    rcon.config.rconfunc(port, "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, port)
-        .catch(err => {
+//Tries each faction in turn until one of them takes the ban. Resolves to whether one did.
+//A faction that accepts the connection but never answers counts as down, or the kicks would never run.
+async function ban(rcon, args, message) {
+    for (const name of config.rcon.factions) {
+        try {
+            await withTimeout(rcon.config.rconfunc(config.rcon.ports[name], "tban " + args.join(' ')+ " [({" + message.member.user.tag + "})]", message, name), 8000, name);
+            return true;
+        } catch (err) {
             console.log(err);
-            let newPort = port + 1;
-            if (newPort === 19104) {
-                return message.reply("Aucun serveur accesible", {allowedMentions: { repliedUser: false }});
-            }
-            ban(rcon, args, member, message, newPort);
-        });
+        }
+    }
+    message.reply({content: "Aucun serveur accesible", allowedMentions: { repliedUser: false }});
+    return false;
 }
 
 module.exports.config = {
